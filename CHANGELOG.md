@@ -1,3 +1,6 @@
+# 1.2.0
+* docs: Set development status to production.
+
 # 1.1.0
 * feat: Rename `list` commands to `ls`.
 * feat: Add `lambda-ai instance-types --available-only` to only list available instance types.

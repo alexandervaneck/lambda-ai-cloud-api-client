@@ -1,14 +1,32 @@
 [project]
 name = "lambda-ai-cloud-api-client"
-version = "1.1.0"
+version = "1.2.0"
 description = "A client library for accessing Lambda Cloud API"
-authors = []
+authors = [{ name = "Alexander van Eck", email = "alexander@x-all.nl" }]
 requires-python = ">=3.10"
 readme = "README.md"
+license = "MIT"
+keywords = ["lambda", "cloud", "api", "cli", "compute", "gpu"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Environment :: Console",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Internet",
+]
+urls = { Homepage = "https://github.com/alexandervaneck/lambda-ai-cloud-api-client", Repository = "https://github.com/alexandervaneck/lambda-ai-cloud-api-client", Issues = "https://github.com/alexandervaneck/lambda-ai-cloud-api-client/issues", Changelog = "https://github.com/alexandervaneck/lambda-ai-cloud-api-client/blob/main/CHANGELOG.md" }
 dependencies = [
-    "httpx>=0.23.0,<0.29.0",
-    "attrs>=22.2.0",
-    "python-dateutil>=2.8.0,<3",
+  "httpx>=0.23.0,<0.29.0",
+  "attrs>=22.2.0",
+  "python-dateutil>=2.8.0,<3",
 ]
 
 [project.scripts]
@@ -23,37 +41,37 @@ line-length = 120
 
 [tool.ruff.lint]
 select = [
-    # pycodestyle
-    "E",
-    # Pyflakes
-    "F",
-    # pyupgrade
-    "UP",
-    # flake8-bugbear
-    "B",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
 ]
 ignore = [
-    "E501" # line too long
+  "E501", # line too long
 ]
 
 [dependency-groups]
 dev = [
-    "openapi-python-client>=0.27.1",
-    "pytest-cov>=7.0.0",
-    "tox-uv>=1.11.0",
-    "pytest-httpx>=0.30.0",
+  "openapi-python-client>=0.27.1",
+  "pytest-cov>=7.0.0",
+  "tox-uv>=1.11.0",
+  "pytest-httpx>=0.30.0",
 ]
 
 [tool.coverage.run]
 source = ["src/"]
 omit = [
-    # Exclude auto-generated code
-    "src/lambda_ai_cloud_api_client/api/*",
-    "src/lambda_ai_cloud_api_client/models/*",
+  # Exclude auto-generated code
+  "src/lambda_ai_cloud_api_client/api/*",
+  "src/lambda_ai_cloud_api_client/models/*",
 ]
 branch = true
 
