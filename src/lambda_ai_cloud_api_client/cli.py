@@ -91,7 +91,7 @@ def _cmd_get_instance(args: argparse.Namespace) -> None:
 def _cmd_list_instance_types(args: argparse.Namespace) -> None:
     client = _build_client(args)
     response = list_instance_types(client=client)
-    if getattr(args, "available_only", False) and response.parsed is not None:
+    if response.parsed is not None:
         parsed = response.parsed
         target = None
         if hasattr(parsed, "data"):
@@ -100,12 +100,23 @@ def _cmd_list_instance_types(args: argparse.Namespace) -> None:
             target = parsed
 
         if target and hasattr(target, "additional_properties"):
+            items = dict(target.additional_properties)
+
+            if getattr(args, "available_only", False):
+                items = {name: item for name, item in items.items() if item.regions_with_capacity_available}
+
+            if getattr(args, "cheapest", False) and items:
+                prices: dict[str, int] = {}
+                for name, item in items.items():
+                    price = getattr(getattr(item, "instance_type", None), "price_cents_per_hour", None)
+                    if price is not None:
+                        prices[name] = price
+                if prices:
+                    min_price = min(prices.values())
+                    items = {name: item for name, item in items.items() if prices.get(name) == min_price}
+
             filtered = target.__class__()  # type: ignore[call-arg]
-            filtered.additional_properties = {
-                name: item
-                for name, item in target.additional_properties.items()
-                if item.regions_with_capacity_available
-            }
+            filtered.additional_properties = items
             if hasattr(parsed, "data"):
                 parsed.data = filtered  # type: ignore[attr-defined]
                 response.parsed = parsed
@@ -282,6 +293,11 @@ def _build_parser() -> argparse.ArgumentParser:
         "--available-only",
         action="store_true",
         help="Show only instance types with available capacity.",
+    )
+    instance_types_parser.add_argument(
+        "--cheapest",
+        action="store_true",
+        help="Show only the cheapest instance type(s).",
     )
     instance_types_parser.set_defaults(func=_cmd_list_instance_types)
 

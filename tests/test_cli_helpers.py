@@ -137,7 +137,7 @@ def test_cmd_list_instance_types_available_only_httpx(httpx_mock, capsys):
     base_url = "https://cloud.lambdalabs.com"
     httpx_mock.add_response(method="GET", url=f"{base_url}/api/v1/instance-types", json=_instance_types_payload())
 
-    args = argparse.Namespace(token="t", base_url=base_url, insecure=False, available_only=True)
+    args = argparse.Namespace(token="t", base_url=base_url, insecure=False, available_only=True, cheapest=False)
     cli._cmd_list_instance_types(args)
 
     out = capsys.readouterr().out
@@ -149,12 +149,24 @@ def test_cmd_list_instance_types_default_httpx(httpx_mock, capsys):
     base_url = "https://cloud.lambdalabs.com"
     httpx_mock.add_response(method="GET", url=f"{base_url}/api/v1/instance-types", json=_instance_types_payload())
 
-    args = argparse.Namespace(token="t", base_url=base_url, insecure=False, available_only=False)
+    args = argparse.Namespace(token="t", base_url=base_url, insecure=False, available_only=False, cheapest=False)
     cli._cmd_list_instance_types(args)
 
     out = capsys.readouterr().out
     assert "with_capacity" in out
     assert "without_capacity" in out
+
+
+def test_cmd_list_instance_types_cheapest(httpx_mock, capsys):
+    base_url = "https://cloud.lambdalabs.com"
+    httpx_mock.add_response(method="GET", url=f"{base_url}/api/v1/instance-types", json=_instance_types_payload())
+
+    args = argparse.Namespace(token="t", base_url=base_url, insecure=False, available_only=False, cheapest=True)
+    cli._cmd_list_instance_types(args)
+
+    out = capsys.readouterr().out
+    assert "with_capacity" in out
+    assert "without_capacity" not in out
 
 
 def test_cmd_list_instances(monkeypatch, capsys):
