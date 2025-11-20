@@ -1,6 +1,6 @@
 [project]
 name = "lambda-ai-cloud-api-client"
-version = "1.0.0"
+version = "1.0.0" # force
 description = "A client library for accessing Lambda Cloud API"
 authors = []
 requires-python = ">=3.10"
@@ -44,9 +44,11 @@ ignore = [
 dev = [
     "openapi-python-client>=0.27.1",
     "pytest-cov>=7.0.0",
+    "tox-uv>=1.11.0",
 ]
 
 [tool.coverage.run]
+source = ["src/"]
 omit = [
     # Exclude auto-generated code
     "src/lambda_ai_cloud_api_client/api/*",

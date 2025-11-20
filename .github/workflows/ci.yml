@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    outputs:
+      publish: ${{ steps.version_check.outputs.publish }}
+      version: ${{ steps.version_check.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.13"
+          activate-environment: 'true'
+
+      - name: Install dependencies
+        run: uv sync --group dev --locked
+
+      - name: Format
+        run: make fmt
+
+      - name: Test
+        run: make test
+
+      - name: Check version bumped
+        id: version_check
+        env:
+          PACKAGE_NAME: lambda-ai-cloud-api-client
+        run: |
+          set -euo pipefail
+          version=$(uv version | awk 'NF>=2 {print $NF; exit}')
+          export VERSION="$version"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base_ref="${{ github.base_ref }}"
+            git fetch origin "${base_ref}:refs/remotes/origin/${base_ref}"
+            diff_range="origin/${base_ref}...HEAD"
+          else
+            git fetch --depth=2
+            diff_range="HEAD^..HEAD"
+          fi
+
+          touch_changed=$(git diff --name-only "$diff_range" -- pyproject.toml || true)
+          version_changed=$(git diff "$diff_range" -- pyproject.toml | grep -E '^\+version\s*=' || true)
+
+          publish=false
+          if [ -n "$touch_changed" ] && [ -n "$version_changed" ]; then
+            publish=true
+          fi
+
+          if [ "${{ github.event_name }}" = "pull_request" ] && [ "$publish" != "true" ]; then
+            echo "pyproject.toml version not updated in PR diff; please bump version." >&2
+            exit 1
+          fi
+
+          {
+            echo "version=${VERSION}"
+            echo "publish=${publish}"
+          } >> "$GITHUB_OUTPUT"
+
+  pypi-publish:
+    name: upload release to PyPI
+    if: github.event_name == 'push' && github.ref_name == 'main' && needs.lint-and-test.outputs.publish == 'true'
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.13"
+          activate-environment: 'true'
+
+      - name: Install dependencies
+        run: uv sync --group dev --locked
+
+      - name: Build distribution
+        run: uv build
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
