@@ -1,8 +1,6 @@
 from http import HTTPStatus
 from io import BytesIO
 
-import pytest
-
 from lambda_ai_cloud_api_client import errors, types
 
 
