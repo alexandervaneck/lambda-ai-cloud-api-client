@@ -1,0 +1,81 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Any, Literal, TypeVar, cast
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+T = TypeVar("T", bound="ApiErrorFirewallRulesetNotFound")
+
+
+@_attrs_define
+class ApiErrorFirewallRulesetNotFound:
+    """
+    Attributes:
+        code (Literal['global/object-does-not-exist']): The unique identifier for the type of error.
+        message (str): A description of the error. Default: 'Firewall ruleset does not exist or you do not have
+            permission to access it.'.
+        suggestion (str): One or more suggestions of possible ways to fix the error. Default: 'Check your firewall
+            ruleset ID and try again.'.
+    """
+
+    code: Literal["global/object-does-not-exist"]
+    message: str = "Firewall ruleset does not exist or you do not have permission to access it."
+    suggestion: str = "Check your firewall ruleset ID and try again."
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        code = self.code
+
+        message = self.message
+
+        suggestion = self.suggestion
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "code": code,
+                "message": message,
+                "suggestion": suggestion,
+            }
+        )
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
+        code = cast(Literal["global/object-does-not-exist"], d.pop("code"))
+        if code != "global/object-does-not-exist":
+            raise ValueError(f"code must match const 'global/object-does-not-exist', got '{code}'")
+
+        message = d.pop("message")
+
+        suggestion = d.pop("suggestion")
+
+        api_error_firewall_ruleset_not_found = cls(
+            code=code,
+            message=message,
+            suggestion=suggestion,
+        )
+
+        api_error_firewall_ruleset_not_found.additional_properties = d
+        return api_error_firewall_ruleset_not_found
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

@@ -1,0 +1,8 @@
+project_name_override: src
+package_name_override: lambda_ai_cloud_api_client
+post_hooks:
+   - "ruff check . --fix-only"
+   - "ruff format ."
+   - "rm README.md"
+   - "rm pyproject.toml"
+   - "rm .gitignore"
