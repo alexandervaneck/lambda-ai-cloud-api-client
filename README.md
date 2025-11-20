@@ -1,7 +1,7 @@
 # Lambda Cloud API - CLI wrapper
 
 This repo contains the generated Python client for the Lambda Cloud API and a lightweight CLI wrapper so you can call it
-directly from your terminal.
+directly from your terminal. The documentation for the api can be found here: https:/docs-api.lambda.ai/api/cloud
 
 ## Running the CLI locally
 
