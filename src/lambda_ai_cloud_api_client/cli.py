@@ -91,6 +91,26 @@ def _cmd_get_instance(args: argparse.Namespace) -> None:
 def _cmd_list_instance_types(args: argparse.Namespace) -> None:
     client = _build_client(args)
     response = list_instance_types(client=client)
+    if getattr(args, "available_only", False) and response.parsed is not None:
+        parsed = response.parsed
+        target = None
+        if hasattr(parsed, "data"):
+            target = parsed.data
+        elif hasattr(parsed, "additional_properties"):
+            target = parsed
+
+        if target and hasattr(target, "additional_properties"):
+            filtered = target.__class__()  # type: ignore[call-arg]
+            filtered.additional_properties = {
+                name: item
+                for name, item in target.additional_properties.items()
+                if item.regions_with_capacity_available
+            }
+            if hasattr(parsed, "data"):
+                parsed.data = filtered  # type: ignore[attr-defined]
+                response.parsed = parsed
+            else:
+                response.parsed = filtered
     _print_response(response)
 
 
@@ -257,6 +277,11 @@ def _build_parser() -> argparse.ArgumentParser:
         "instance-types",
         help="List available instance types.",
         parents=[common],
+    )
+    instance_types_parser.add_argument(
+        "--available-only",
+        action="store_true",
+        help="Show only instance types with available capacity.",
     )
     instance_types_parser.set_defaults(func=_cmd_list_instance_types)
 

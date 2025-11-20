@@ -12,7 +12,7 @@ directly from your terminal. The documentation for the api can be found here: ht
 
 Examples:
 
-- List instance types: `lambda-ai instance-types`
+- List instance types: `lambda-ai instance-types` (add `--available-only` to show only types with capacity)
 - List images: `lambda-ai images`
 - List SSH keys: `lambda-ai ssh-keys`
 - List instances: `lambda-ai instances ls`
