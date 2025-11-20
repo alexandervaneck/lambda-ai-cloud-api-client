@@ -15,7 +15,7 @@ Examples:
 - List instance types: `lambda-ai instance-types`
 - List images: `lambda-ai images`
 - List SSH keys: `lambda-ai ssh-keys`
-- List instances: `lambda-ai instances list`
+- List instances: `lambda-ai instances ls`
 - Get one instance: `lambda-ai instances get <instance-id>`
 - Launch an instance:
   `lambda-ai instances launch --region us-east-1 --instance-type gpu_1x_a10 --ssh-key my-key --name demo`

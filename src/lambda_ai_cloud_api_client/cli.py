@@ -211,9 +211,9 @@ def _build_parser() -> argparse.ArgumentParser:
     instances_parser = subparsers.add_parser("instances", help="Manage instances.", parents=[common])
     instances_sub = instances_parser.add_subparsers(dest="instances_command", required=True)
 
-    list_parser = instances_sub.add_parser("list", help="List running instances.")
-    list_parser.add_argument("--cluster-id", help="Filter by cluster ID.", default=None)
-    list_parser.set_defaults(func=_cmd_list_instances)
+    ls_parser = instances_sub.add_parser("ls", help="List running instances.")
+    ls_parser.add_argument("--cluster-id", help="Filter by cluster ID.", default=None)
+    ls_parser.set_defaults(func=_cmd_list_instances)
 
     get_parser = instances_sub.add_parser("get", help="Get details for a single instance.")
     get_parser.add_argument("id", help="Instance ID.")

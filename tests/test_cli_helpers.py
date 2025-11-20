@@ -245,6 +245,6 @@ def test_cmd_list_other_resources(monkeypatch, capsys):
 
 def test_build_parser_creates_subcommands():
     parser = cli._build_parser()
-    args = parser.parse_args(["instances", "list"])
+    args = parser.parse_args(["instances", "ls"])
     assert args.command == "instances"
-    assert args.instances_command == "list"
+    assert args.instances_command == "ls"
