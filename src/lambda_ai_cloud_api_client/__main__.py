@@ -11,6 +11,8 @@ from types import SimpleNamespace
 from typing import Any, TypeVar
 
 import click
+from rich.console import Console
+from rich.table import Table
 
 from . import AuthenticatedClient
 from .api.images.list_images import sync_detailed as list_images
@@ -85,6 +87,38 @@ def _cmd_list_instances(args: SimpleNamespace) -> None:
     client = _build_client(args)
     response = list_instances(client=client, cluster_id=args.cluster_id)
     _print_response(response)
+
+
+def _render_instances_table(response) -> None:
+    status = int(response.status_code)
+    if status < 200 or status >= 300 or response.parsed is None:
+        _print_response(response)
+        return
+
+    parsed = response.parsed
+    instances = getattr(parsed, "data", None)
+    if not instances:
+        Console().print("No instances found.")
+        return
+
+    table = Table(title="Instances", show_lines=False)
+    table.add_column("ID")
+    table.add_column("Name", default="")
+    table.add_column("Status")
+    table.add_column("Type")
+    table.add_column("Region")
+    table.add_column("IP", default="")
+
+    for inst in instances:
+        inst_name = getattr(inst, "name", "") or ""
+        inst_status = getattr(inst, "status", "") or ""
+        inst_type = getattr(getattr(inst, "instance_type", None), "name", "") or ""
+        inst_region = getattr(getattr(inst, "region", None), "name", "") or ""
+        inst_ip = getattr(inst, "ip", "") or ""
+
+        table.add_row(inst.id, inst_name, str(inst_status), inst_type, inst_region, inst_ip)
+
+    Console().print(table)
 
 
 def _cmd_get_instance(args: SimpleNamespace) -> None:
@@ -246,7 +280,9 @@ def main() -> None:
 @_common_options
 def root_ls(cluster_id: str | None, token: str | None, base_url: str, insecure: bool) -> None:
     args = SimpleNamespace(cluster_id=cluster_id, token=token, base_url=base_url, insecure=insecure)
-    _cmd_list_instances(args)
+    client = _build_client(args)
+    response = list_instances(client=client, cluster_id=args.cluster_id)
+    _render_instances_table(response)
 
 
 @main.group(help="Manage instances.")

@@ -15,7 +15,8 @@ Examples:
 - List instance types: `lambda-ai instance-types` (add `--available-only` to show only types with capacity, `--cheapest` to filter to the lowest price)
 - List images: `lambda-ai images`
 - List SSH keys: `lambda-ai ssh-keys`
-- List instances: `lambda-ai instances ls` (or the shortcut `lambda-ai ls`)
+- List instances: `lambda-ai instances ls`
+- Shortcut table view: `lambda-ai ls` (renders a table)
 - Get one instance: `lambda-ai instances get <instance-id>`
 - Launch an instance:
   `lambda-ai instances launch --region us-east-1 --instance-type gpu_1x_a10 --ssh-key my-key --name demo`

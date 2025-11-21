@@ -1,6 +1,7 @@
 # 1.3.0
 * feat: Add `click` and refactor argparse.
 * feat: Add `lai` command, as a shortcut to `lambda-ai`.
+* feat: Add `lai ls` for displaying instances in a table.
 
 # 1.2.0
 * docs: Set development status to production.
