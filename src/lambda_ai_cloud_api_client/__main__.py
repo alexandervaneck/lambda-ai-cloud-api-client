@@ -121,6 +121,48 @@ def _render_instances_table(response) -> None:
     Console().print(table)
 
 
+def _render_images_table(response) -> None:
+    status = int(response.status_code)
+    if status < 200 or status >= 300 or response.parsed is None:
+        _print_response(response)
+        return
+
+    parsed = response.parsed
+    images = getattr(parsed, "data", None)
+    if not images:
+        Console().print("No images found.")
+        return
+
+    table = Table(title="Images", show_lines=False)
+    table.add_column("ID")
+    table.add_column("Name")
+    table.add_column("Family")
+    table.add_column("Version")
+    table.add_column("Arch")
+    table.add_column("Region")
+
+    sorted_images = sorted(
+        images,
+        key=lambda img: (
+            getattr(getattr(img, "region", None), "name", "") or "",
+            getattr(img, "version", "") or "",
+        ),
+    )
+
+    for img in sorted_images:
+        region = getattr(img, "region", None)
+        table.add_row(
+            getattr(img, "id", ""),
+            getattr(img, "name", ""),
+            getattr(img, "family", ""),
+            getattr(img, "version", ""),
+            getattr(img, "architecture", ""),
+            getattr(region, "name", "") if region else "",
+        )
+
+    Console().print(table)
+
+
 def _cmd_get_instance(args: SimpleNamespace) -> None:
     client = _build_client(args)
     response = get_instance(id=args.id, client=client)
@@ -391,10 +433,57 @@ def instance_types_cmd(available_only: bool, cheapest: bool, token: str | None, 
 
 
 @main.command(name="images", help="List available images.")
+@click.option(
+    "--json-output",
+    is_flag=True,
+    help="Output raw JSON instead of a table.",
+)
+@click.option(
+    "--region",
+    multiple=True,
+    help="Filter images by region name (repeat to include multiple).",
+)
+@click.option(
+    "--arch",
+    multiple=True,
+    help="Filter images by architecture (repeat to include multiple).",
+)
+@click.option(
+    "--family",
+    multiple=True,
+    help="Filter images by family (repeat to include multiple).",
+)
 @_common_options
-def images_cmd(token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(token=token, base_url=base_url, insecure=insecure)
-    _cmd_list_images(args)
+def images_cmd(
+    json_output: bool,
+    region: tuple[str, ...],
+    arch: tuple[str, ...],
+    family: tuple[str, ...],
+    token: str | None,
+    base_url: str,
+    insecure: bool,
+) -> None:
+    args = SimpleNamespace(
+        token=token, base_url=base_url, insecure=insecure, region=list(region), arch=list(arch), family=list(family)
+    )
+    if json_output:
+        _cmd_list_images(args)
+        return
+    client = _build_client(args)
+    response = list_images(client=client)
+    if response.parsed and hasattr(response.parsed, "data"):
+        filtered = response.parsed.data
+        if args.region:
+            allowed = set(args.region)
+            filtered = [img for img in filtered if getattr(getattr(img, "region", None), "name", None) in allowed]
+        if args.arch:
+            allowed_arch = set(args.arch)
+            filtered = [img for img in filtered if getattr(img, "architecture", None) in allowed_arch]
+        if args.family:
+            allowed_family = set(args.family)
+            filtered = [img for img in filtered if getattr(img, "family", None) in allowed_family]
+        response.parsed.data = filtered  # type: ignore[attr-defined]
+    _render_images_table(response)
 
 
 @main.command(name="ssh-keys", help="List SSH keys.")

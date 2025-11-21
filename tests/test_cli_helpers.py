@@ -330,7 +330,23 @@ def test_build_parser_creates_subcommands(monkeypatch):
 
     called = {}
     monkeypatch.setattr(cli, "_cmd_list_instances", lambda args: called.setdefault("ls", args.cluster_id))
+    monkeypatch.setattr(cli, "_render_images_table", lambda response: called.setdefault("images", True))
+    monkeypatch.setattr(cli, "list_images", lambda client: DummyResponse(200, parsed=[]))
+    monkeypatch.setattr(
+        cli,
+        "list_instances",
+        lambda client, cluster_id=None: DummyResponse(200, parsed=SimpleNamespace(data=[]), content=b"{}"),
+    )
 
     ls_res = runner.invoke(cli.main, ["instances", "ls", "--cluster-id", "abc", "--token", "t"])
     assert ls_res.exit_code == 0
     assert called["ls"] == "abc"
+
+    root_ls = runner.invoke(cli.main, ["ls", "--cluster-id", "abc", "--token", "t"])
+    assert root_ls.exit_code == 0
+    assert called["ls"] == "abc"
+
+    images_res = runner.invoke(cli.main, ["images", "--token", "t"])
+    assert images_res.exit_code == 0
+    images_json = runner.invoke(cli.main, ["images", "--json-output", "--token", "t"])
+    assert images_json.exit_code == 0
