@@ -1,3 +1,6 @@
+# 1.3.0
+* feat: Add `click` and refactor argparse.
+
 # 1.2.0
 * docs: Set development status to production.
 

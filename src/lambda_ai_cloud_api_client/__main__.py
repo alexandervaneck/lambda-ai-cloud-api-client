@@ -1,13 +1,16 @@
-"""Command line wrapper for the Lambda Cloud API client."""
+"""Command line wrapper for the Lambda Cloud API client (click-based)."""
 
 from __future__ import annotations
 
-import argparse
 import json
 import os
 import sys
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from types import SimpleNamespace
+from typing import Any, TypeVar
+
+import click
 
 from . import AuthenticatedClient
 from .api.images.list_images import sync_detailed as list_images
@@ -26,6 +29,8 @@ from .models.requested_tag_entry import RequestedTagEntry
 
 DEFAULT_BASE_URL = os.getenv("LAMBDA_CLOUD_BASE_URL", "https://cloud.lambdalabs.com")
 TOKEN_ENV_VARS = ("LAMBDA_CLOUD_TOKEN", "LAMBDA_CLOUD_API_TOKEN", "LAMBDA_API_TOKEN")
+
+T = TypeVar("T")
 
 
 def _to_serializable(value: Any) -> Any:
@@ -67,7 +72,7 @@ def _load_token(explicit_token: str | None) -> str:
     sys.exit(1)
 
 
-def _build_client(args: argparse.Namespace) -> AuthenticatedClient:
+def _build_client(args: SimpleNamespace) -> AuthenticatedClient:
     token = _load_token(args.token)
     return AuthenticatedClient(
         base_url=args.base_url,
@@ -76,19 +81,19 @@ def _build_client(args: argparse.Namespace) -> AuthenticatedClient:
     )
 
 
-def _cmd_list_instances(args: argparse.Namespace) -> None:
+def _cmd_list_instances(args: SimpleNamespace) -> None:
     client = _build_client(args)
     response = list_instances(client=client, cluster_id=args.cluster_id)
     _print_response(response)
 
 
-def _cmd_get_instance(args: argparse.Namespace) -> None:
+def _cmd_get_instance(args: SimpleNamespace) -> None:
     client = _build_client(args)
     response = get_instance(id=args.id, client=client)
     _print_response(response)
 
 
-def _cmd_list_instance_types(args: argparse.Namespace) -> None:
+def _cmd_list_instance_types(args: SimpleNamespace) -> None:
     client = _build_client(args)
     response = list_instance_types(client=client)
     if response.parsed is not None:
@@ -125,13 +130,13 @@ def _cmd_list_instance_types(args: argparse.Namespace) -> None:
     _print_response(response)
 
 
-def _cmd_list_images(args: argparse.Namespace) -> None:
+def _cmd_list_images(args: SimpleNamespace) -> None:
     client = _build_client(args)
     response = list_images(client=client)
     _print_response(response)
 
 
-def _cmd_list_ssh_keys(args: argparse.Namespace) -> None:
+def _cmd_list_ssh_keys(args: SimpleNamespace) -> None:
     client = _build_client(args)
     response = list_ssh_keys(client=client)
     _print_response(response)
@@ -160,7 +165,7 @@ def _read_user_data(user_data_path: str | None) -> str | None:
     return path.read_text()
 
 
-def _parse_image(args: argparse.Namespace) -> ImageSpecificationFamily | ImageSpecificationID | None:
+def _parse_image(args: SimpleNamespace) -> ImageSpecificationFamily | ImageSpecificationID | None:
     if args.image_id and args.image_family:
         print("Use either --image-id or --image-family, not both.", file=sys.stderr)
         sys.exit(1)
@@ -171,7 +176,7 @@ def _parse_image(args: argparse.Namespace) -> ImageSpecificationFamily | ImageSp
     return None
 
 
-def _cmd_launch_instance(args: argparse.Namespace) -> None:
+def _cmd_launch_instance(args: SimpleNamespace) -> None:
     client = _build_client(args)
     try:
         region = PublicRegionCode(args.region)
@@ -208,112 +213,147 @@ def _cmd_launch_instance(args: argparse.Namespace) -> None:
     _print_response(response)
 
 
-def _cmd_terminate_instances(args: argparse.Namespace) -> None:
+def _cmd_terminate_instances(args: SimpleNamespace) -> None:
     client = _build_client(args)
     request = InstanceTerminateRequest(instance_ids=args.instance_id)
     response = terminate_instance(client=client, body=request)
     _print_response(response)
 
 
-def _add_common_args(parser: argparse.ArgumentParser) -> None:
-    parser.add_argument("--token", help="API token. Defaults to env vars: " + ", ".join(TOKEN_ENV_VARS))
-    parser.add_argument(
+def _common_options(func: Callable[..., T]) -> Callable[..., T]:
+    func = click.option("--token", help="API token. Defaults to env vars: " + ", ".join(TOKEN_ENV_VARS))(func)
+    func = click.option(
         "--base-url",
         default=DEFAULT_BASE_URL,
-        help=f"API base URL (default: {DEFAULT_BASE_URL})",
-    )
-    parser.add_argument(
+        show_default=True,
+        help="API base URL.",
+    )(func)
+    func = click.option(
         "--insecure",
-        action="store_true",
+        is_flag=True,
         help="Disable TLS verification (not recommended).",
+    )(func)
+    return func
+
+
+@click.group()
+def main() -> None:
+    """Interact with Lambda Cloud from the CLI."""
+
+
+@main.command("ls", help="List running instances (shortcut for 'instances ls').")
+@click.option("--cluster-id", default=None, help="Filter by cluster ID.")
+@_common_options
+def root_ls(cluster_id: str | None, token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(cluster_id=cluster_id, token=token, base_url=base_url, insecure=insecure)
+    _cmd_list_instances(args)
+
+
+@main.group(help="Manage instances.")
+def instances() -> None:
+    """Instances commands."""
+
+
+@instances.command(name="ls", help="List running instances.")
+@click.option("--cluster-id", default=None, help="Filter by cluster ID.")
+@_common_options
+def instances_ls(cluster_id: str | None, token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(cluster_id=cluster_id, token=token, base_url=base_url, insecure=insecure)
+    _cmd_list_instances(args)
+
+
+@instances.command(name="get", help="Get details for a single instance.")
+@click.argument("id")
+@_common_options
+def instances_get(id: str, token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(id=id, token=token, base_url=base_url, insecure=insecure)
+    _cmd_get_instance(args)
+
+
+@instances.command(name="launch", help="Launch a new instance.")
+@click.option("--region", required=True, help="Region code (e.g. us-east-1).")
+@click.option("--instance-type", required=True, help="Instance type name.")
+@click.option("--ssh-key", required=True, multiple=True, help="SSH key name to inject (repeat for multiple).")
+@click.option("--name", help="Instance name.")
+@click.option("--hostname", help="Hostname to assign.")
+@click.option("--filesystem", multiple=True, help="Filesystem name to mount (repeat for multiple).")
+@click.option("--image-id", help="Image ID to boot from.")
+@click.option("--image-family", help="Image family to boot from.")
+@click.option("--user-data-file", help="Path to cloud-init user-data file.")
+@click.option("--tag", multiple=True, help="Tag to apply, formatted as key=value (repeat for multiple).")
+@_common_options
+def instances_launch(
+    region: str,
+    instance_type: str,
+    ssh_key: tuple[str, ...],
+    name: str | None,
+    hostname: str | None,
+    filesystem: tuple[str, ...],
+    image_id: str | None,
+    image_family: str | None,
+    user_data_file: str | None,
+    tag: tuple[str, ...],
+    token: str | None,
+    base_url: str,
+    insecure: bool,
+) -> None:
+    args = SimpleNamespace(
+        region=region,
+        instance_type=instance_type,
+        ssh_key=list(ssh_key),
+        name=name,
+        hostname=hostname,
+        filesystem=list(filesystem) if filesystem else None,
+        image_id=image_id,
+        image_family=image_family,
+        user_data_file=user_data_file,
+        tag=list(tag),
+        token=token,
+        base_url=base_url,
+        insecure=insecure,
     )
+    _cmd_launch_instance(args)
 
 
-def _build_parser() -> argparse.ArgumentParser:
-    common = argparse.ArgumentParser(add_help=False)
-    _add_common_args(common)
+@instances.command(name="terminate", help="Terminate one or more instances.")
+@click.argument("instance_id", nargs=-1, required=True)
+@_common_options
+def instances_terminate(instance_id: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(instance_id=list(instance_id), token=token, base_url=base_url, insecure=insecure)
+    _cmd_terminate_instances(args)
 
-    parser = argparse.ArgumentParser(
-        description="Interact with Lambda Cloud from the CLI.",
-        parents=[common],
+
+@main.command(name="instance-types", help="List available instance types.")
+@click.option(
+    "--available-only",
+    is_flag=True,
+    help="Show only instance types with available capacity.",
+)
+@click.option(
+    "--cheapest",
+    is_flag=True,
+    help="Show only the cheapest instance type(s).",
+)
+@_common_options
+def instance_types_cmd(available_only: bool, cheapest: bool, token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(
+        available_only=available_only, cheapest=cheapest, token=token, base_url=base_url, insecure=insecure
     )
-    subparsers = parser.add_subparsers(dest="command", required=True)
-
-    instances_parser = subparsers.add_parser("instances", help="Manage instances.", parents=[common])
-    instances_sub = instances_parser.add_subparsers(dest="instances_command", required=True)
-
-    ls_parser = instances_sub.add_parser("ls", help="List running instances.")
-    ls_parser.add_argument("--cluster-id", help="Filter by cluster ID.", default=None)
-    ls_parser.set_defaults(func=_cmd_list_instances)
-
-    get_parser = instances_sub.add_parser("get", help="Get details for a single instance.")
-    get_parser.add_argument("id", help="Instance ID.")
-    get_parser.set_defaults(func=_cmd_get_instance)
-
-    launch_parser = instances_sub.add_parser("launch", help="Launch a new instance.")
-    launch_parser.add_argument("--region", required=True, help="Region code (e.g. us-east-1).")
-    launch_parser.add_argument("--instance-type", required=True, help="Instance type name.")
-    launch_parser.add_argument(
-        "--ssh-key",
-        required=True,
-        action="append",
-        help="SSH key name to inject (repeat for multiple).",
-    )
-    launch_parser.add_argument("--name", help="Instance name.")
-    launch_parser.add_argument("--hostname", help="Hostname to assign.")
-    launch_parser.add_argument(
-        "--filesystem",
-        action="append",
-        help="Filesystem name to mount (repeat for multiple).",
-    )
-    launch_parser.add_argument("--image-id", help="Image ID to boot from.")
-    launch_parser.add_argument("--image-family", help="Image family to boot from.")
-    launch_parser.add_argument("--user-data-file", help="Path to cloud-init user-data file.")
-    launch_parser.add_argument(
-        "--tag",
-        action="append",
-        help="Tag to apply, formatted as key=value (repeat for multiple).",
-    )
-    launch_parser.set_defaults(func=_cmd_launch_instance)
-
-    terminate_parser = instances_sub.add_parser("terminate", help="Terminate one or more instances.")
-    terminate_parser.add_argument(
-        "instance_id",
-        nargs="+",
-        help="Instance IDs to terminate.",
-    )
-    terminate_parser.set_defaults(func=_cmd_terminate_instances)
-
-    instance_types_parser = subparsers.add_parser(
-        "instance-types",
-        help="List available instance types.",
-        parents=[common],
-    )
-    instance_types_parser.add_argument(
-        "--available-only",
-        action="store_true",
-        help="Show only instance types with available capacity.",
-    )
-    instance_types_parser.add_argument(
-        "--cheapest",
-        action="store_true",
-        help="Show only the cheapest instance type(s).",
-    )
-    instance_types_parser.set_defaults(func=_cmd_list_instance_types)
-
-    images_parser = subparsers.add_parser("images", help="List available images.", parents=[common])
-    images_parser.set_defaults(func=_cmd_list_images)
-
-    ssh_parser = subparsers.add_parser("ssh-keys", help="List SSH keys.", parents=[common])
-    ssh_parser.set_defaults(func=_cmd_list_ssh_keys)
-
-    return parser
+    _cmd_list_instance_types(args)
 
 
-def main(argv: list[str] | None = None) -> None:
-    parser = _build_parser()
-    args = parser.parse_args(argv)
-    args.func(args)
+@main.command(name="images", help="List available images.")
+@_common_options
+def images_cmd(token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(token=token, base_url=base_url, insecure=insecure)
+    _cmd_list_images(args)
+
+
+@main.command(name="ssh-keys", help="List SSH keys.")
+@_common_options
+def ssh_keys_cmd(token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(token=token, base_url=base_url, insecure=insecure)
+    _cmd_list_ssh_keys(args)
 
 
 if __name__ == "__main__":

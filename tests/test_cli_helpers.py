@@ -2,8 +2,9 @@ import argparse
 from types import SimpleNamespace
 
 import pytest
+from click.testing import CliRunner
 
-from lambda_ai_cloud_api_client import cli
+from lambda_ai_cloud_api_client import __main__ as cli
 from lambda_ai_cloud_api_client.models import ImageSpecificationFamily, ImageSpecificationID, RequestedTagEntry
 
 
@@ -320,8 +321,16 @@ def test_cmd_terminate_instances(monkeypatch, capsys):
     assert '"terminated": true' in capsys.readouterr().out
 
 
-def test_build_parser_creates_subcommands():
-    parser = cli._build_parser()
-    args = parser.parse_args(["instances", "ls"])
-    assert args.command == "instances"
-    assert args.instances_command == "ls"
+def test_build_parser_creates_subcommands(monkeypatch):
+    runner = CliRunner()
+    res = runner.invoke(cli.main, ["--help"])
+    assert res.exit_code == 0
+    assert "instances" in res.output
+    assert "ls" in res.output
+
+    called = {}
+    monkeypatch.setattr(cli, "_cmd_list_instances", lambda args: called.setdefault("ls", args.cluster_id))
+
+    ls_res = runner.invoke(cli.main, ["instances", "ls", "--cluster-id", "abc", "--token", "t"])
+    assert ls_res.exit_code == 0
+    assert called["ls"] == "abc"
