@@ -13,10 +13,13 @@ directly from your terminal. The documentation for the api can be found here: ht
 Examples:
 
 - List instance types: `lambda-ai instance-types` (add `--available-only` to show only types with capacity, `--cheapest` to filter to the lowest price)
+- Table view of types: `lambda-ai types` (filters: `--available-only`, `--cheapest`, `--region`, `--gpu`, `--min-gpus`, `--min-vcpus`, `--min-memory`, `--max-price`)
 - List images: `lambda-ai images`
 - List SSH keys: `lambda-ai ssh-keys`
 - List instances: `lambda-ai instances ls`
 - Shortcut table view: `lambda-ai ls` (renders a table; supports `--region` multiple times)
+- Quick launch: `lambda-ai start --region us-east-1 --instance-type gpu_1x_a10 --ssh-key my-key`
+- Quick stop: `lambda-ai stop <id-1> <id-2>`
 - Get one instance: `lambda-ai instances get <instance-id>`
 - Launch an instance:
   `lambda-ai instances launch --region us-east-1 --instance-type gpu_1x_a10 --ssh-key my-key --name demo`

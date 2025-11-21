@@ -1,0 +1,38 @@
+                                                                                  Images                                                                                  
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ID                                                  ┃ Name                       ┃ Family                     ┃ Version          ┃ Arch       ┃ Region                 ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ asia-northeast-1       │
+│ 4ff21799-3c5e-4448-963e-046700d652c0                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ asia-northeast-1       │
+│ 1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ asia-northeast-2       │
+│ 4ff21799-3c5e-4448-963e-046700d652c0                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ asia-northeast-2       │
+│ 1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ asia-south-1           │
+│ 4ff21799-3c5e-4448-963e-046700d652c0                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ asia-south-1           │
+│ 1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ australia-east-1       │
+│ 4ff21799-3c5e-4448-963e-046700d652c0                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ australia-east-1       │
+│ 1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ europe-central-1       │
+│ 4ff21799-3c5e-4448-963e-046700d652c0                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ europe-central-1       │
+│ 1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ me-west-1              │
+│ 4ff21799-3c5e-4448-963e-046700d652c0                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ me-west-1              │
+│ 1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ us-east-1              │
+│ 4ff21799-3c5e-4448-963e-046700d652c0                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ us-east-1              │
+│ a96996c5-02d3-49eb-8914-c1ddb20d3b08                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ us-east-2              │
+│ 08151eac-0619-4cd3-acab-5786a5fda1e4                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ us-east-2              │
+│ 78512ef8-8f06-45eb-9ce6-aee96622f787                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ arm64      │ us-east-3              │
+│ 0eb41057-8eb0-4303-8364-ca93b87e49b5                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ arm64      │ us-east-3              │
+│ 1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ us-midwest-1           │
+│ 4ff21799-3c5e-4448-963e-046700d652c0                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ us-midwest-1           │
+│ 42e03f08-e4c6-4f56-9bb7-9e66d309873b                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ us-midwest-2           │
+│ 38e2d3e5-cb1e-4c0e-8b96-8e69b516e300                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ us-south-1             │
+│ bc089187-a08c-410f-bc29-5da775ee0a04                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ us-south-1             │
+│ 694f7ddf-5c43-41d5-b9cf-f3ff88f4f795                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ us-south-2             │
+│ fb633aee-2605-41b8-b653-953322f50cd3                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ us-south-2             │
+│ 418327d8-1ec8-43dd-9b42-8c786bf5fe18                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ us-south-3             │
+│ b389a52f-2e75-4b1c-b21c-4ba4bb42fca8                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ us-south-3             │
+│ 1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ us-west-1              │
+│ 4ff21799-3c5e-4448-963e-046700d652c0                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ us-west-1              │
+│ 1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ us-west-2              │
+│ 4ff21799-3c5e-4448-963e-046700d652c0                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ us-west-2              │
+│ a9207a11-7ed6-4dc4-850e-5685434b2704                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1026      │ x86_64     │ us-west-3              │
+│ 496dafa8-8dab-4a2d-afbf-b94e5d09d53f                │ Lambda Stack 22.04         │ lambda-stack-22-04         │ 22.4.5-1459      │ x86_64     │ us-west-3              │
+└─────────────────────────────────────────────────────┴────────────────────────────┴────────────────────────────┴──────────────────┴────────────┴────────────────────────┘

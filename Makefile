@@ -13,4 +13,7 @@ fmt:
 	uvx ruff check --fix .
 
 test:
+	uv run pytest --cov $(PYTEST_ARGS)
+
+test-tox:
 	uvx --with tox-uv tox

@@ -2,298 +2,30 @@
 
 from __future__ import annotations
 
-import json
+import json as _json
 import os
 import sys
 from collections.abc import Callable
-from pathlib import Path
 from types import SimpleNamespace
-from typing import Any, TypeVar
+from typing import TypeVar
 
 import click
-from rich.console import Console
-from rich.table import Table
 
-from . import AuthenticatedClient
-from .api.images.list_images import sync_detailed as list_images
-from .api.instances.get_instance import sync_detailed as get_instance
-from .api.instances.launch_instance import sync_detailed as launch_instance
-from .api.instances.list_instance_types import sync_detailed as list_instance_types
-from .api.instances.list_instances import sync_detailed as list_instances
-from .api.instances.terminate_instance import sync_detailed as terminate_instance
-from .api.ssh_keys.list_ssh_keys import sync_detailed as list_ssh_keys
-from .models.image_specification_family import ImageSpecificationFamily
-from .models.image_specification_id import ImageSpecificationID
-from .models.instance_launch_request import InstanceLaunchRequest
-from .models.instance_terminate_request import InstanceTerminateRequest
-from .models.public_region_code import PublicRegionCode
-from .models.requested_tag_entry import RequestedTagEntry
+from lambda_ai_cloud_api_client.cli.get import get_instance
+from lambda_ai_cloud_api_client.cli.images import filter_images, list_images, render_images_table
+from lambda_ai_cloud_api_client.cli.keys import filter_keys, list_keys, render_keys_table
+from lambda_ai_cloud_api_client.cli.ls import filter_instances, list_instances, render_instances_table
+from lambda_ai_cloud_api_client.cli.rename import rename_instance
+from lambda_ai_cloud_api_client.cli.response import print_response
+from lambda_ai_cloud_api_client.cli.restart import restart_instances
+from lambda_ai_cloud_api_client.cli.start import start_instance
+from lambda_ai_cloud_api_client.cli.stop import stop_instances
+from lambda_ai_cloud_api_client.cli.types import filter_instance_types, list_instance_types, render_types_table
 
 DEFAULT_BASE_URL = os.getenv("LAMBDA_CLOUD_BASE_URL", "https://cloud.lambdalabs.com")
 TOKEN_ENV_VARS = ("LAMBDA_CLOUD_TOKEN", "LAMBDA_CLOUD_API_TOKEN", "LAMBDA_API_TOKEN")
 
 T = TypeVar("T")
-
-
-def _to_serializable(value: Any) -> Any:
-    """Convert API models into JSON serializable structures."""
-    if hasattr(value, "to_dict"):
-        return _to_serializable(value.to_dict())
-    if isinstance(value, dict):
-        return {k: _to_serializable(v) for k, v in value.items()}
-    if isinstance(value, (list, tuple)):
-        return [_to_serializable(v) for v in value]
-    return value
-
-
-def _print_response(response) -> None:
-    """Pretty-print responses and exit non-zero on errors."""
-    status = int(response.status_code)
-    parsed = response.parsed
-    if 200 <= status < 300:
-        payload = _to_serializable(parsed) if parsed is not None else {"status": status}
-        print(json.dumps(payload, indent=2))
-        return
-
-    payload = parsed if parsed is not None else response.content.decode("utf-8", errors="replace")
-    print(json.dumps({"status_code": status, "error": _to_serializable(payload)}, indent=2))
-    sys.exit(1)
-
-
-def _load_token(explicit_token: str | None) -> str:
-    if explicit_token:
-        return explicit_token
-    for env_var in TOKEN_ENV_VARS:
-        token = os.getenv(env_var)
-        if token:
-            return token
-    print(
-        f"No API token provided. Supply --token or set one of: {', '.join(TOKEN_ENV_VARS)}",
-        file=sys.stderr,
-    )
-    sys.exit(1)
-
-
-def _build_client(args: SimpleNamespace) -> AuthenticatedClient:
-    token = _load_token(args.token)
-    return AuthenticatedClient(
-        base_url=args.base_url,
-        token=token,
-        verify_ssl=not args.insecure,
-    )
-
-
-def _cmd_list_instances(args: SimpleNamespace) -> None:
-    client = _build_client(args)
-    response = list_instances(client=client, cluster_id=args.cluster_id)
-    _print_response(response)
-
-
-def _render_instances_table(response) -> None:
-    status = int(response.status_code)
-    if status < 200 or status >= 300 or response.parsed is None:
-        _print_response(response)
-        return
-
-    parsed = response.parsed
-    instances = getattr(parsed, "data", None)
-    if not instances:
-        Console().print("No instances found.")
-        return
-
-    table = Table(title="Instances", show_lines=False)
-    table.add_column("ID")
-    table.add_column("Name", default="")
-    table.add_column("Status")
-    table.add_column("Type")
-    table.add_column("Region")
-    table.add_column("IP", default="")
-
-    for inst in instances:
-        inst_name = getattr(inst, "name", "") or ""
-        inst_status = getattr(inst, "status", "") or ""
-        inst_type = getattr(getattr(inst, "instance_type", None), "name", "") or ""
-        inst_region = getattr(getattr(inst, "region", None), "name", "") or ""
-        inst_ip = getattr(inst, "ip", "") or ""
-
-        table.add_row(inst.id, inst_name, str(inst_status), inst_type, inst_region, inst_ip)
-
-    Console().print(table)
-
-
-def _render_images_table(response) -> None:
-    status = int(response.status_code)
-    if status < 200 or status >= 300 or response.parsed is None:
-        _print_response(response)
-        return
-
-    parsed = response.parsed
-    images = getattr(parsed, "data", None)
-    if not images:
-        Console().print("No images found.")
-        return
-
-    table = Table(title="Images", show_lines=False)
-    table.add_column("ID")
-    table.add_column("Name")
-    table.add_column("Family")
-    table.add_column("Version")
-    table.add_column("Arch")
-    table.add_column("Region")
-
-    sorted_images = sorted(
-        images,
-        key=lambda img: (
-            getattr(getattr(img, "region", None), "name", "") or "",
-            getattr(img, "version", "") or "",
-        ),
-    )
-
-    for img in sorted_images:
-        region = getattr(img, "region", None)
-        table.add_row(
-            getattr(img, "id", ""),
-            getattr(img, "name", ""),
-            getattr(img, "family", ""),
-            getattr(img, "version", ""),
-            getattr(img, "architecture", ""),
-            getattr(region, "name", "") if region else "",
-        )
-
-    Console().print(table)
-
-
-def _cmd_get_instance(args: SimpleNamespace) -> None:
-    client = _build_client(args)
-    response = get_instance(id=args.id, client=client)
-    _print_response(response)
-
-
-def _cmd_list_instance_types(args: SimpleNamespace) -> None:
-    client = _build_client(args)
-    response = list_instance_types(client=client)
-    if response.parsed is not None:
-        parsed = response.parsed
-        target = None
-        if hasattr(parsed, "data"):
-            target = parsed.data
-        elif hasattr(parsed, "additional_properties"):
-            target = parsed
-
-        if target and hasattr(target, "additional_properties"):
-            items = dict(target.additional_properties)
-
-            if getattr(args, "available_only", False):
-                items = {name: item for name, item in items.items() if item.regions_with_capacity_available}
-
-            if getattr(args, "cheapest", False) and items:
-                prices: dict[str, int] = {}
-                for name, item in items.items():
-                    price = getattr(getattr(item, "instance_type", None), "price_cents_per_hour", None)
-                    if price is not None:
-                        prices[name] = price
-                if prices:
-                    min_price = min(prices.values())
-                    items = {name: item for name, item in items.items() if prices.get(name) == min_price}
-
-            filtered = target.__class__()  # type: ignore[call-arg]
-            filtered.additional_properties = items
-            if hasattr(parsed, "data"):
-                parsed.data = filtered  # type: ignore[attr-defined]
-                response.parsed = parsed
-            else:
-                response.parsed = filtered
-    _print_response(response)
-
-
-def _cmd_list_images(args: SimpleNamespace) -> None:
-    client = _build_client(args)
-    response = list_images(client=client)
-    _print_response(response)
-
-
-def _cmd_list_ssh_keys(args: SimpleNamespace) -> None:
-    client = _build_client(args)
-    response = list_ssh_keys(client=client)
-    _print_response(response)
-
-
-def _parse_tags(raw_tags: list[str] | None) -> list[RequestedTagEntry] | None:
-    if not raw_tags:
-        return None
-    tags: list[RequestedTagEntry] = []
-    for raw in raw_tags:
-        if "=" not in raw:
-            print(f"Invalid tag '{raw}'. Use key=value format.", file=sys.stderr)
-            sys.exit(1)
-        key, value = raw.split("=", 1)
-        tags.append(RequestedTagEntry(key=key, value=value))
-    return tags
-
-
-def _read_user_data(user_data_path: str | None) -> str | None:
-    if not user_data_path:
-        return None
-    path = Path(user_data_path)
-    if not path.exists():
-        print(f"User-data file not found: {path}", file=sys.stderr)
-        sys.exit(1)
-    return path.read_text()
-
-
-def _parse_image(args: SimpleNamespace) -> ImageSpecificationFamily | ImageSpecificationID | None:
-    if args.image_id and args.image_family:
-        print("Use either --image-id or --image-family, not both.", file=sys.stderr)
-        sys.exit(1)
-    if args.image_id:
-        return ImageSpecificationID(id=args.image_id)
-    if args.image_family:
-        return ImageSpecificationFamily(family=args.image_family)
-    return None
-
-
-def _cmd_launch_instance(args: SimpleNamespace) -> None:
-    client = _build_client(args)
-    try:
-        region = PublicRegionCode(args.region)
-    except ValueError:
-        valid_regions = ", ".join([r.value for r in PublicRegionCode])
-        print(f"Invalid region '{args.region}'. Choose one of: {valid_regions}", file=sys.stderr)
-        sys.exit(1)
-
-    image = _parse_image(args)
-    tags = _parse_tags(args.tag)
-    user_data = _read_user_data(args.user_data_file)
-
-    request_params: dict[str, Any] = {
-        "region_name": region,
-        "instance_type_name": args.instance_type,
-        "ssh_key_names": args.ssh_key,
-    }
-
-    if args.name:
-        request_params["name"] = args.name
-    if args.hostname:
-        request_params["hostname"] = args.hostname
-    if args.filesystem:
-        request_params["file_system_names"] = args.filesystem
-    if image:
-        request_params["image"] = image
-    if user_data:
-        request_params["user_data"] = user_data
-    if tags:
-        request_params["tags"] = tags
-
-    request = InstanceLaunchRequest(**request_params)
-    response = launch_instance(client=client, body=request)
-    _print_response(response)
-
-
-def _cmd_terminate_instances(args: SimpleNamespace) -> None:
-    client = _build_client(args)
-    request = InstanceTerminateRequest(instance_ids=args.instance_id)
-    response = terminate_instance(client=client, body=request)
-    _print_response(response)
 
 
 def _common_options(func: Callable[..., T]) -> Callable[..., T]:
@@ -312,55 +44,55 @@ def _common_options(func: Callable[..., T]) -> Callable[..., T]:
     return func
 
 
-@click.group()
+class OrderedGroup(click.Group):
+    def list_commands(self, ctx):
+        return self.commands
+
+
+@click.group(cls=OrderedGroup)
 def main() -> None:
     """Interact with Lambda Cloud from the CLI."""
 
 
-@main.command("ls", help="List running instances (shortcut for 'instances ls').")
-@click.option("--cluster-id", default=None, help="Filter by cluster ID.")
+@main.command("ls", help="List instances.")
+@click.option("--status", multiple=True, help="Filter by status (repeat to include multiple).")
 @click.option("--region", multiple=True, help="Filter by region (repeat to include multiple).")
+@click.option("--json", is_flag=True, help="Output raw JSON instead of a table.")
 @_common_options
-def root_ls(
-    cluster_id: str | None, region: tuple[str, ...], token: str | None, base_url: str, insecure: bool
+def ls_cmd(
+    status: tuple[str, ...], region: tuple[str, ...], json: bool, token: str | None, base_url: str, insecure: bool
 ) -> None:
     args = SimpleNamespace(
-        cluster_id=cluster_id, token=token, base_url=base_url, insecure=insecure, region=list(region)
+        token=token,
+        base_url=base_url,
+        insecure=insecure,
+        status=list(status),
+        region=list(region),
     )
-    client = _build_client(args)
-    response = list_instances(client=client, cluster_id=args.cluster_id)
-    # Apply region filter client-side since API does not support it directly.
-    if args.region and response.parsed and hasattr(response.parsed, "data"):
-        allowed = set(args.region)
-        filtered = [
-            inst for inst in response.parsed.data if getattr(getattr(inst, "region", None), "name", None) in allowed
-        ]
-        response.parsed.data = filtered  # type: ignore[attr-defined]
-    _render_instances_table(response)
+    response = list_instances(args)
+    filtered_response = filter_instances(response, args)
+
+    if json:
+        print_response(filtered_response)
+        return
+
+    render_instances_table(filtered_response)
 
 
-@main.group(help="Manage instances.")
-def instances() -> None:
-    """Instances commands."""
-
-
-@instances.command(name="ls", help="List running instances.")
-@click.option("--cluster-id", default=None, help="Filter by cluster ID.")
-@_common_options
-def instances_ls(cluster_id: str | None, token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(cluster_id=cluster_id, token=token, base_url=base_url, insecure=insecure)
-    _cmd_list_instances(args)
-
-
-@instances.command(name="get", help="Get details for a single instance.")
+@main.command(name="get", help="Get instance details.")
 @click.argument("id")
 @_common_options
-def instances_get(id: str, token: str | None, base_url: str, insecure: bool) -> None:
+def get_cmd(id: str, token: str | None, base_url: str, insecure: bool) -> None:
     args = SimpleNamespace(id=id, token=token, base_url=base_url, insecure=insecure)
-    _cmd_get_instance(args)
+    response = get_instance(args)
+    print_response(response)
+
+    status = int(response.status_code)
+    if status < 200 or status >= 300 or response.parsed is None:
+        sys.exit(1)
 
 
-@instances.command(name="launch", help="Launch a new instance.")
+@main.command(name="start", help="Start/launch a new instance.")
 @click.option("--region", required=True, help="Region code (e.g. us-east-1).")
 @click.option("--instance-type", required=True, help="Instance type name.")
 @click.option("--ssh-key", required=True, multiple=True, help="SSH key name to inject (repeat for multiple).")
@@ -371,8 +103,9 @@ def instances_get(id: str, token: str | None, base_url: str, insecure: bool) -> 
 @click.option("--image-family", help="Image family to boot from.")
 @click.option("--user-data-file", help="Path to cloud-init user-data file.")
 @click.option("--tag", multiple=True, help="Tag to apply, formatted as key=value (repeat for multiple).")
+@click.option("--json", is_flag=True, help="Output raw JSON instead of a table.")
 @_common_options
-def instances_launch(
+def start_cmd(
     region: str,
     instance_type: str,
     ssh_key: tuple[str, ...],
@@ -383,6 +116,7 @@ def instances_launch(
     image_family: str | None,
     user_data_file: str | None,
     tag: tuple[str, ...],
+    json: bool,
     token: str | None,
     base_url: str,
     insecure: bool,
@@ -402,46 +136,122 @@ def instances_launch(
         base_url=base_url,
         insecure=insecure,
     )
-    _cmd_launch_instance(args)
+    response = start_instance(args)
+
+    status = int(response.status_code)
+    if status < 200 or status >= 300 or response.parsed is None:
+        print_response(response)
+        sys.exit(1)
+
+    instance_ids = response.parsed.data.instance_ids
+    if json:
+        print(_json.dumps(instance_ids, indent=2))
+        return
+
+    print(f"Started instances: {', '.join(instance_ids)}")
 
 
-@instances.command(name="terminate", help="Terminate one or more instances.")
-@click.argument("instance_id", nargs=-1, required=True)
+@main.command(name="stop", help="Stop/terminate one or more instances.")
+@click.argument("id", nargs=-1, required=True)
 @_common_options
-def instances_terminate(instance_id: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(instance_id=list(instance_id), token=token, base_url=base_url, insecure=insecure)
-    _cmd_terminate_instances(args)
+def stop_cmd(id: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(id=list(id), token=token, base_url=base_url, insecure=insecure)
+    response = stop_instances(args)
+    print_response(response)
+
+    status = int(response.status_code)
+    if status < 200 or status >= 300 or response.parsed is None:
+        sys.exit(1)
 
 
-@main.command(name="instance-types", help="List available instance types.")
-@click.option(
-    "--available-only",
-    is_flag=True,
-    help="Show only instance types with available capacity.",
-)
-@click.option(
-    "--cheapest",
-    is_flag=True,
-    help="Show only the cheapest instance type(s).",
-)
+@main.command(name="restart", help="Restart one or more instances.")
+@click.argument("id", nargs=-1, required=True)
 @_common_options
-def instance_types_cmd(available_only: bool, cheapest: bool, token: str | None, base_url: str, insecure: bool) -> None:
+def restart_cmd(id: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(id=list(id), token=token, base_url=base_url, insecure=insecure)
+    response = restart_instances(args)
+    print_response(response)
+
+    status = int(response.status_code)
+    if status < 200 or status >= 300 or response.parsed is None:
+        sys.exit(1)
+
+
+@main.command(name="rename", help="Rename an instance.")
+@click.argument("id")
+@click.argument("name")
+@_common_options
+def rename_cmd(id: str, name: str, token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(id=id, name=name, token=token, base_url=base_url, insecure=insecure)
+    response = rename_instance(args)
+    print_response(response)
+
+    status = int(response.status_code)
+    if status < 200 or status >= 300 or response.parsed is None:
+        sys.exit(1)
+
+
+@main.command(name="types", help="List instance types.")
+@click.option("--available", is_flag=True, help="Show only types with available capacity.")
+@click.option("--cheapest", is_flag=True, help="Show only the cheapest type(s).")
+@click.option("--region", multiple=True, help="Filter by region (repeat allowed).")
+@click.option("--gpu", multiple=True, help="Filter by GPU description substring (repeat allowed).")
+@click.option("--min-gpus", type=int, default=None, help="Minimum GPUs.")
+@click.option("--min-vcpus", type=int, default=None, help="Minimum vCPUs.")
+@click.option("--min-memory", type=int, default=None, help="Minimum memory (GiB).")
+@click.option("--min-storage", type=int, default=None, help="Minimum storage (GiB).")
+@click.option("--max-price", type=float, default=None, help="Maximum price (cents/hour).")
+@click.option("--json", is_flag=True, help="Output raw JSON instead of a table.")
+@_common_options
+def types_cmd(
+    available: bool,
+    cheapest: bool,
+    region: tuple[str, ...],
+    gpu: tuple[str, ...],
+    min_gpus: int | None,
+    min_vcpus: int | None,
+    min_memory: int | None,
+    min_storage: int | None,
+    max_price: int | None,
+    json: bool,
+    token: str | None,
+    base_url: str,
+    insecure: bool,
+) -> None:
     args = SimpleNamespace(
-        available_only=available_only, cheapest=cheapest, token=token, base_url=base_url, insecure=insecure
+        token=token,
+        base_url=base_url,
+        insecure=insecure,
+        available=available,
+        cheapest=cheapest,
+        region=list(region),
+        gpu=gpu,
+        min_gpus=min_gpus,
+        min_vcpus=min_vcpus,
+        min_memory=min_memory,
+        min_storage=min_storage,
+        max_price=max_price,
     )
-    _cmd_list_instance_types(args)
+    response = list_instance_types(args)
+    filtered_response = filter_instance_types(response, args)
+
+    if json:
+        print_response(filtered_response)
+        return
+
+    render_types_table(filtered_response)
 
 
 @main.command(name="images", help="List available images.")
 @click.option(
-    "--json-output",
-    is_flag=True,
-    help="Output raw JSON instead of a table.",
+    "--family",
+    multiple=True,
+    help="Filter images by family (repeat to include multiple).",
 )
 @click.option(
-    "--region",
+    "--version",
     multiple=True,
-    help="Filter images by region name (repeat to include multiple).",
+    help="Filter images by version (repeat to include multiple).",
 )
 @click.option(
     "--arch",
@@ -449,48 +259,79 @@ def instance_types_cmd(available_only: bool, cheapest: bool, token: str | None, 
     help="Filter images by architecture (repeat to include multiple).",
 )
 @click.option(
-    "--family",
+    "--region",
     multiple=True,
-    help="Filter images by family (repeat to include multiple).",
+    help="Filter images by region name (repeat to include multiple).",
+)
+@click.option(
+    "--json",
+    is_flag=True,
+    help="Output raw JSON instead of a table.",
 )
 @_common_options
 def images_cmd(
-    json_output: bool,
-    region: tuple[str, ...],
-    arch: tuple[str, ...],
     family: tuple[str, ...],
+    version: tuple[str, ...],
+    arch: tuple[str, ...],
+    region: tuple[str, ...],
+    json: bool,
     token: str | None,
     base_url: str,
     insecure: bool,
 ) -> None:
     args = SimpleNamespace(
-        token=token, base_url=base_url, insecure=insecure, region=list(region), arch=list(arch), family=list(family)
+        token=token,
+        base_url=base_url,
+        insecure=insecure,
+        family=list(family),
+        version=list(version),
+        arch=list(arch),
+        region=list(region),
     )
-    if json_output:
-        _cmd_list_images(args)
+    response = list_images(args)
+    filtered_response = filter_images(response, args)
+
+    if json:
+        print_response(filtered_response)
         return
-    client = _build_client(args)
-    response = list_images(client=client)
-    if response.parsed and hasattr(response.parsed, "data"):
-        filtered = response.parsed.data
-        if args.region:
-            allowed = set(args.region)
-            filtered = [img for img in filtered if getattr(getattr(img, "region", None), "name", None) in allowed]
-        if args.arch:
-            allowed_arch = set(args.arch)
-            filtered = [img for img in filtered if getattr(img, "architecture", None) in allowed_arch]
-        if args.family:
-            allowed_family = set(args.family)
-            filtered = [img for img in filtered if getattr(img, "family", None) in allowed_family]
-        response.parsed.data = filtered  # type: ignore[attr-defined]
-    _render_images_table(response)
+
+    render_images_table(filtered_response)
 
 
-@main.command(name="ssh-keys", help="List SSH keys.")
+@main.command(name="keys", help="List SSH keys.")
+@click.option(
+    "--id",
+    multiple=True,
+    help="Filter keys by id (repeat to include multiple).",
+)
+@click.option(
+    "--name",
+    multiple=True,
+    help="Filter key by name (repeat to include multiple).",
+)
+@click.option(
+    "--json",
+    is_flag=True,
+    help="Output raw JSON instead of a table.",
+)
 @_common_options
-def ssh_keys_cmd(token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(token=token, base_url=base_url, insecure=insecure)
-    _cmd_list_ssh_keys(args)
+def ssh_keys_cmd(id: str, name: str, json: bool, token: str | None, base_url: str, insecure: bool) -> None:
+    args = SimpleNamespace(
+        id=id,
+        name=name,
+        token=token,
+        base_url=base_url,
+        insecure=insecure,
+    )
+
+    response = list_keys(args)
+    filtered_response = filter_keys(response, args)
+
+    if json:
+        print_response(filtered_response)
+        return
+
+    render_keys_table(filtered_response)
 
 
 if __name__ == "__main__":

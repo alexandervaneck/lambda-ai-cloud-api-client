@@ -1,8 +1,15 @@
-# 1.3.0
+# 2.0.0
 * feat: Add `click` and refactor argparse.
 * feat: Add `lai` command, as a shortcut to `lambda-ai`.
 * feat: Add `lai ls` for displaying instances in a table.
+* feat: Add `lai get` for display all information of an instance.
+* feat: Add `lai start` for starting/launching new instances.
+* feat: Add `lai stop` for stopping/terminating instances.
+* feat: Add `lai restart` for restarting instances.
 * feat: Add `lai images` for displaying images in a table.
+* feat: Add `lai types` for displaying instance types in a table.
+* feat: Add `lai keys` for displaying ssh keys in a table.
+* removal: Remove lambda-ai command and instance-types, instances and ssh-keys subcommands. 
 
 # 1.2.0
 * docs: Set development status to production.

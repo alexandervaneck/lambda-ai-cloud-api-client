@@ -32,7 +32,6 @@ dependencies = [
 ]
 
 [project.scripts]
-lambda-ai = "lambda_ai_cloud_api_client.__main__:main"
 lai = "lambda_ai_cloud_api_client.__main__:main"
 
 [build-system]
@@ -81,4 +80,4 @@ branch = true
 [tool.coverage.report]
 show_missing = true
 skip_covered = true
-sort = '-Cover'
+sort = 'Cover'

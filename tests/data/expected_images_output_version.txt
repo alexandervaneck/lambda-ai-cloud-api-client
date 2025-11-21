@@ -1,0 +1,40 @@
+                                                                                  Images                                                                                  
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+┃ ID                                     ┃ Name                                                  ┃ Family                     ┃ Version      ┃ Arch   ┃ Region           ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+│ 87a00082-3c81-48e9-aa2f-38197fa4c244   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ asia-northeast-1 │
+│ 4ff21799-3c5e-4448-963e-046700d652c0   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ asia-northeast-1 │
+│ 87a00082-3c81-48e9-aa2f-38197fa4c244   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ asia-northeast-2 │
+│ 4ff21799-3c5e-4448-963e-046700d652c0   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ asia-northeast-2 │
+│ 87a00082-3c81-48e9-aa2f-38197fa4c244   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ asia-south-1     │
+│ 4ff21799-3c5e-4448-963e-046700d652c0   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ asia-south-1     │
+│ 87a00082-3c81-48e9-aa2f-38197fa4c244   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ australia-east-1 │
+│ 4ff21799-3c5e-4448-963e-046700d652c0   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ australia-east-1 │
+│ 87a00082-3c81-48e9-aa2f-38197fa4c244   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ europe-central-1 │
+│ 4ff21799-3c5e-4448-963e-046700d652c0   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ europe-central-1 │
+│ 87a00082-3c81-48e9-aa2f-38197fa4c244   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ me-west-1        │
+│ 4ff21799-3c5e-4448-963e-046700d652c0   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ me-west-1        │
+│ 87a00082-3c81-48e9-aa2f-38197fa4c244   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ us-east-1        │
+│ 4ff21799-3c5e-4448-963e-046700d652c0   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ us-east-1        │
+│ 222dd329-2d28-4b09-9c94-078b515a3a23   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ us-east-2        │
+│ 08151eac-0619-4cd3-acab-5786a5fda1e4   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ us-east-2        │
+│ 0eb41057-8eb0-4303-8364-ca93b87e49b5   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ arm64  │ us-east-3        │
+│ 87a00082-3c81-48e9-aa2f-38197fa4c244   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ us-midwest-1     │
+│ 4ff21799-3c5e-4448-963e-046700d652c0   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ us-midwest-1     │
+│ c5ae8f4b-f876-4d3d-aab8-7e4f77838a5d   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ us-midwest-2     │
+│ 42e03f08-e4c6-4f56-9bb7-9e66d309873b   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ us-midwest-2     │
+│ d084e71d-a08f-4378-89cc-7ce5ce1dacd8   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ us-south-1       │
+│ bc089187-a08c-410f-bc29-5da775ee0a04   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ us-south-1       │
+│ 9ad08af3-e8dd-4196-82bb-142727f11fa6   │ Lambda Stack (Legacy) 22.04                           │ lambda-stack-legacy-22-04  │ 22.4.5-1459  │ x86_64 │ us-south-1       │
+│ 7667b0f8-a7e0-4653-bd38-18c2b9a20e70   │ Lambda Stack (Legacy) on Ubuntu 22.04.5 LTS (1459)    │ lambda-stack-legacy-22-04  │ 22.4.5-1459  │ x86_64 │ us-south-2       │
+│ 9dbea942-2fa9-4e81-9310-50c779a2412d   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ us-south-2       │
+│ fb633aee-2605-41b8-b653-953322f50cd3   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ us-south-2       │
+│ e16ee41c-94ba-4682-97e3-848f4a834423   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ us-south-3       │
+│ b389a52f-2e75-4b1c-b21c-4ba4bb42fca8   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ us-south-3       │
+│ 87a00082-3c81-48e9-aa2f-38197fa4c244   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ us-west-1        │
+│ 4ff21799-3c5e-4448-963e-046700d652c0   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ us-west-1        │
+│ 87a00082-3c81-48e9-aa2f-38197fa4c244   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ us-west-2        │
+│ 4ff21799-3c5e-4448-963e-046700d652c0   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ us-west-2        │
+│ 6df77351-e13a-4f4f-aacb-59e0bf28828d   │ GPU Base 22.04                                        │ gpu-base-22-04             │ 22.4.5-1459  │ x86_64 │ us-west-3        │
+│ 496dafa8-8dab-4a2d-afbf-b94e5d09d53f   │ Lambda Stack 22.04                                    │ lambda-stack-22-04         │ 22.4.5-1459  │ x86_64 │ us-west-3        │
+└────────────────────────────────────────┴───────────────────────────────────────────────────────┴────────────────────────────┴──────────────┴────────┴──────────────────┘
