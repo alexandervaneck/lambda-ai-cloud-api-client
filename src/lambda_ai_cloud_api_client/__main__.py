@@ -277,11 +277,23 @@ def main() -> None:
 
 @main.command("ls", help="List running instances (shortcut for 'instances ls').")
 @click.option("--cluster-id", default=None, help="Filter by cluster ID.")
+@click.option("--region", multiple=True, help="Filter by region (repeat to include multiple).")
 @_common_options
-def root_ls(cluster_id: str | None, token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(cluster_id=cluster_id, token=token, base_url=base_url, insecure=insecure)
+def root_ls(
+    cluster_id: str | None, region: tuple[str, ...], token: str | None, base_url: str, insecure: bool
+) -> None:
+    args = SimpleNamespace(
+        cluster_id=cluster_id, token=token, base_url=base_url, insecure=insecure, region=list(region)
+    )
     client = _build_client(args)
     response = list_instances(client=client, cluster_id=args.cluster_id)
+    # Apply region filter client-side since API does not support it directly.
+    if args.region and response.parsed and hasattr(response.parsed, "data"):
+        allowed = set(args.region)
+        filtered = [
+            inst for inst in response.parsed.data if getattr(getattr(inst, "region", None), "name", None) in allowed
+        ]
+        response.parsed.data = filtered  # type: ignore[attr-defined]
     _render_instances_table(response)
 
 
