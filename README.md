@@ -1,4 +1,4 @@
-# Lambda Cloud API - CLI wrapper
+# Lambda Cloud API - CLI
 
 This repo contains the generated Python client for the Lambda Cloud API and a lightweight CLI wrapper so you can call it
 directly from your terminal. The documentation for the api can be found here: https:/docs-api.lambda.ai/api/cloud
@@ -15,7 +15,7 @@ Examples:
 - List instance types: `lambda-ai instance-types` (add `--available-only` to show only types with capacity, `--cheapest` to filter to the lowest price)
 - List images: `lambda-ai images`
 - List SSH keys: `lambda-ai ssh-keys`
-- List instances: `lambda-ai instances ls`
+- List instances: `lambda-ai instances ls` (or the shortcut `lambda-ai ls`)
 - Get one instance: `lambda-ai instances get <instance-id>`
 - Launch an instance:
   `lambda-ai instances launch --region us-east-1 --instance-type gpu_1x_a10 --ssh-key my-key --name demo`

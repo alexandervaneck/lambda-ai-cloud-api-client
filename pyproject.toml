@@ -31,7 +31,8 @@ dependencies = [
 ]
 
 [project.scripts]
-lambda-ai = "lambda_ai_cloud_api_client.cli:main"
+lambda-ai = "lambda_ai_cloud_api_client.__main__:main"
+lai = "lambda_ai_cloud_api_client.__main__:main"
 
 [build-system]
 requires = ["uv_build>=0.9.0,<0.10.0"]
