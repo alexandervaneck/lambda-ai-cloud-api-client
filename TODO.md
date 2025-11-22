@@ -22,5 +22,5 @@ Endpoints to be implemented:
 - [ ] GET audit-events
 
 Additional commands to be implemented:
-- [ ] lai ssh, ssh into an instance.
+- [x] lai ssh, ssh into an instance.
 - [ ] lai run --rm, start an instance, ssh into it, and optionally remove/turn-off the instance after exiting.

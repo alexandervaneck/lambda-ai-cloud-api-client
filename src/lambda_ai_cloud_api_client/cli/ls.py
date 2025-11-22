@@ -7,19 +7,26 @@ from rich.table import Table
 from lambda_ai_cloud_api_client.api.instances.list_instances import sync_detailed as _list_instances
 from lambda_ai_cloud_api_client.cli.client import auth_client
 from lambda_ai_cloud_api_client.cli.response import print_response
-from lambda_ai_cloud_api_client.models import ListInstancesResponse200
+from lambda_ai_cloud_api_client.models import (
+    ListInstancesResponse200,
+    ListInstancesResponse401,
+    ListInstancesResponse403,
+)
 from lambda_ai_cloud_api_client.types import Response, Unset
 
 
-def list_instances(args: SimpleNamespace) -> Response[ListInstancesResponse200]:
+def list_instances(
+    args: SimpleNamespace,
+) -> Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403]:
     client = auth_client(args)
     instances: Response[ListInstancesResponse200] = _list_instances(client=client)
     return instances
 
 
 def filter_instances(
-    response: Response[ListInstancesResponse200], args: SimpleNamespace
-) -> Response[ListInstancesResponse200]:
+    response: Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403],
+    args: SimpleNamespace,
+) -> Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403]:
     if response.parsed and hasattr(response.parsed, "data"):
         filtered = response.parsed.data
         if args.region:
@@ -34,7 +41,9 @@ def filter_instances(
     return response
 
 
-def render_instances_table(response) -> None:
+def render_instances_table(
+    response: Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403],
+) -> None:
     status = int(response.status_code)
     if status < 200 or status >= 300 or response.parsed is None:
         print_response(response)
