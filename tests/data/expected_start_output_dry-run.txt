@@ -1,0 +1,1 @@
+Dry run: would launch instance_type='gpu_1x_a100_sxm4' in region='us-east-1'

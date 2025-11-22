@@ -94,9 +94,18 @@ def get_cmd(id: str, token: str | None, base_url: str, insecure: bool) -> None:
 
 
 @main.command(name="start", help="Start/launch a new instance.")
-@click.option("--region", required=True, help="Region code (e.g. us-east-1).")
-@click.option("--instance-type", required=True, help="Instance type name.")
+@click.option("--instance-type", help="Instance type name (optional if filters narrow to one).")
+@click.option("--region", multiple=True, help="Region filter (repeat allowed).")
+@click.option("--available", is_flag=True, help="Show only types with available capacity.")
+@click.option("--cheapest", is_flag=True, help="Show only the cheapest type(s).")
+@click.option("--gpu", multiple=True, help="Filter by GPU description substring (repeat allowed).")
+@click.option("--min-gpus", type=int, default=None, help="Minimum GPUs.")
+@click.option("--min-vcpus", type=int, default=None, help="Minimum vCPUs.")
+@click.option("--min-memory", type=int, default=None, help="Minimum memory (GiB).")
+@click.option("--min-storage", type=int, default=None, help="Minimum storage (GiB).")
+@click.option("--max-price", type=float, default=None, help="Maximum price (cents/hour).")
 @click.option("--ssh-key", required=True, multiple=True, help="SSH key name to inject (repeat for multiple).")
+@click.option("--dry-run", is_flag=True, help="Resolve type/region and print the plan without launching.")
 @click.option("--name", help="Instance name.")
 @click.option("--hostname", help="Hostname to assign.")
 @click.option("--filesystem", multiple=True, help="Filesystem name to mount (repeat for multiple).")
@@ -107,9 +116,18 @@ def get_cmd(id: str, token: str | None, base_url: str, insecure: bool) -> None:
 @click.option("--json", is_flag=True, help="Output raw JSON instead of a table.")
 @_common_options
 def start_cmd(
-    region: str,
-    instance_type: str,
+    instance_type: str | None,
+    region: tuple[str, ...],
+    available: bool,
+    cheapest: bool,
+    gpu: tuple[str, ...],
+    min_gpus: int | None,
+    min_vcpus: int | None,
+    min_memory: int | None,
+    min_storage: int | None,
+    max_price: float | None,
     ssh_key: tuple[str, ...],
+    dry_run: bool,
     name: str | None,
     hostname: str | None,
     filesystem: tuple[str, ...],
@@ -123,9 +141,18 @@ def start_cmd(
     insecure: bool,
 ) -> None:
     args = SimpleNamespace(
-        region=region,
         instance_type=instance_type,
+        region=list(region),
+        available=available,
+        cheapest=cheapest,
+        gpu=list(gpu),
+        min_gpus=min_gpus,
+        min_vcpus=min_vcpus,
+        min_memory=min_memory,
+        min_storage=min_storage,
+        max_price=max_price,
         ssh_key=list(ssh_key),
+        dry_run=dry_run,
         name=name,
         hostname=hostname,
         filesystem=list(filesystem) if filesystem else None,
@@ -133,11 +160,14 @@ def start_cmd(
         image_family=image_family,
         user_data_file=user_data_file,
         tag=list(tag),
+        json=json,
         token=token,
         base_url=base_url,
         insecure=insecure,
     )
     response = start_instance(args)
+    if args.dry_run:
+        return
 
     status = int(response.status_code)
     if status < 200 or status >= 300 or response.parsed is None:
