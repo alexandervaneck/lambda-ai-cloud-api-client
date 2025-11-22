@@ -35,6 +35,7 @@ lai --help
 - List instances: `lai ls`
 - Get instance details: `lai get <instance-id>`
 - Start an instance: `lai start --region us-east-1 --instance-type gpu_1x_a10 --ssh-key my-key --name demo`
+- SSH into an instance by name or id (waits for IP and SSH availability): `lai ssh <name-or-id>`
 - Stop instances: `lai stop <id-1> <id-2>`
 - Restart instances: `lai restart <id-1> <id-2>`
 - Rename an instance: `lai rename <instance-id> new-name`
@@ -43,4 +44,3 @@ lai --help
   - --cheapest finds the instance-type that is currently the cheapest $ per hour.
 - List available images: `lai images --region us-east-1`
 - List SSH keys: `lai keys`
-

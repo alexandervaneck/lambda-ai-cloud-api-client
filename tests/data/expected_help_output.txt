@@ -12,6 +12,7 @@ Commands:
   stop     Stop/terminate one or more instances.
   restart  Restart one or more instances.
   rename   Rename an instance.
+  ssh      SSH into an instance by name or id.
   types    List instance types.
   images   List available images.
   keys     List SSH keys.

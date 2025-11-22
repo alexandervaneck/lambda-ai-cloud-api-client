@@ -18,6 +18,7 @@ from lambda_ai_cloud_api_client.cli.ls import filter_instances, list_instances, 
 from lambda_ai_cloud_api_client.cli.rename import rename_instance
 from lambda_ai_cloud_api_client.cli.response import print_response
 from lambda_ai_cloud_api_client.cli.restart import restart_instances
+from lambda_ai_cloud_api_client.cli.ssh import ssh_into_instance
 from lambda_ai_cloud_api_client.cli.start import start_instance
 from lambda_ai_cloud_api_client.cli.stop import stop_instances
 from lambda_ai_cloud_api_client.cli.types import filter_instance_types, list_instance_types, render_types_table
@@ -189,6 +190,51 @@ def rename_cmd(id: str, name: str, token: str | None, base_url: str, insecure: b
     status = int(response.status_code)
     if status < 200 or status >= 300 or response.parsed is None:
         sys.exit(1)
+
+
+@main.command(name="ssh", help="SSH into an instance by name or id.")
+@click.argument("name_or_id")
+@click.option(
+    "--timeout-seconds",
+    type=int,
+    default=60 * 10,  # 10min
+    show_default=True,
+    help="Time to wait for an IP before giving up.",
+)
+@click.option(
+    "--interval-seconds",
+    type=int,
+    default=5,
+    show_default=True,
+    help="Polling interval while waiting for the IP.",
+)
+@click.option(
+    "--ssh-ready-timeout-seconds",
+    type=int,
+    default=120,
+    show_default=True,
+    help="Time to wait for SSH (port 22) to open after an IP is assigned.",
+)
+@_common_options
+def ssh_cmd(
+    name_or_id: str,
+    timeout_seconds: int,
+    interval_seconds: int,
+    ssh_ready_timeout_seconds: int,
+    token: str | None,
+    base_url: str,
+    insecure: bool,
+) -> None:
+    args = SimpleNamespace(
+        name_or_id=name_or_id,
+        timeout_seconds=max(timeout_seconds, 1),
+        interval_seconds=max(interval_seconds, 1),
+        ssh_ready_timeout_seconds=max(ssh_ready_timeout_seconds, 1),
+        token=token,
+        base_url=base_url,
+        insecure=insecure,
+    )
+    ssh_into_instance(args)
 
 
 @main.command(name="types", help="List instance types.")

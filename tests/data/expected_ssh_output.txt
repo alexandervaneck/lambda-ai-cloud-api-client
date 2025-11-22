@@ -1,0 +1,4 @@
+Connecting to ubuntu@198.51.100.2 ...
+Waiting for IP on instance 'My Instance' (0920582c7ff041399e34823a0be62549)... retrying in 5s
+Waiting for IP on instance 'My Instance' (0920582c7ff041399e34823a0be62549)... retrying in 5s
+Waiting for SSH on instance 'My Instance' (198.51.100.2)... retrying in 5s

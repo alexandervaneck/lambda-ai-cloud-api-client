@@ -1,3 +1,7 @@
+# 2.1.0
+* feat: Add `lai ssh <name-or-id>` to ssh into a (starting) instance by name or id.
+    This command will wait for an IP to be assigned and for port 22 to be available.
+
 # 2.0.0
 * feat: Add `click` and refactor argparse.
 * feat: Add `lai` command, as a shortcut to `lambda-ai`.
