@@ -5,6 +5,7 @@ Endpoints to be implemented:
 - [x] POST instance (create/launch) - start
   - TODO: Add `file_system_mounts` as param
   - TODO: Add `firewall_rulesets` as param
+  - TODO: Add a `cheapest` flag? like with instance-types?
 - [x] POST instance (terminate) - stop
 - [x] POST instance (restart) - restart
 - [x] GET instance types

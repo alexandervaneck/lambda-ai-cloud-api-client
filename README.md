@@ -1,32 +1,46 @@
 # Lambda Cloud API - CLI
 
-This repo contains the generated Python client for the Lambda Cloud API and a lightweight CLI wrapper so you can call it
-directly from your terminal. The documentation for the api can be found here: https:/docs-api.lambda.ai/api/cloud
+This project is a wrapper around the Lambda Cloud API with some additional Quality-of-Life additions.
+The documentation of the API can be found here: https://docs-api.lambda.ai/api/cloud
 
-## Running the CLI locally
+## Installation
 
-1. Set your API token via `LAMBDA_CLOUD_TOKEN` (or `LAMBDA_CLOUD_API_TOKEN` / `LAMBDA_API_TOKEN`), optionally
-   `LAMBDA_CLOUD_BASE_URL` if you use a non-default endpoint.
-2. Install this CLI: `uv pip install lambda-ai-cloud-api-client`.
-3. Run commands: `lambda-ai <command> ...`
+```bash
+uv pip install lambda-ai-cloud-api-client
+```
 
-Examples:
+## Usage
 
-- List instance types: `lambda-ai instance-types` (add `--available-only` to show only types with capacity, `--cheapest` to filter to the lowest price)
-- Table view of types: `lambda-ai types` (filters: `--available-only`, `--cheapest`, `--region`, `--gpu`, `--min-gpus`, `--min-vcpus`, `--min-memory`, `--max-price`)
-- List images: `lambda-ai images`
-- List SSH keys: `lambda-ai ssh-keys`
-- List instances: `lambda-ai instances ls`
-- Shortcut table view: `lambda-ai ls` (renders a table; supports `--region` multiple times)
-- Quick launch: `lambda-ai start --region us-east-1 --instance-type gpu_1x_a10 --ssh-key my-key`
-- Quick stop: `lambda-ai stop <id-1> <id-2>`
-- Get one instance: `lambda-ai instances get <instance-id>`
-- Launch an instance:
-  `lambda-ai instances launch --region us-east-1 --instance-type gpu_1x_a10 --ssh-key my-key --name demo`
-- Terminate instances: `lambda-ai instances terminate <id-1> <id-2>`
+1. Set up an API token and environment.
 
-Flags:
+In your lambda.ai account go to https://cloud.lambda.ai/api-keys/cloud-api and generate a new Cloud AI Key.
+Set this token as an environment variable in the terminal you've installed this project.
 
-- `--token` to override the token (instead of env vars)
-- `--base-url` to target a specific control plane (defaults to `https://cloud.lambdalabs.com`)
-- `--insecure` to skip TLS verification (only for debugging)
+```bash
+export LAMBDA_CLOUD_API_TOKEN=<your-token>
+```
+The project also accepts `LAMBDA_CLOUD_TOKEN` and `LAMBDA_API_TOKEN` if you prefer that naming.
+Optionally you can set the api base url, `LAMBDA_CLOUD_BASE_URL`, the default is https://cloud.lambdalabs.com .
+
+2. Using the CLI
+
+To save on keystrokes I've named the command `lai` for lambda.ai. To see all available commands use:
+
+```bash
+lai --help
+```
+
+## Overview of features
+
+- List instances: `lai ls`
+- Get instance details: `lai get <instance-id>`
+- Start an instance: `lai start --region us-east-1 --instance-type gpu_1x_a10 --ssh-key my-key --name demo`
+- Stop instances: `lai stop <id-1> <id-2>`
+- Restart instances: `lai restart <id-1> <id-2>`
+- Rename an instance: `lai rename <instance-id> new-name`
+- List instance types: `lai types --available --cheapest --region us-east-1`
+  - --available shows only those instance types that are currently available
+  - --cheapest finds the instance-type that is currently the cheapest $ per hour.
+- List available images: `lai images --region us-east-1`
+- List SSH keys: `lai keys`
+
