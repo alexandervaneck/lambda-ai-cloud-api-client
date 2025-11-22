@@ -1,0 +1,17 @@
+Usage: main [OPTIONS] COMMAND [ARGS]...
+
+  Interact with Lambda Cloud from the CLI.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  ls       List instances.
+  get      Get instance details.
+  start    Start/launch a new instance.
+  stop     Stop/terminate one or more instances.
+  restart  Restart one or more instances.
+  rename   Rename an instance.
+  types    List instance types.
+  images   List available images.
+  keys     List SSH keys.

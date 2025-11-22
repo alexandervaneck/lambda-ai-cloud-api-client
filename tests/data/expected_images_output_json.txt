@@ -1,0 +1,1656 @@
+{
+  "data": [
+    {
+      "id": "15c1034f-5e2e-4b7a-9ebd-8c8847440e1c",
+      "created_time": "2025-11-13T19:45:33.104000+00:00",
+      "updated_time": "2025-11-13T20:00:03.693000+00:00",
+      "name": "Lambda Stack (Legacy) 22.04",
+      "description": "Legacy AI ready GPU image with CUDA, Docker, and ML frameworks for V100s",
+      "family": "lambda-stack-legacy-22-04",
+      "version": "22.4.5-1722",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-2",
+        "description": "North Texas, USA"
+      }
+    },
+    {
+      "id": "7667b0f8-a7e0-4653-bd38-18c2b9a20e70",
+      "created_time": "2025-11-13T19:21:11.879000+00:00",
+      "updated_time": "2025-11-13T19:39:49.149000+00:00",
+      "name": "Lambda Stack (Legacy) on Ubuntu 22.04.5 LTS (1459)",
+      "description": "Legacy AI ready GPU image with CUDA, Docker, and ML frameworks for V100s",
+      "family": "lambda-stack-legacy-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-2",
+        "description": "North Texas, USA"
+      }
+    },
+    {
+      "id": "286092df-662d-4818-8b90-4670d7f2535f",
+      "created_time": "2025-07-07T20:38:55.116000+00:00",
+      "updated_time": "2025-08-20T00:46:21.405000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-2",
+        "description": "North Texas, USA"
+      }
+    },
+    {
+      "id": "9dbea942-2fa9-4e81-9310-50c779a2412d",
+      "created_time": "2025-07-07T19:17:40.440000+00:00",
+      "updated_time": "2025-08-20T00:46:31.868000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-2",
+        "description": "North Texas, USA"
+      }
+    },
+    {
+      "id": "21c00c0d-7a24-49ad-8192-a6858dd00dad",
+      "created_time": "2025-07-07T15:20:25.091000+00:00",
+      "updated_time": "2025-08-20T00:46:42.725000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-2",
+        "description": "North Texas, USA"
+      }
+    },
+    {
+      "id": "fb633aee-2605-41b8-b653-953322f50cd3",
+      "created_time": "2025-07-07T15:05:44.405000+00:00",
+      "updated_time": "2025-08-20T00:46:53.882000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-2",
+        "description": "North Texas, USA"
+      }
+    },
+    {
+      "id": "c03081da-ca59-4e02-a273-c70ec2853806",
+      "created_time": "2025-07-07T09:36:01.048000+00:00",
+      "updated_time": "2025-08-18T22:55:54.756000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-2",
+        "description": "North Texas, USA"
+      }
+    },
+    {
+      "id": "fcdc36ad-41b5-4688-a584-8d1f2d08d478",
+      "created_time": "2025-07-07T09:26:38.297000+00:00",
+      "updated_time": "2025-08-18T21:47:54.155000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-2",
+        "description": "North Texas, USA"
+      }
+    },
+    {
+      "id": "694f7ddf-5c43-41d5-b9cf-f3ff88f4f795",
+      "created_time": "2025-03-11T23:00:05.465000+00:00",
+      "updated_time": "2025-08-20T00:47:08.296000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-2",
+        "description": "North Texas, USA"
+      }
+    },
+    {
+      "id": "5ca753ed-0408-480d-a749-c17935e83072",
+      "created_time": "2025-07-07T20:38:55.510000+00:00",
+      "updated_time": "2025-08-20T00:41:49.024000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "europe-central-1",
+        "description": "Germany"
+      }
+    },
+    {
+      "id": "87a00082-3c81-48e9-aa2f-38197fa4c244",
+      "created_time": "2025-07-07T19:17:36.439000+00:00",
+      "updated_time": "2025-08-20T00:42:02.360000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "europe-central-1",
+        "description": "Germany"
+      }
+    },
+    {
+      "id": "55d11912-9ff1-4079-9202-3058709784ee",
+      "created_time": "2025-07-07T15:21:16.232000+00:00",
+      "updated_time": "2025-08-20T00:42:17.818000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "europe-central-1",
+        "description": "Germany"
+      }
+    },
+    {
+      "id": "4ff21799-3c5e-4448-963e-046700d652c0",
+      "created_time": "2025-07-07T15:05:48.522000+00:00",
+      "updated_time": "2025-08-20T00:42:26.731000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "europe-central-1",
+        "description": "Germany"
+      }
+    },
+    {
+      "id": "6c389693-2b2d-47a3-93da-052c2331bd98",
+      "created_time": "2025-07-07T09:33:45.478000+00:00",
+      "updated_time": "2025-08-18T22:54:38.435000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "europe-central-1",
+        "description": "Germany"
+      }
+    },
+    {
+      "id": "46b7dad7-8b02-4cea-8c12-8ede60b39698",
+      "created_time": "2025-07-07T09:23:42.248000+00:00",
+      "updated_time": "2025-08-18T20:30:38.647000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "europe-central-1",
+        "description": "Germany"
+      }
+    },
+    {
+      "id": "1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77",
+      "created_time": "2025-03-11T23:00:07.278000+00:00",
+      "updated_time": "2025-08-20T00:42:40.104000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "europe-central-1",
+        "description": "Germany"
+      }
+    },
+    {
+      "id": "5ca753ed-0408-480d-a749-c17935e83072",
+      "created_time": "2025-07-07T20:38:55.510000+00:00",
+      "updated_time": "2025-08-20T00:41:49.024000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-south-1",
+        "description": "India"
+      }
+    },
+    {
+      "id": "87a00082-3c81-48e9-aa2f-38197fa4c244",
+      "created_time": "2025-07-07T19:17:36.439000+00:00",
+      "updated_time": "2025-08-20T00:42:02.360000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-south-1",
+        "description": "India"
+      }
+    },
+    {
+      "id": "55d11912-9ff1-4079-9202-3058709784ee",
+      "created_time": "2025-07-07T15:21:16.232000+00:00",
+      "updated_time": "2025-08-20T00:42:17.818000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-south-1",
+        "description": "India"
+      }
+    },
+    {
+      "id": "4ff21799-3c5e-4448-963e-046700d652c0",
+      "created_time": "2025-07-07T15:05:48.522000+00:00",
+      "updated_time": "2025-08-20T00:42:26.731000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-south-1",
+        "description": "India"
+      }
+    },
+    {
+      "id": "6c389693-2b2d-47a3-93da-052c2331bd98",
+      "created_time": "2025-07-07T09:33:45.478000+00:00",
+      "updated_time": "2025-08-18T22:54:38.435000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-south-1",
+        "description": "India"
+      }
+    },
+    {
+      "id": "46b7dad7-8b02-4cea-8c12-8ede60b39698",
+      "created_time": "2025-07-07T09:23:42.248000+00:00",
+      "updated_time": "2025-08-18T20:30:38.647000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-south-1",
+        "description": "India"
+      }
+    },
+    {
+      "id": "1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77",
+      "created_time": "2025-03-11T23:00:07.278000+00:00",
+      "updated_time": "2025-08-20T00:42:40.104000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-south-1",
+        "description": "India"
+      }
+    },
+    {
+      "id": "5ca753ed-0408-480d-a749-c17935e83072",
+      "created_time": "2025-07-07T20:38:55.510000+00:00",
+      "updated_time": "2025-08-20T00:41:49.024000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "me-west-1",
+        "description": "Israel"
+      }
+    },
+    {
+      "id": "87a00082-3c81-48e9-aa2f-38197fa4c244",
+      "created_time": "2025-07-07T19:17:36.439000+00:00",
+      "updated_time": "2025-08-20T00:42:02.360000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "me-west-1",
+        "description": "Israel"
+      }
+    },
+    {
+      "id": "55d11912-9ff1-4079-9202-3058709784ee",
+      "created_time": "2025-07-07T15:21:16.232000+00:00",
+      "updated_time": "2025-08-20T00:42:17.818000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "me-west-1",
+        "description": "Israel"
+      }
+    },
+    {
+      "id": "4ff21799-3c5e-4448-963e-046700d652c0",
+      "created_time": "2025-07-07T15:05:48.522000+00:00",
+      "updated_time": "2025-08-20T00:42:26.731000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "me-west-1",
+        "description": "Israel"
+      }
+    },
+    {
+      "id": "6c389693-2b2d-47a3-93da-052c2331bd98",
+      "created_time": "2025-07-07T09:33:45.478000+00:00",
+      "updated_time": "2025-08-18T22:54:38.435000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "me-west-1",
+        "description": "Israel"
+      }
+    },
+    {
+      "id": "46b7dad7-8b02-4cea-8c12-8ede60b39698",
+      "created_time": "2025-07-07T09:23:42.248000+00:00",
+      "updated_time": "2025-08-18T20:30:38.647000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "me-west-1",
+        "description": "Israel"
+      }
+    },
+    {
+      "id": "1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77",
+      "created_time": "2025-03-11T23:00:07.278000+00:00",
+      "updated_time": "2025-08-20T00:42:40.104000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "me-west-1",
+        "description": "Israel"
+      }
+    },
+    {
+      "id": "2459bf44-f1df-4449-985d-7fc29c5a7bef",
+      "created_time": "2025-07-07T20:38:59.124000+00:00",
+      "updated_time": "2025-08-20T00:47:22.290000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-3",
+        "description": "Central Texas, USA"
+      }
+    },
+    {
+      "id": "e16ee41c-94ba-4682-97e3-848f4a834423",
+      "created_time": "2025-07-07T19:17:43.812000+00:00",
+      "updated_time": "2025-08-20T00:47:35.266000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-3",
+        "description": "Central Texas, USA"
+      }
+    },
+    {
+      "id": "17ba87d4-7e2e-41c1-aeca-ae2db20b41a4",
+      "created_time": "2025-07-07T15:07:29.846000+00:00",
+      "updated_time": "2025-08-20T00:47:50.945000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-3",
+        "description": "Central Texas, USA"
+      }
+    },
+    {
+      "id": "b389a52f-2e75-4b1c-b21c-4ba4bb42fca8",
+      "created_time": "2025-07-07T15:05:53.762000+00:00",
+      "updated_time": "2025-08-20T00:48:00.854000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-3",
+        "description": "Central Texas, USA"
+      }
+    },
+    {
+      "id": "26cd4787-f1aa-4c30-bb16-b4476daba409",
+      "created_time": "2025-07-07T09:36:15.021000+00:00",
+      "updated_time": "2025-08-18T22:56:56.670000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-3",
+        "description": "Central Texas, USA"
+      }
+    },
+    {
+      "id": "2362a139-8323-4443-81b8-58e96f0f64f4",
+      "created_time": "2025-07-07T09:27:09.871000+00:00",
+      "updated_time": "2025-08-18T22:44:52.769000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-3",
+        "description": "Central Texas, USA"
+      }
+    },
+    {
+      "id": "418327d8-1ec8-43dd-9b42-8c786bf5fe18",
+      "created_time": "2025-04-10T18:27:47.165000+00:00",
+      "updated_time": "2025-08-20T00:48:13.112000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-3",
+        "description": "Central Texas, USA"
+      }
+    },
+    {
+      "id": "5ca753ed-0408-480d-a749-c17935e83072",
+      "created_time": "2025-07-07T20:38:55.510000+00:00",
+      "updated_time": "2025-08-20T00:41:49.024000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-1",
+        "description": "Osaka, Japan"
+      }
+    },
+    {
+      "id": "87a00082-3c81-48e9-aa2f-38197fa4c244",
+      "created_time": "2025-07-07T19:17:36.439000+00:00",
+      "updated_time": "2025-08-20T00:42:02.360000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-1",
+        "description": "Osaka, Japan"
+      }
+    },
+    {
+      "id": "55d11912-9ff1-4079-9202-3058709784ee",
+      "created_time": "2025-07-07T15:21:16.232000+00:00",
+      "updated_time": "2025-08-20T00:42:17.818000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-1",
+        "description": "Osaka, Japan"
+      }
+    },
+    {
+      "id": "4ff21799-3c5e-4448-963e-046700d652c0",
+      "created_time": "2025-07-07T15:05:48.522000+00:00",
+      "updated_time": "2025-08-20T00:42:26.731000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-1",
+        "description": "Osaka, Japan"
+      }
+    },
+    {
+      "id": "6c389693-2b2d-47a3-93da-052c2331bd98",
+      "created_time": "2025-07-07T09:33:45.478000+00:00",
+      "updated_time": "2025-08-18T22:54:38.435000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-1",
+        "description": "Osaka, Japan"
+      }
+    },
+    {
+      "id": "46b7dad7-8b02-4cea-8c12-8ede60b39698",
+      "created_time": "2025-07-07T09:23:42.248000+00:00",
+      "updated_time": "2025-08-18T20:30:38.647000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-1",
+        "description": "Osaka, Japan"
+      }
+    },
+    {
+      "id": "1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77",
+      "created_time": "2025-03-11T23:00:07.278000+00:00",
+      "updated_time": "2025-08-20T00:42:40.104000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-1",
+        "description": "Osaka, Japan"
+      }
+    },
+    {
+      "id": "5ca753ed-0408-480d-a749-c17935e83072",
+      "created_time": "2025-07-07T20:38:55.510000+00:00",
+      "updated_time": "2025-08-20T00:41:49.024000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-2",
+        "description": "Tokyo, Japan"
+      }
+    },
+    {
+      "id": "87a00082-3c81-48e9-aa2f-38197fa4c244",
+      "created_time": "2025-07-07T19:17:36.439000+00:00",
+      "updated_time": "2025-08-20T00:42:02.360000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-2",
+        "description": "Tokyo, Japan"
+      }
+    },
+    {
+      "id": "55d11912-9ff1-4079-9202-3058709784ee",
+      "created_time": "2025-07-07T15:21:16.232000+00:00",
+      "updated_time": "2025-08-20T00:42:17.818000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-2",
+        "description": "Tokyo, Japan"
+      }
+    },
+    {
+      "id": "4ff21799-3c5e-4448-963e-046700d652c0",
+      "created_time": "2025-07-07T15:05:48.522000+00:00",
+      "updated_time": "2025-08-20T00:42:26.731000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-2",
+        "description": "Tokyo, Japan"
+      }
+    },
+    {
+      "id": "6c389693-2b2d-47a3-93da-052c2331bd98",
+      "created_time": "2025-07-07T09:33:45.478000+00:00",
+      "updated_time": "2025-08-18T22:54:38.435000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-2",
+        "description": "Tokyo, Japan"
+      }
+    },
+    {
+      "id": "46b7dad7-8b02-4cea-8c12-8ede60b39698",
+      "created_time": "2025-07-07T09:23:42.248000+00:00",
+      "updated_time": "2025-08-18T20:30:38.647000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-2",
+        "description": "Tokyo, Japan"
+      }
+    },
+    {
+      "id": "1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77",
+      "created_time": "2025-03-11T23:00:07.278000+00:00",
+      "updated_time": "2025-08-20T00:42:40.104000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "asia-northeast-2",
+        "description": "Tokyo, Japan"
+      }
+    },
+    {
+      "id": "5ca753ed-0408-480d-a749-c17935e83072",
+      "created_time": "2025-07-07T20:38:55.510000+00:00",
+      "updated_time": "2025-08-20T00:41:49.024000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-1",
+        "description": "Virginia, USA"
+      }
+    },
+    {
+      "id": "87a00082-3c81-48e9-aa2f-38197fa4c244",
+      "created_time": "2025-07-07T19:17:36.439000+00:00",
+      "updated_time": "2025-08-20T00:42:02.360000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-1",
+        "description": "Virginia, USA"
+      }
+    },
+    {
+      "id": "55d11912-9ff1-4079-9202-3058709784ee",
+      "created_time": "2025-07-07T15:21:16.232000+00:00",
+      "updated_time": "2025-08-20T00:42:17.818000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-1",
+        "description": "Virginia, USA"
+      }
+    },
+    {
+      "id": "4ff21799-3c5e-4448-963e-046700d652c0",
+      "created_time": "2025-07-07T15:05:48.522000+00:00",
+      "updated_time": "2025-08-20T00:42:26.731000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-1",
+        "description": "Virginia, USA"
+      }
+    },
+    {
+      "id": "6c389693-2b2d-47a3-93da-052c2331bd98",
+      "created_time": "2025-07-07T09:33:45.478000+00:00",
+      "updated_time": "2025-08-18T22:54:38.435000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-1",
+        "description": "Virginia, USA"
+      }
+    },
+    {
+      "id": "46b7dad7-8b02-4cea-8c12-8ede60b39698",
+      "created_time": "2025-07-07T09:23:42.248000+00:00",
+      "updated_time": "2025-08-18T20:30:38.647000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-1",
+        "description": "Virginia, USA"
+      }
+    },
+    {
+      "id": "1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77",
+      "created_time": "2025-03-11T23:00:07.278000+00:00",
+      "updated_time": "2025-08-20T00:42:40.104000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-1",
+        "description": "Virginia, USA"
+      }
+    },
+    {
+      "id": "5ca753ed-0408-480d-a749-c17935e83072",
+      "created_time": "2025-07-07T20:38:55.510000+00:00",
+      "updated_time": "2025-08-20T00:41:49.024000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-2",
+        "description": "Arizona, USA"
+      }
+    },
+    {
+      "id": "87a00082-3c81-48e9-aa2f-38197fa4c244",
+      "created_time": "2025-07-07T19:17:36.439000+00:00",
+      "updated_time": "2025-08-20T00:42:02.360000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-2",
+        "description": "Arizona, USA"
+      }
+    },
+    {
+      "id": "55d11912-9ff1-4079-9202-3058709784ee",
+      "created_time": "2025-07-07T15:21:16.232000+00:00",
+      "updated_time": "2025-08-20T00:42:17.818000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-2",
+        "description": "Arizona, USA"
+      }
+    },
+    {
+      "id": "4ff21799-3c5e-4448-963e-046700d652c0",
+      "created_time": "2025-07-07T15:05:48.522000+00:00",
+      "updated_time": "2025-08-20T00:42:26.731000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-2",
+        "description": "Arizona, USA"
+      }
+    },
+    {
+      "id": "6c389693-2b2d-47a3-93da-052c2331bd98",
+      "created_time": "2025-07-07T09:33:45.478000+00:00",
+      "updated_time": "2025-08-18T22:54:38.435000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-2",
+        "description": "Arizona, USA"
+      }
+    },
+    {
+      "id": "46b7dad7-8b02-4cea-8c12-8ede60b39698",
+      "created_time": "2025-07-07T09:23:42.248000+00:00",
+      "updated_time": "2025-08-18T20:30:38.647000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-2",
+        "description": "Arizona, USA"
+      }
+    },
+    {
+      "id": "1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77",
+      "created_time": "2025-03-11T23:00:07.278000+00:00",
+      "updated_time": "2025-08-20T00:42:40.104000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-2",
+        "description": "Arizona, USA"
+      }
+    },
+    {
+      "id": "5ca753ed-0408-480d-a749-c17935e83072",
+      "created_time": "2025-07-07T20:38:55.510000+00:00",
+      "updated_time": "2025-08-20T00:41:49.024000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-1",
+        "description": "California, USA"
+      }
+    },
+    {
+      "id": "87a00082-3c81-48e9-aa2f-38197fa4c244",
+      "created_time": "2025-07-07T19:17:36.439000+00:00",
+      "updated_time": "2025-08-20T00:42:02.360000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-1",
+        "description": "California, USA"
+      }
+    },
+    {
+      "id": "55d11912-9ff1-4079-9202-3058709784ee",
+      "created_time": "2025-07-07T15:21:16.232000+00:00",
+      "updated_time": "2025-08-20T00:42:17.818000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-1",
+        "description": "California, USA"
+      }
+    },
+    {
+      "id": "4ff21799-3c5e-4448-963e-046700d652c0",
+      "created_time": "2025-07-07T15:05:48.522000+00:00",
+      "updated_time": "2025-08-20T00:42:26.731000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-1",
+        "description": "California, USA"
+      }
+    },
+    {
+      "id": "6c389693-2b2d-47a3-93da-052c2331bd98",
+      "created_time": "2025-07-07T09:33:45.478000+00:00",
+      "updated_time": "2025-08-18T22:54:38.435000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-1",
+        "description": "California, USA"
+      }
+    },
+    {
+      "id": "46b7dad7-8b02-4cea-8c12-8ede60b39698",
+      "created_time": "2025-07-07T09:23:42.248000+00:00",
+      "updated_time": "2025-08-18T20:30:38.647000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-1",
+        "description": "California, USA"
+      }
+    },
+    {
+      "id": "1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77",
+      "created_time": "2025-03-11T23:00:07.278000+00:00",
+      "updated_time": "2025-08-20T00:42:40.104000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-1",
+        "description": "California, USA"
+      }
+    },
+    {
+      "id": "3cbfbff4-1a2d-42f7-9285-1738fd50182e",
+      "created_time": "2025-07-07T20:38:55.001000+00:00",
+      "updated_time": "2025-08-20T00:39:46.428000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-1",
+        "description": "Texas, USA"
+      }
+    },
+    {
+      "id": "d084e71d-a08f-4378-89cc-7ce5ce1dacd8",
+      "created_time": "2025-07-07T19:17:39.522000+00:00",
+      "updated_time": "2025-08-20T00:40:05.210000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-1",
+        "description": "Texas, USA"
+      }
+    },
+    {
+      "id": "bc09a11b-f2f1-4e83-a7ab-3eec67f4fd13",
+      "created_time": "2025-07-07T15:21:20.949000+00:00",
+      "updated_time": "2025-08-20T00:40:20.708000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-1",
+        "description": "Texas, USA"
+      }
+    },
+    {
+      "id": "bc089187-a08c-410f-bc29-5da775ee0a04",
+      "created_time": "2025-07-07T15:05:48.336000+00:00",
+      "updated_time": "2025-08-20T00:40:34.674000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-1",
+        "description": "Texas, USA"
+      }
+    },
+    {
+      "id": "9ad08af3-e8dd-4196-82bb-142727f11fa6",
+      "created_time": "2025-07-07T14:35:40.578000+00:00",
+      "updated_time": "2025-08-20T00:40:46.481000+00:00",
+      "name": "Lambda Stack (Legacy) 22.04",
+      "description": "Legacy AI ready GPU image with CUDA, Docker, and ML frameworks for V100s",
+      "family": "lambda-stack-legacy-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-1",
+        "description": "Texas, USA"
+      }
+    },
+    {
+      "id": "a7ffcea0-9fb6-4bbf-973c-e36c7b711ade",
+      "created_time": "2025-07-07T09:35:27.027000+00:00",
+      "updated_time": "2025-08-18T22:56:07.395000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-1",
+        "description": "Texas, USA"
+      }
+    },
+    {
+      "id": "e74fbc9b-b153-4192-9011-bb116fbb121a",
+      "created_time": "2025-07-07T09:25:38.315000+00:00",
+      "updated_time": "2025-08-18T20:48:17.981000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-1",
+        "description": "Texas, USA"
+      }
+    },
+    {
+      "id": "61855cae-8d3b-4fba-b42f-441ef64cdef7",
+      "created_time": "2025-03-13T22:32:54.278000+00:00",
+      "updated_time": "2025-08-20T00:41:06.067000+00:00",
+      "name": "Lambda Stack (Legacy) 22.04",
+      "description": "Legacy AI ready GPU image with CUDA, Docker, and ML frameworks for V100s",
+      "family": "lambda-stack-legacy-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-1",
+        "description": "Texas, USA"
+      }
+    },
+    {
+      "id": "38e2d3e5-cb1e-4c0e-8b96-8e69b516e300",
+      "created_time": "2025-03-11T22:59:58.908000+00:00",
+      "updated_time": "2025-08-20T00:41:19.461000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-south-1",
+        "description": "Texas, USA"
+      }
+    },
+    {
+      "id": "5ca753ed-0408-480d-a749-c17935e83072",
+      "created_time": "2025-07-07T20:38:55.510000+00:00",
+      "updated_time": "2025-08-20T00:41:49.024000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-1",
+        "description": "Illinois, USA"
+      }
+    },
+    {
+      "id": "87a00082-3c81-48e9-aa2f-38197fa4c244",
+      "created_time": "2025-07-07T19:17:36.439000+00:00",
+      "updated_time": "2025-08-20T00:42:02.360000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-1",
+        "description": "Illinois, USA"
+      }
+    },
+    {
+      "id": "55d11912-9ff1-4079-9202-3058709784ee",
+      "created_time": "2025-07-07T15:21:16.232000+00:00",
+      "updated_time": "2025-08-20T00:42:17.818000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-1",
+        "description": "Illinois, USA"
+      }
+    },
+    {
+      "id": "4ff21799-3c5e-4448-963e-046700d652c0",
+      "created_time": "2025-07-07T15:05:48.522000+00:00",
+      "updated_time": "2025-08-20T00:42:26.731000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-1",
+        "description": "Illinois, USA"
+      }
+    },
+    {
+      "id": "6c389693-2b2d-47a3-93da-052c2331bd98",
+      "created_time": "2025-07-07T09:33:45.478000+00:00",
+      "updated_time": "2025-08-18T22:54:38.435000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-1",
+        "description": "Illinois, USA"
+      }
+    },
+    {
+      "id": "46b7dad7-8b02-4cea-8c12-8ede60b39698",
+      "created_time": "2025-07-07T09:23:42.248000+00:00",
+      "updated_time": "2025-08-18T20:30:38.647000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-1",
+        "description": "Illinois, USA"
+      }
+    },
+    {
+      "id": "1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77",
+      "created_time": "2025-03-11T23:00:07.278000+00:00",
+      "updated_time": "2025-08-20T00:42:40.104000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-1",
+        "description": "Illinois, USA"
+      }
+    },
+    {
+      "id": "16b41dcb-8f7b-4f7c-a123-ea95e828e39c",
+      "created_time": "2025-07-07T20:38:57.407000+00:00",
+      "updated_time": "2025-08-20T00:43:08.612000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-3",
+        "description": "Utah, USA"
+      }
+    },
+    {
+      "id": "6df77351-e13a-4f4f-aacb-59e0bf28828d",
+      "created_time": "2025-07-07T19:17:32.844000+00:00",
+      "updated_time": "2025-08-20T00:43:22.773000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-3",
+        "description": "Utah, USA"
+      }
+    },
+    {
+      "id": "d4745ca5-abd9-474d-842d-3fe60ee2eb66",
+      "created_time": "2025-07-07T15:21:22.181000+00:00",
+      "updated_time": "2025-08-20T00:43:34.196000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-3",
+        "description": "Utah, USA"
+      }
+    },
+    {
+      "id": "496dafa8-8dab-4a2d-afbf-b94e5d09d53f",
+      "created_time": "2025-07-07T15:05:50.887000+00:00",
+      "updated_time": "2025-08-20T00:43:46.094000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-3",
+        "description": "Utah, USA"
+      }
+    },
+    {
+      "id": "3cfd8a13-321c-4830-969f-111918b58166",
+      "created_time": "2025-07-07T09:32:32.289000+00:00",
+      "updated_time": "2025-08-18T22:55:35.317000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-3",
+        "description": "Utah, USA"
+      }
+    },
+    {
+      "id": "6ebca197-2aba-419e-9eab-79445b2a9e19",
+      "created_time": "2025-07-07T09:21:46.750000+00:00",
+      "updated_time": "2025-08-18T20:57:23.041000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-3",
+        "description": "Utah, USA"
+      }
+    },
+    {
+      "id": "a9207a11-7ed6-4dc4-850e-5685434b2704",
+      "created_time": "2025-03-11T23:00:01.130000+00:00",
+      "updated_time": "2025-08-20T00:44:00.281000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-west-3",
+        "description": "Utah, USA"
+      }
+    },
+    {
+      "id": "d81f8657-2a16-43bb-a810-f6033afcc399",
+      "created_time": "2025-07-07T20:38:55.001000+00:00",
+      "updated_time": "2025-08-28T16:13:17.611000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-2",
+        "description": "Washington DC, USA"
+      }
+    },
+    {
+      "id": "222dd329-2d28-4b09-9c94-078b515a3a23",
+      "created_time": "2025-07-07T19:17:38.298000+00:00",
+      "updated_time": "2025-08-28T16:13:53.413000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-2",
+        "description": "Washington DC, USA"
+      }
+    },
+    {
+      "id": "d20a72ff-75f4-4a70-8a9a-c6161c210dce",
+      "created_time": "2025-07-07T15:21:15.772000+00:00",
+      "updated_time": "2025-08-28T16:13:29.120000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-2",
+        "description": "Washington DC, USA"
+      }
+    },
+    {
+      "id": "08151eac-0619-4cd3-acab-5786a5fda1e4",
+      "created_time": "2025-07-07T15:05:58.331000+00:00",
+      "updated_time": "2025-08-28T16:13:22.252000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-2",
+        "description": "Washington DC, USA"
+      }
+    },
+    {
+      "id": "39c66112-e8af-4ecb-a690-2ea525cf0ef2",
+      "created_time": "2025-07-07T09:35:43.754000+00:00",
+      "updated_time": "2025-08-28T16:14:10.791000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-2",
+        "description": "Washington DC, USA"
+      }
+    },
+    {
+      "id": "3b31c30c-7645-4e80-ad5d-0c5652ebb616",
+      "created_time": "2025-07-07T09:26:18.076000+00:00",
+      "updated_time": "2025-08-28T16:14:04.213000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-2",
+        "description": "Washington DC, USA"
+      }
+    },
+    {
+      "id": "a96996c5-02d3-49eb-8914-c1ddb20d3b08",
+      "created_time": "2025-03-11T23:00:03.384000+00:00",
+      "updated_time": "2025-08-28T16:14:41.933000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-east-2",
+        "description": "Washington DC, USA"
+      }
+    },
+    {
+      "id": "0eb41057-8eb0-4303-8364-ca93b87e49b5",
+      "created_time": "2025-07-07T22:20:15.990000+00:00",
+      "updated_time": "2025-08-20T00:49:48.830000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "arm64",
+      "region": {
+        "name": "us-east-3",
+        "description": "Washington DC, USA"
+      }
+    },
+    {
+      "id": "e57d5fc7-36e7-4f9a-953f-3429c1f7e3b7",
+      "created_time": "2025-07-07T22:07:24.235000+00:00",
+      "updated_time": "2025-08-20T00:49:37.318000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "arm64",
+      "region": {
+        "name": "us-east-3",
+        "description": "Washington DC, USA"
+      }
+    },
+    {
+      "id": "78512ef8-8f06-45eb-9ce6-aee96622f787",
+      "created_time": "2025-03-11T23:00:09.436000+00:00",
+      "updated_time": "2025-08-20T00:50:00.136000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "arm64",
+      "region": {
+        "name": "us-east-3",
+        "description": "Washington DC, USA"
+      }
+    },
+    {
+      "id": "5ca753ed-0408-480d-a749-c17935e83072",
+      "created_time": "2025-07-07T20:38:55.510000+00:00",
+      "updated_time": "2025-08-20T00:41:49.024000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "australia-east-1",
+        "description": "Sydney, Australia"
+      }
+    },
+    {
+      "id": "87a00082-3c81-48e9-aa2f-38197fa4c244",
+      "created_time": "2025-07-07T19:17:36.439000+00:00",
+      "updated_time": "2025-08-20T00:42:02.360000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "australia-east-1",
+        "description": "Sydney, Australia"
+      }
+    },
+    {
+      "id": "55d11912-9ff1-4079-9202-3058709784ee",
+      "created_time": "2025-07-07T15:21:16.232000+00:00",
+      "updated_time": "2025-08-20T00:42:17.818000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "australia-east-1",
+        "description": "Sydney, Australia"
+      }
+    },
+    {
+      "id": "4ff21799-3c5e-4448-963e-046700d652c0",
+      "created_time": "2025-07-07T15:05:48.522000+00:00",
+      "updated_time": "2025-08-20T00:42:26.731000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "australia-east-1",
+        "description": "Sydney, Australia"
+      }
+    },
+    {
+      "id": "6c389693-2b2d-47a3-93da-052c2331bd98",
+      "created_time": "2025-07-07T09:33:45.478000+00:00",
+      "updated_time": "2025-08-18T22:54:38.435000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "australia-east-1",
+        "description": "Sydney, Australia"
+      }
+    },
+    {
+      "id": "46b7dad7-8b02-4cea-8c12-8ede60b39698",
+      "created_time": "2025-07-07T09:23:42.248000+00:00",
+      "updated_time": "2025-08-18T20:30:38.647000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "australia-east-1",
+        "description": "Sydney, Australia"
+      }
+    },
+    {
+      "id": "1ccaf2d0-3e9e-49cf-a8a4-4e2d2d181b77",
+      "created_time": "2025-03-11T23:00:07.278000+00:00",
+      "updated_time": "2025-08-20T00:42:40.104000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1026",
+      "architecture": "x86_64",
+      "region": {
+        "name": "australia-east-1",
+        "description": "Sydney, Australia"
+      }
+    },
+    {
+      "id": "e948bca3-d1b6-4e83-a3ba-1ac58af35af0",
+      "created_time": "2025-07-07T20:38:54.798000+00:00",
+      "updated_time": "2025-08-28T16:14:57.424000+00:00",
+      "name": "GPU Base 24.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-2",
+        "description": "Ohio, USA"
+      }
+    },
+    {
+      "id": "c5ae8f4b-f876-4d3d-aab8-7e4f77838a5d",
+      "created_time": "2025-07-07T19:17:42.337000+00:00",
+      "updated_time": "2025-08-28T16:15:06.568000+00:00",
+      "name": "GPU Base 22.04",
+      "description": "GPU base image with CUDA and Docker enabled",
+      "family": "gpu-base-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-2",
+        "description": "Ohio, USA"
+      }
+    },
+    {
+      "id": "b742e4a3-5a33-4375-8804-6df6b255514a",
+      "created_time": "2025-07-07T15:19:29.196000+00:00",
+      "updated_time": "2025-08-28T16:15:12.736000+00:00",
+      "name": "Lambda Stack 24.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks",
+      "family": "lambda-stack-24-04",
+      "version": "24.4.2-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-2",
+        "description": "Ohio, USA"
+      }
+    },
+    {
+      "id": "42e03f08-e4c6-4f56-9bb7-9e66d309873b",
+      "created_time": "2025-07-07T15:05:51.632000+00:00",
+      "updated_time": "2025-08-28T16:15:22.778000+00:00",
+      "name": "Lambda Stack 22.04",
+      "description": "AI ready GPU image with CUDA, Docker, and ML frameworks 22.04.5",
+      "family": "lambda-stack-22-04",
+      "version": "22.4.5-1459",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-2",
+        "description": "Ohio, USA"
+      }
+    },
+    {
+      "id": "0958c796-070d-4861-ab03-ce7f3f1734b3",
+      "created_time": "2025-07-07T09:36:32.894000+00:00",
+      "updated_time": "2025-08-28T16:15:37.369000+00:00",
+      "name": "Ubuntu 24.04.2 LTS",
+      "description": "Ubuntu 24.04.2 LTS (Noble Numbat)",
+      "family": "ubuntu-24-04",
+      "version": "24.4.2-20250626",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-2",
+        "description": "Ohio, USA"
+      }
+    },
+    {
+      "id": "9f24a1a9-ea8c-4cef-adb2-ccaa21ff344a",
+      "created_time": "2025-07-07T09:27:33.009000+00:00",
+      "updated_time": "2025-08-28T16:15:31.593000+00:00",
+      "name": "Ubuntu 22.04.5 LTS",
+      "description": "Ubuntu 22.04.5 LTS (Jammy Jellyfish)",
+      "family": "ubuntu-22-04",
+      "version": "22.4.5-20250702",
+      "architecture": "x86_64",
+      "region": {
+        "name": "us-midwest-2",
+        "description": "Ohio, USA"
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+                                                                                   Keys                                                                                   
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ID                               ┃ Name         ┃ Public key                                                                                                           ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ d02cb1eda8d4s47a927ebc5da267s9a4 │ yubikey      │ ssh-rsa                                                                                                              │
+│                                  │              │ AAAAB3NzaC1yc2EAAAADAQABAAACAQCqZSE+s5yumzn1bFlzsCben313qg31l0SsSYgJtR8EyW7n1SoERg3RjppmrbcZj0NjVRi57AuygObfRhfF/QJh │
+│                                  │              │ t+zRnWk5Eg79Z7gBQGgCLjuVXQ0xZ7AwvLW/PP57S0xyculCVAOZb47dePSUb7Qt0GPpzx5SRIJQZF3JpfAbFgbNVlLwncDrOkibtLKTGSZr43gkvejA │
+│                                  │              │ QuK4mQD77opVemFDxjZ5aKDEbQHgDSSfNKLB19GqrVDB3WpaFEErSSUEq+0g+/xrJMkREzM3HfGI5Iiww26huhcjvRpqCb+fWpNh39nv38y41Fi5+zoF │
+│                                  │              │ aYZqYftwAuyx3fb7QBplIfhSDL1Hf5jZ9iK20RM4Gz1Jc8OxS/9q8AWN6Tb2/yZEoucwA41P4nezt0s4f0edBso9t7mPd4GWEKjYF2M4UNGwUK0++0DP │
+│                                  │              │ GpSJxsiltUIuKnLx+sthsEbTZPTs5a6zs4bxMyjHOkx3WKbCur/NeFIS/sCZc9HDu/AAtJG3ihJ93IBQrIRsrxAHD+pUaJn+urplVUcU/fYF28B0XFNt │
+│                                  │              │ YtH8DpwiALiKL/UH/wbHIjUvM2yvVOXpWxh6OqcapBWGpb6CSc5AmWf3XHzTygP2Sl7zxIDDhZw8jw9W8JR2PYewYpiJQE/I7ZEuToc5majQH/cOzjo8 │
+│                                  │              │ EQuWVL9i7Ci4zQ0VyQ== cardno:18 618 727                                                                               │
+│ another-id                       │ another-name │ another-public-key                                                                                                   │
+└──────────────────────────────────┴──────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘

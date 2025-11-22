@@ -1,0 +1,72 @@
+{
+  "data": {
+    "restarted_instances": [
+      {
+        "is_reserved": false,
+        "id": "0920582c7ff041399e34823a0be62549",
+        "status": "active",
+        "ssh_key_names": [
+          "My SSH key"
+        ],
+        "file_system_names": [
+          "my-filesystem"
+        ],
+        "region": {
+          "name": "us-west-1",
+          "description": "California, USA"
+        },
+        "instance_type": {
+          "name": "gpu_8x_a100",
+          "description": "8x A100 (40 GB SXM4)",
+          "gpu_description": "A100 (40 GB SXM4)",
+          "price_cents_per_hour": 1032,
+          "specs": {
+            "vcpus": 124,
+            "memory_gib": 1800,
+            "storage_gib": 6144,
+            "gpus": 8
+          }
+        },
+        "actions": {
+          "migrate": {
+            "available": true
+          },
+          "rebuild": {
+            "available": true
+          },
+          "restart": {
+            "available": true
+          },
+          "cold_reboot": {
+            "available": true
+          },
+          "terminate": {
+            "available": true
+          }
+        },
+        "name": "My Instance",
+        "ip": "198.51.100.2",
+        "private_ip": "10.0.2.100",
+        "file_system_mounts": [
+          {
+            "mount_point": "/lambda/nfs/my-filesystem",
+            "file_system_id": "a098b0c7ff041399e34823a0be62549"
+          }
+        ],
+        "hostname": "198.51.100.2",
+        "jupyter_token": "03b7d30d9d3e4d8fa41657bc0d478c1b",
+        "jupyter_url": "https://jupyter-249e1ccff1894822af39ac822637f881.lambdaspaces.com/?token=03b7d30d9d3e4d8fa41657bc0d478c1b",
+        "tags": [
+          {
+            "key": "key1",
+            "value": "value1"
+          },
+          {
+            "key": "key2",
+            "value": "value2"
+          }
+        ]
+      }
+    ]
+  }
+}

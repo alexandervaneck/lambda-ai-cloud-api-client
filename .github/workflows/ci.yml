@@ -30,7 +30,7 @@ jobs:
         run: make fmt
 
       - name: Test
-        run: make test
+        run: make test-tox
 
       - name: Check version bumped
         id: version_check
