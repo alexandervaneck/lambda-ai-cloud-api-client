@@ -1,5 +1,4 @@
 import sys
-from types import SimpleNamespace
 
 from rich.console import Console
 from rich.table import Table
@@ -11,26 +10,32 @@ from lambda_ai_cloud_api_client.models import ListImagesResponse200
 from lambda_ai_cloud_api_client.types import Response
 
 
-def list_images(args: SimpleNamespace) -> Response[ListImagesResponse200]:
-    client = auth_client(args)
+def list_images(base_url: str, token: str | None = None, insecure: bool = False) -> Response[ListImagesResponse200]:
+    client = auth_client(base_url=base_url, token=token, insecure=insecure)
     images: Response[ListImagesResponse200] = _list_images(client=client)
     return images
 
 
-def filter_images(response: Response[ListImagesResponse200], args: SimpleNamespace) -> Response[ListImagesResponse200]:
+def filter_images(
+    response: Response[ListImagesResponse200],
+    family: tuple[str, ...] | None = None,
+    version: tuple[str, ...] | None = None,
+    arch: tuple[str, ...] | None = None,
+    region: tuple[str, ...] | None = None,
+) -> Response[ListImagesResponse200]:
     if response.parsed and hasattr(response.parsed, "data"):
         filtered = response.parsed.data
-        if args.family:
-            allowed_family = set(args.family)
+        if family:
+            allowed_family = set(family)
             filtered = [img for img in filtered if getattr(img, "family", None) in allowed_family]
-        if args.version:
-            allowed_version = set(args.version)
+        if version:
+            allowed_version = set(version)
             filtered = [img for img in filtered if getattr(img, "version", None) in allowed_version]
-        if args.arch:
-            allowed_arch = set(args.arch)
+        if arch:
+            allowed_arch = set(arch)
             filtered = [img for img in filtered if getattr(img, "architecture", None) in allowed_arch]
-        if args.region:
-            allowed = set(args.region)
+        if region:
+            allowed = set(region)
             filtered = [img for img in filtered if getattr(getattr(img, "region", None), "name", None) in allowed]
 
         response.parsed.data = filtered  # type: ignore[attr-defined]

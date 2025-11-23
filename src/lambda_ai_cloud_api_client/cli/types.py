@@ -1,5 +1,4 @@
 import sys
-from types import SimpleNamespace
 
 from rich.console import Console
 from rich.table import Table
@@ -11,14 +10,25 @@ from lambda_ai_cloud_api_client.models import ListInstanceTypesResponse200
 from lambda_ai_cloud_api_client.types import Response
 
 
-def list_instance_types(args: SimpleNamespace) -> Response[ListInstanceTypesResponse200]:
-    client = auth_client(args)
+def list_instance_types(
+    base_url: str, token: str | None = None, insecure: bool = False
+) -> Response[ListInstanceTypesResponse200]:
+    client = auth_client(base_url=base_url, token=token, insecure=insecure)
     r: Response[ListInstanceTypesResponse200] = _list_instance_types(client=client)
     return r
 
 
 def filter_instance_types(
-    response: Response[ListInstanceTypesResponse200], args: SimpleNamespace
+    response: Response[ListInstanceTypesResponse200],
+    available: bool,
+    cheapest: bool,
+    region: tuple[str, ...],
+    gpu: tuple[str, ...],
+    min_gpus: int | None,
+    min_vcpus: int | None,
+    min_memory: int | None,
+    min_storage: int | None,
+    max_price: int | None,
 ) -> Response[ListInstanceTypesResponse200]:
     parsed = response.parsed
     target = getattr(parsed, "data", parsed if hasattr(parsed, "additional_properties") else None)
@@ -27,62 +37,61 @@ def filter_instance_types(
 
     items = dict(target.additional_properties)
 
-    if args.available:
+    if available:
         items = {name: item for name, item in items.items() if item.regions_with_capacity_available}
 
-    if args.region:
-        allowed_regions = set(args.region)
+    if region:
+        allowed_regions = set(region)
         items = {
             name: item
             for name, item in items.items()
             if any(getattr(reg, "name", None) in allowed_regions for reg in item.regions_with_capacity_available)
         }
 
-    if args.gpu:
+    if gpu:
         items = {
             name: item
             for name, item in items.items()
             if getattr(getattr(item, "instance_type", None), "gpu_description", None)
-            and any(term.lower() in getattr(item.instance_type, "gpu_description", "").lower() for term in args.gpu)
+            and any(term.lower() in getattr(item.instance_type, "gpu_description", "").lower() for term in gpu)
         }
 
-    if args.min_gpus is not None:
+    if min_gpus is not None:
         items = {
             name: item
             for name, item in items.items()
-            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "gpus", 0) >= args.min_gpus
+            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "gpus", 0) >= min_gpus
         }
 
-    if args.min_vcpus is not None:
+    if min_vcpus is not None:
         items = {
             name: item
             for name, item in items.items()
-            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "vcpus", 0) >= args.min_vcpus
+            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "vcpus", 0) >= min_vcpus
         }
 
-    if args.min_memory is not None:
+    if min_memory is not None:
         items = {
             name: item
             for name, item in items.items()
-            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "memory_gib", 0) >= args.min_memory
+            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "memory_gib", 0) >= min_memory
         }
 
-    if args.min_storage is not None:
+    if min_storage is not None:
         items = {
             name: item
             for name, item in items.items()
-            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "storage_gib", 0)
-            >= args.min_storage
+            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "storage_gib", 0) >= min_storage
         }
 
-    if args.max_price is not None:
+    if max_price is not None:
         items = {
             name: item
             for name, item in items.items()
-            if getattr(getattr(item, "instance_type", None), "price_cents_per_hour", 0) <= args.max_price * 100
+            if getattr(getattr(item, "instance_type", None), "price_cents_per_hour", 0) <= max_price * 100
         }
 
-    if args.cheapest and items:
+    if cheapest and items:
         prices: dict[str, int] = {}
         for name, item in items.items():
             price = getattr(item, "instance_type", None).price_cents_per_hour

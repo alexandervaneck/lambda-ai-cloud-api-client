@@ -1,5 +1,3 @@
-from types import SimpleNamespace
-
 from lambda_ai_cloud_api_client.api.instances.terminate_instance import sync_detailed as terminate_instance
 from lambda_ai_cloud_api_client.cli.client import auth_client
 from lambda_ai_cloud_api_client.models import (
@@ -13,13 +11,13 @@ from lambda_ai_cloud_api_client.types import Response
 
 
 def stop_instances(
-    args: SimpleNamespace,
+    id: tuple[str, ...], base_url: str, token: str | None = None, insecure: bool = False
 ) -> Response[
     TerminateInstanceResponse200
     | TerminateInstanceResponse401
     | TerminateInstanceResponse403
     | TerminateInstanceResponse404
 ]:
-    client = auth_client(args)
-    request = InstanceTerminateRequest(instance_ids=args.id)
+    client = auth_client(base_url=base_url, token=token, insecure=insecure)
+    request = InstanceTerminateRequest(instance_ids=list(id))
     return terminate_instance(client=client, body=request)

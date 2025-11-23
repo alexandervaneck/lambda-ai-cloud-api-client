@@ -6,7 +6,6 @@ import json as _json
 import os
 import sys
 from collections.abc import Callable
-from types import SimpleNamespace
 from typing import TypeVar
 
 import click
@@ -63,15 +62,8 @@ def main() -> None:
 def ls_cmd(
     status: tuple[str, ...], region: tuple[str, ...], json: bool, token: str | None, base_url: str, insecure: bool
 ) -> None:
-    args = SimpleNamespace(
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
-        status=list(status),
-        region=list(region),
-    )
-    response = list_instances(args)
-    filtered_response = filter_instances(response, args)
+    response = list_instances(base_url, token, insecure)
+    filtered_response = filter_instances(response, region, status)
 
     if json:
         print_response(filtered_response)
@@ -84,8 +76,7 @@ def ls_cmd(
 @click.argument("id")
 @_common_options
 def get_cmd(id: str, token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(id=id, token=token, base_url=base_url, insecure=insecure)
-    response = get_instance(args)
+    response = get_instance(id=id, base_url=base_url, token=token, insecure=insecure)
     print_response(response)
 
     status = int(response.status_code)
@@ -140,7 +131,7 @@ def start_cmd(
     base_url: str,
     insecure: bool,
 ) -> None:
-    args = SimpleNamespace(
+    response = start_instance(
         instance_type=instance_type,
         region=list(region),
         available=available,
@@ -165,8 +156,7 @@ def start_cmd(
         base_url=base_url,
         insecure=insecure,
     )
-    response = start_instance(args)
-    if args.dry_run:
+    if dry_run:
         return
 
     status = int(response.status_code)
@@ -186,8 +176,7 @@ def start_cmd(
 @click.argument("id", nargs=-1, required=True)
 @_common_options
 def stop_cmd(id: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(id=list(id), token=token, base_url=base_url, insecure=insecure)
-    response = stop_instances(args)
+    response = stop_instances(id, base_url, token, insecure)
     print_response(response)
 
     status = int(response.status_code)
@@ -199,8 +188,7 @@ def stop_cmd(id: tuple[str, ...], token: str | None, base_url: str, insecure: bo
 @click.argument("id", nargs=-1, required=True)
 @_common_options
 def restart_cmd(id: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(id=list(id), token=token, base_url=base_url, insecure=insecure)
-    response = restart_instances(args)
+    response = restart_instances(id, base_url, token, insecure)
     print_response(response)
 
     status = int(response.status_code)
@@ -213,8 +201,7 @@ def restart_cmd(id: tuple[str, ...], token: str | None, base_url: str, insecure:
 @click.argument("name")
 @_common_options
 def rename_cmd(id: str, name: str, token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(id=id, name=name, token=token, base_url=base_url, insecure=insecure)
-    response = rename_instance(args)
+    response = rename_instance(id, name, base_url, token, insecure)
     print_response(response)
 
     status = int(response.status_code)
@@ -229,7 +216,7 @@ def rename_cmd(id: str, name: str, token: str | None, base_url: str, insecure: b
     type=int,
     default=60 * 10,  # 10min
     show_default=True,
-    help="Time to wait for an IP before giving up.",
+    help="Time to wait before an IP address is assigned, and then to wait until SSH (port 22) is open.",
 )
 @click.option(
     "--interval-seconds",
@@ -238,33 +225,16 @@ def rename_cmd(id: str, name: str, token: str | None, base_url: str, insecure: b
     show_default=True,
     help="Polling interval while waiting for the IP.",
 )
-@click.option(
-    "--ssh-ready-timeout-seconds",
-    type=int,
-    default=120,
-    show_default=True,
-    help="Time to wait for SSH (port 22) to open after an IP is assigned.",
-)
 @_common_options
 def ssh_cmd(
     name_or_id: str,
     timeout_seconds: int,
     interval_seconds: int,
-    ssh_ready_timeout_seconds: int,
     token: str | None,
     base_url: str,
     insecure: bool,
 ) -> None:
-    args = SimpleNamespace(
-        name_or_id=name_or_id,
-        timeout_seconds=max(timeout_seconds, 1),
-        interval_seconds=max(interval_seconds, 1),
-        ssh_ready_timeout_seconds=max(ssh_ready_timeout_seconds, 1),
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
-    )
-    ssh_into_instance(args)
+    ssh_into_instance(name_or_id, max(timeout_seconds, 1), max(interval_seconds, 1), base_url, token, insecure)
 
 
 @main.command(name="types", help="List instance types.")
@@ -294,13 +264,12 @@ def types_cmd(
     base_url: str,
     insecure: bool,
 ) -> None:
-    args = SimpleNamespace(
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
+    response = list_instance_types(base_url, token, insecure)
+    filtered_response = filter_instance_types(
+        response,
         available=available,
         cheapest=cheapest,
-        region=list(region),
+        region=region,
         gpu=gpu,
         min_gpus=min_gpus,
         min_vcpus=min_vcpus,
@@ -308,8 +277,6 @@ def types_cmd(
         min_storage=min_storage,
         max_price=max_price,
     )
-    response = list_instance_types(args)
-    filtered_response = filter_instance_types(response, args)
 
     if json:
         print_response(filtered_response)
@@ -355,17 +322,8 @@ def images_cmd(
     base_url: str,
     insecure: bool,
 ) -> None:
-    args = SimpleNamespace(
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
-        family=list(family),
-        version=list(version),
-        arch=list(arch),
-        region=list(region),
-    )
-    response = list_images(args)
-    filtered_response = filter_images(response, args)
+    response = list_images(base_url, token, insecure)
+    filtered_response = filter_images(response, family, version, arch, region)
 
     if json:
         print_response(filtered_response)
@@ -391,17 +349,16 @@ def images_cmd(
     help="Output raw JSON instead of a table.",
 )
 @_common_options
-def ssh_keys_cmd(id: str, name: str, json: bool, token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(
-        id=id,
-        name=name,
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
-    )
-
-    response = list_keys(args)
-    filtered_response = filter_keys(response, args)
+def ssh_keys_cmd(
+    id: tuple[str, ...] | None,
+    name: tuple[str, ...] | None,
+    json: bool,
+    token: str | None,
+    base_url: str,
+    insecure: bool,
+) -> None:
+    response = list_keys(base_url, token, insecure)
+    filtered_response = filter_keys(response, id, name)
 
     if json:
         print_response(filtered_response)

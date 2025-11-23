@@ -1,5 +1,4 @@
 import sys
-from types import SimpleNamespace
 
 from rich.console import Console
 from rich.table import Table
@@ -16,24 +15,25 @@ from lambda_ai_cloud_api_client.types import Response, Unset
 
 
 def list_instances(
-    args: SimpleNamespace,
+    base_url: str, token: str | None = None, insecure: bool = False
 ) -> Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403]:
-    client = auth_client(args)
+    client = auth_client(base_url=base_url, token=token, insecure=insecure)
     instances: Response[ListInstancesResponse200] = _list_instances(client=client)
     return instances
 
 
 def filter_instances(
     response: Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403],
-    args: SimpleNamespace,
+    region: tuple[str, ...] | None = None,
+    status: tuple[str, ...] | None = None,
 ) -> Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403]:
     if response.parsed and hasattr(response.parsed, "data"):
         filtered = response.parsed.data
-        if args.region:
-            allowed = set(args.region)
+        if region:
+            allowed = set(region)
             filtered = [i for i in filtered if getattr(getattr(i, "region", None), "name", None) in allowed]
-        if args.status:
-            allowed = set(args.status)
+        if status:
+            allowed = set(status)
             filtered = [i for i in filtered if getattr(i, "status", None) in allowed]
 
         response.parsed.data = filtered  # type: ignore[attr-defined]

@@ -1,7 +1,5 @@
-import json
 import sys
 from pathlib import Path
-from types import SimpleNamespace
 from typing import Any
 
 from lambda_ai_cloud_api_client.api.instances.launch_instance import sync_detailed as launch_instance
@@ -22,14 +20,16 @@ from lambda_ai_cloud_api_client.models import (
 from lambda_ai_cloud_api_client.types import Response
 
 
-def _parse_image(args: SimpleNamespace) -> ImageSpecificationFamily | ImageSpecificationID | None:
-    if args.image_id and args.image_family:
+def _parse_image(
+    image_id: str | None, image_family: str | None
+) -> ImageSpecificationFamily | ImageSpecificationID | None:
+    if image_id and image_family:
         print("Use either --image-id or --image-family, not both.", file=sys.stderr)
         sys.exit(1)
-    if args.image_id:
-        return ImageSpecificationID(id=args.image_id)
-    if args.image_family:
-        return ImageSpecificationFamily(family=args.image_family)
+    if image_id:
+        return ImageSpecificationID(id=image_id)
+    if image_family:
+        return ImageSpecificationFamily(family=image_family)
     return None
 
 
@@ -56,23 +56,34 @@ def _read_user_data(user_data_path: str | None) -> str | None:
     return path.read_text()
 
 
-def _resolve_type_and_region(args: SimpleNamespace) -> tuple[str, PublicRegionCode]:
-    type_args = SimpleNamespace(
-        token=args.token,
-        base_url=args.base_url,
-        insecure=args.insecure,
-        available=args.available,
-        cheapest=args.cheapest,
-        region=args.region,
-        gpu=args.gpu,
-        min_gpus=args.min_gpus,
-        min_vcpus=args.min_vcpus,
-        min_memory=args.min_memory,
-        min_storage=args.min_storage,
-        max_price=args.max_price,
+def _resolve_type_and_region(
+    instance_type: str | None,
+    region: tuple[str, ...],
+    available: bool,
+    cheapest: bool,
+    gpu: tuple[str, ...],
+    min_gpus: int | None,
+    min_vcpus: int | None,
+    min_memory: int | None,
+    min_storage: int | None,
+    max_price: int | None,
+    token: str | None,
+    base_url: str,
+    insecure: bool,
+) -> tuple[str, PublicRegionCode]:
+    response = list_instance_types(base_url, token, insecure)
+    response = filter_instance_types(
+        response,
+        available=available,
+        cheapest=cheapest,
+        region=region,
+        gpu=gpu,
+        min_gpus=min_gpus,
+        min_vcpus=min_vcpus,
+        min_memory=min_memory,
+        min_storage=min_storage,
+        max_price=max_price,
     )
-    response = list_instance_types(type_args)
-    response = filter_instance_types(response, type_args)
 
     parsed = getattr(response, "parsed", None)
     data = getattr(parsed, "data", None) if parsed is not None else None
@@ -82,7 +93,7 @@ def _resolve_type_and_region(args: SimpleNamespace) -> tuple[str, PublicRegionCo
         print("No instance types match your filters.", file=sys.stderr)
         sys.exit(1)
 
-    selected_name = args.instance_type
+    selected_name = instance_type
     selected = None
     if selected_name:
         selected = items.get(selected_name)
@@ -101,8 +112,8 @@ def _resolve_type_and_region(args: SimpleNamespace) -> tuple[str, PublicRegionCo
 
     allowed_regions = [getattr(r, "name", None) for r in getattr(selected, "regions_with_capacity_available", [])]
     chosen_region_name = None
-    if args.region:
-        for reg in args.region:
+    if region:
+        for reg in region:
             if reg in allowed_regions:
                 chosen_region_name = reg
                 break
@@ -132,7 +143,29 @@ def _resolve_type_and_region(args: SimpleNamespace) -> tuple[str, PublicRegionCo
 
 
 def start_instance(
-    args: SimpleNamespace,
+    instance_type: str | None,
+    region: tuple[str, ...],
+    available: bool,
+    cheapest: bool,
+    gpu: tuple[str, ...],
+    min_gpus: int | None,
+    min_vcpus: int | None,
+    min_memory: int | None,
+    min_storage: int | None,
+    max_price: float | None,
+    ssh_key: tuple[str, ...],
+    dry_run: bool,
+    name: str | None,
+    hostname: str | None,
+    filesystem: tuple[str, ...],
+    image_id: str | None,
+    image_family: str | None,
+    user_data_file: str | None,
+    tag: tuple[str, ...],
+    json: bool,
+    token: str | None,
+    base_url: str,
+    insecure: bool,
 ) -> Response[
     LaunchInstanceResponse200
     | LaunchInstanceResponse400
@@ -141,26 +174,39 @@ def start_instance(
     | LaunchInstanceResponse404
     | None
 ]:
-    client = auth_client(args)
+    client = auth_client(base_url=base_url, token=token, insecure=insecure)
+    instance_type_name, region = _resolve_type_and_region(
+        instance_type=instance_type,
+        region=region,
+        available=available,
+        cheapest=cheapest,
+        gpu=gpu,
+        min_gpus=min_gpus,
+        min_vcpus=min_vcpus,
+        min_memory=min_memory,
+        min_storage=min_storage,
+        max_price=max_price,
+        token=token,
+        base_url=base_url,
+        insecure=insecure,
+    )
 
-    instance_type_name, region = _resolve_type_and_region(args)
-
-    image = _parse_image(args)
-    tags = _parse_tags(args.tag)
-    user_data = _read_user_data(args.user_data_file)
+    image = _parse_image(image_id, image_family)
+    tags = _parse_tags(tag)
+    user_data = _read_user_data(user_data_file)
 
     request_params: dict[str, Any] = {
         "region_name": region,
         "instance_type_name": instance_type_name,
-        "ssh_key_names": args.ssh_key,
+        "ssh_key_names": ssh_key,
     }
 
-    if args.name:
-        request_params["name"] = args.name
-    if args.hostname:
-        request_params["hostname"] = args.hostname
-    if args.filesystem:
-        request_params["file_system_names"] = args.filesystem
+    if name:
+        request_params["name"] = name
+    if hostname:
+        request_params["hostname"] = hostname
+    if filesystem:
+        request_params["file_system_names"] = filesystem
     if image:
         request_params["image"] = image
     if user_data:
@@ -168,12 +214,12 @@ def start_instance(
     if tags:
         request_params["tags"] = tags
 
-    if args.dry_run:
+    if dry_run:
         plan = {
             "instance_type_name": instance_type_name,
             "region_name": region.value,
         }
-        if args.json:
+        if json:
             print(json.dumps(plan, indent=2))
         else:
             print(f"Dry run: would launch instance_type='{instance_type_name}' in region='{region.value}'")
