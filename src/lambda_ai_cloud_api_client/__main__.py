@@ -205,8 +205,7 @@ def restart_cmd(id: tuple[str, ...], token: str | None, base_url: str, insecure:
 @click.argument("name")
 @_common_options
 def rename_cmd(id: str, name: str, token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(id=id, name=name, token=token, base_url=base_url, insecure=insecure)
-    response = rename_instance(args)
+    response = rename_instance(id, name, base_url, token, insecure)
     print_response(response)
 
     status = int(response.status_code)
