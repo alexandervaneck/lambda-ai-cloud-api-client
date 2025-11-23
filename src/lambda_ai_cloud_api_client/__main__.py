@@ -381,17 +381,16 @@ def images_cmd(
     help="Output raw JSON instead of a table.",
 )
 @_common_options
-def ssh_keys_cmd(id: str, name: str, json: bool, token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(
-        id=id,
-        name=name,
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
-    )
-
-    response = list_keys(args)
-    filtered_response = filter_keys(response, args)
+def ssh_keys_cmd(
+    id: tuple[str, ...] | None,
+    name: tuple[str, ...] | None,
+    json: bool,
+    token: str | None,
+    base_url: str,
+    insecure: bool,
+) -> None:
+    response = list_keys(base_url, token, insecure)
+    filtered_response = filter_keys(response, id, name)
 
     if json:
         print_response(filtered_response)

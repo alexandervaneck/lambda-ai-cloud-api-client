@@ -1,5 +1,4 @@
 import sys
-from types import SimpleNamespace
 
 from rich.console import Console
 from rich.table import Table
@@ -11,20 +10,22 @@ from lambda_ai_cloud_api_client.models import ListSSHKeysResponse200
 from lambda_ai_cloud_api_client.types import Response
 
 
-def list_keys(args: SimpleNamespace) -> Response[ListSSHKeysResponse200]:
-    client = auth_client(base_url=args.base_url, token=args.token, insecure=args.insecure)
+def list_keys(base_url: str, token: str | None = None, insecure: bool = False) -> Response[ListSSHKeysResponse200]:
+    client = auth_client(base_url=base_url, token=token, insecure=insecure)
     keys: Response[ListSSHKeysResponse200] = _list_keys(client=client)
     return keys
 
 
-def filter_keys(response: Response[ListSSHKeysResponse200], args: SimpleNamespace) -> Response[ListSSHKeysResponse200]:
+def filter_keys(
+    response: Response[ListSSHKeysResponse200], id: str | None = None, name: str | None = None
+) -> Response[ListSSHKeysResponse200]:
     if response.parsed and hasattr(response.parsed, "data"):
         filtered = response.parsed.data
-        if args.id:
-            allowed_id = set(args.id)
+        if id:
+            allowed_id = set(id)
             filtered = [img for img in filtered if getattr(img, "id", None) in allowed_id]
-        if args.name:
-            allowed_name = set(args.name)
+        if name:
+            allowed_name = set(name)
             filtered = [img for img in filtered if getattr(img, "name", None) in allowed_name]
         response.parsed.data = filtered  # type: ignore[attr-defined]
 
