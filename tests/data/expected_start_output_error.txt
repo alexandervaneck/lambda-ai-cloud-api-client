@@ -1,3 +1,4 @@
+Launch plan instance_type_name='gpu_1x_a100_sxm4' in region.value='us-east-1'
 {
   "status_code": 500,
   "error": "{}"

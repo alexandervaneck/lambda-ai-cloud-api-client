@@ -13,6 +13,7 @@ Commands:
   restart  Restart one or more instances.
   rename   Rename an instance.
   ssh      SSH into an instance by name or id.
+  run      Run a command on an instance over SSH.
   types    List instance types.
   images   List available images.
   keys     List SSH keys.

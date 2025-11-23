@@ -20,6 +20,7 @@ def list_instance_types(
 
 def filter_instance_types(
     response: Response[ListInstanceTypesResponse200],
+    instance_type: str | None,
     available: bool,
     cheapest: bool,
     region: tuple[str, ...],
@@ -36,6 +37,14 @@ def filter_instance_types(
         return response
 
     items = dict(target.additional_properties)
+
+    if instance_type:
+        items = {
+            name: item
+            for name, item in items.items()
+            if getattr(getattr(item, "instance_type", None), "name", None)
+            and getattr(getattr(item, "instance_type", None), "name", None) == instance_type
+        }
 
     if available:
         items = {name: item for name, item in items.items() if item.regions_with_capacity_available}

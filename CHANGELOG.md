@@ -1,3 +1,6 @@
+# 2.3.0
+* feat: Add `lai run <name-or-id> <command>` to run a command on a remote instance. Supports env vars.
+
 # 2.2.1
 * feat: Replace `lai ssh --ssh_ready_timeout_seconds` with the already existing `--timout-seconds`, and re-use.
 * refactor: Remove SimpleNamespace as argument, this is a god-dict and not explicit enough.

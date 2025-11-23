@@ -1,1 +1,2 @@
+Launch plan instance_type_name='gpu_1x_a10' in region.value='us-east-1'
 Started instances: 0920582c7ff041399e34823a0be62549

@@ -1,0 +1,5 @@
+Launch plan instance_type_name='gpu_1x_a10' in region.value='us-east-1'
+Executing: ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/dev/null ubuntu@198.51.100.2 echo hello world
+Waiting for IP on instance '0920582c7ff041399e34823a0be62549' (0920582c7ff041399e34823a0be62549)... retrying in 5s
+Waiting for IP on instance '0920582c7ff041399e34823a0be62549' (0920582c7ff041399e34823a0be62549)... retrying in 5s
+Waiting for SSH on instance '0920582c7ff041399e34823a0be62549' (198.51.100.2)... retrying in 5s

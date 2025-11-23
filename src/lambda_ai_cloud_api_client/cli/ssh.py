@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import shlex
 import socket
 import sys
 import time
@@ -22,7 +23,7 @@ def _extract_ip(instance: Instance | None) -> str | None:
     return ip
 
 
-def _choose_instance(response: Response, name_or_id: str) -> Instance:
+def choose_instance(response: Response, name_or_id: str) -> Instance:
     status = int(response.status_code)
     if status < 200 or status >= 300 or response.parsed is None:
         print_response(response)
@@ -86,8 +87,8 @@ def _wait_for_ip(
         time.sleep(wait_seconds)
 
 
-def _wait_for_ssh(name_or_id: str, ip: str, ssh_ready_timeout_seconds: int, interval_seconds: int) -> bool:
-    deadline = time.monotonic() + ssh_ready_timeout_seconds
+def _wait_for_ssh(name_or_id: str, ip: str, timeout_seconds: int, interval_seconds: int) -> bool:
+    deadline = time.monotonic() + timeout_seconds
     while True:
         try:
             with socket.create_connection((ip, 22), timeout=5):
@@ -107,17 +108,15 @@ def _wait_for_ssh(name_or_id: str, ip: str, ssh_ready_timeout_seconds: int, inte
         time.sleep(wait_seconds)
 
 
-def ssh_into_instance(
+def wait_for_instance(
+    instance: Instance,
     name_or_id: str,
     timeout_seconds: int,
     interval_seconds: int,
     base_url: str,
     token: str | None = None,
     insecure: bool = False,
-) -> None:
-    instances = list_instances(base_url, token, insecure)
-    instance = _choose_instance(instances, name_or_id)
-
+) -> str:
     ip = _extract_ip(instance)
     if not ip:
         ip = _wait_for_ip(
@@ -144,6 +143,51 @@ def ssh_into_instance(
         )
         sys.exit(1)
 
+    return ip
+
+
+def ssh_command(ip: str, command: tuple[str, ...], env_assignments: list[str] | None = None) -> list[str]:
     target = f"ubuntu@{ip}"
-    print(f"Connecting to {target} ...")
-    os.execvp("ssh", ["ssh", target])
+    ssh_args = [
+        "ssh",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+        "-o",
+        "UserKnownHostsFile=/dev/null",
+        target,
+    ]
+    if command:
+        parts: list[str] = []
+        if env_assignments:
+            parts.extend(env_assignments)
+        parts.extend(command)
+        remote_cmd = " ".join(shlex.quote(p) for p in parts)
+        ssh_args.append(remote_cmd)
+    return ssh_args
+
+
+def ssh_into_instance(
+    name_or_id: str,
+    timeout_seconds: int,
+    interval_seconds: int,
+    base_url: str,
+    token: str | None = None,
+    insecure: bool = False,
+    *,
+    command: tuple[str, ...] | None = None,
+    env_assignments: list[str] | None = None,
+) -> None:
+    instances = list_instances(base_url, token, insecure)
+    instance = choose_instance(instances, name_or_id)
+    ip = wait_for_instance(
+        instance,
+        name_or_id,
+        timeout_seconds,
+        interval_seconds,
+        base_url,
+        token,
+        insecure,
+    )
+    ssh_args = ssh_command(ip, command, env_assignments)
+    print(f"Executing: {' '.join(ssh_args)}")
+    os.execvp("ssh", ssh_args)

@@ -1,3 +1,4 @@
+import json as _json
 import sys
 from pathlib import Path
 from typing import Any
@@ -74,6 +75,7 @@ def _resolve_type_and_region(
     response = list_instance_types(base_url, token, insecure)
     response = filter_instance_types(
         response,
+        instance_type=instance_type,
         available=available,
         cheapest=cheapest,
         region=region,
@@ -162,10 +164,10 @@ def start_instance(
     image_family: str | None,
     user_data_file: str | None,
     tag: tuple[str, ...],
-    json: bool,
     token: str | None,
     base_url: str,
     insecure: bool,
+    json: bool = False,
 ) -> Response[
     LaunchInstanceResponse200
     | LaunchInstanceResponse400
@@ -195,6 +197,10 @@ def start_instance(
     tags = _parse_tags(tag)
     user_data = _read_user_data(user_data_file)
 
+    if not ssh_key:
+        print("--ssh-key is required to start an instance. Please provide the name of an SSH key.")
+        exit(1)
+
     request_params: dict[str, Any] = {
         "region_name": region,
         "instance_type_name": instance_type_name,
@@ -214,16 +220,20 @@ def start_instance(
     if tags:
         request_params["tags"] = tags
 
+    plan = {
+        "instance_type_name": instance_type_name,
+        "region_name": region.value,
+    }
+
+    if json and dry_run:
+        print(_json.dumps(plan, indent=2))
+        return
+
+    if not json:
+        print(f"Launch plan {instance_type_name=} in {region.value=}")
     if dry_run:
-        plan = {
-            "instance_type_name": instance_type_name,
-            "region_name": region.value,
-        }
-        if json:
-            print(json.dumps(plan, indent=2))
-        else:
-            print(f"Dry run: would launch instance_type='{instance_type_name}' in region='{region.value}'")
-        return None
+        print("Dry-run, exiting without launching...")
+        return
 
     request = InstanceLaunchRequest(**request_params)
     return launch_instance(client=client, body=request)

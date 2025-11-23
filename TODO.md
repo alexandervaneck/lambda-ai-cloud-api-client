@@ -23,7 +23,11 @@ Endpoints to be implemented:
 
 Additional commands to be implemented:
 - [x] lai ssh, ssh into an instance.
-- [ ] lai run --rm, start an instance, ssh into it, and optionally remove/turn-off the instance after exiting.
+- [x] lai run --rm, start an instance, ssh into it, and optionally remove/turn-off the instance after exiting.
 
 Improvements
 - [ ] Share auth_client globally so we can use the same thread when we need multiple calls. probably with @cached
+- [x] Added run command
+- [x] Added run env var arg
+- [x] Added run volume arg
+- [ ] refactor instance type selection logic to me cleaner and return an InstanceType.

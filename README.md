@@ -38,6 +38,7 @@ lai --help
 - Start with filters (auto-selects type/region when narrowed to one): `lai start --available --cheapest --gpu H100 --ssh-key my-key`
 - Dry run start resolution without launching: `lai start --dry-run --available --gpu H100 --ssh-key my-key`
 - SSH into an instance by name or id (waits for IP and SSH availability): `lai ssh <name-or-id>`
+- Run a command on an instance over SSH: `lai run <name-or-id> <command ...>`
 - Stop instances: `lai stop <id-1> <id-2>`
 - Restart instances: `lai restart <id-1> <id-2>`
 - Rename an instance: `lai rename <instance-id> new-name`

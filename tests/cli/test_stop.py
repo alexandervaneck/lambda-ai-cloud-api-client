@@ -23,6 +23,11 @@ def test_stop(
 ) -> None:
     # Arrange
     httpx_mock.add_response(
+        method="GET",
+        url=f"{DEFAULT_BASE_URL}/api/v1/instances",
+        json=json.loads((DATA_FOLDER / "m_instances_response.json").read_text()),
+    )
+    httpx_mock.add_response(
         method="POST",
         url=f"{DEFAULT_BASE_URL}/api/v1/instance-operations/terminate",
         match_json={"instance_ids": ["0920582c7ff041399e34823a0be62549"]},
@@ -36,6 +41,11 @@ def test_stop(
 
 def test_stop_error(httpx_mock, c_assert_cmd_results_equals: Callable[[list[str], Path, int], Result]) -> None:
     # Arrange
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{DEFAULT_BASE_URL}/api/v1/instances",
+        json=json.loads((DATA_FOLDER / "m_instances_response.json").read_text()),
+    )
     httpx_mock.add_response(
         method="POST",
         url=f"{DEFAULT_BASE_URL}/api/v1/instance-operations/terminate",
