@@ -63,15 +63,8 @@ def main() -> None:
 def ls_cmd(
     status: tuple[str, ...], region: tuple[str, ...], json: bool, token: str | None, base_url: str, insecure: bool
 ) -> None:
-    args = SimpleNamespace(
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
-        status=list(status),
-        region=list(region),
-    )
-    response = list_instances(args)
-    filtered_response = filter_instances(response, args)
+    response = list_instances(base_url, token, insecure)
+    filtered_response = filter_instances(response, region, status)
 
     if json:
         print_response(filtered_response)

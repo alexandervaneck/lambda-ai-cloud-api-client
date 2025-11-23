@@ -7,7 +7,7 @@ import time
 from types import SimpleNamespace
 
 from lambda_ai_cloud_api_client.cli.get import get_instance
-from lambda_ai_cloud_api_client.cli.ls import list_instances as _list_instances
+from lambda_ai_cloud_api_client.cli.ls import list_instances
 from lambda_ai_cloud_api_client.cli.response import print_response
 from lambda_ai_cloud_api_client.models import Instance
 from lambda_ai_cloud_api_client.types import Response, Unset
@@ -101,7 +101,7 @@ def _wait_for_ssh(ip: str, args: SimpleNamespace) -> bool:
 
 
 def ssh_into_instance(args: SimpleNamespace) -> None:
-    instances = _list_instances(args)
+    instances = list_instances(args.base_url, args.token, args.insecure)
     instance = _choose_instance(instances, args.name_or_id)
 
     ip = _extract_ip(instance)
