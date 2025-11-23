@@ -1,6 +1,7 @@
 # 2.2.1
 * feat: Replace `lai ssh --ssh_ready_timeout_seconds` with the already existing `--timout-seconds`, and re-use.
 * refactor: Remove SimpleNamespace as argument, this is a god-dict and not explicit enough.
+* fix: Make Unset renderable by rich.
 
 # 2.2.0
 
