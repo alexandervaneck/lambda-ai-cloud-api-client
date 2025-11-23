@@ -1,4 +1,3 @@
-
 from lambda_ai_cloud_api_client.api.instances.post_instance import sync_detailed as _post_instance
 from lambda_ai_cloud_api_client.cli.client import auth_client
 from lambda_ai_cloud_api_client.models import InstanceModificationRequest, PostInstanceResponse200

@@ -191,8 +191,7 @@ def stop_cmd(id: tuple[str, ...], token: str | None, base_url: str, insecure: bo
 @click.argument("id", nargs=-1, required=True)
 @_common_options
 def restart_cmd(id: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(id=list(id), token=token, base_url=base_url, insecure=insecure)
-    response = restart_instances(args)
+    response = restart_instances(id, base_url, token, insecure)
     print_response(response)
 
     status = int(response.status_code)
