@@ -6,7 +6,6 @@ import json as _json
 import os
 import sys
 from collections.abc import Callable
-from types import SimpleNamespace
 from typing import TypeVar
 
 import click
@@ -132,7 +131,7 @@ def start_cmd(
     base_url: str,
     insecure: bool,
 ) -> None:
-    args = SimpleNamespace(
+    response = start_instance(
         instance_type=instance_type,
         region=list(region),
         available=available,
@@ -157,8 +156,7 @@ def start_cmd(
         base_url=base_url,
         insecure=insecure,
     )
-    response = start_instance(args)
-    if args.dry_run:
+    if dry_run:
         return
 
     status = int(response.status_code)
@@ -178,8 +176,7 @@ def start_cmd(
 @click.argument("id", nargs=-1, required=True)
 @_common_options
 def stop_cmd(id: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(id=list(id), token=token, base_url=base_url, insecure=insecure)
-    response = stop_instances(args)
+    response = stop_instances(id, base_url, token, insecure)
     print_response(response)
 
     status = int(response.status_code)
@@ -267,13 +264,12 @@ def types_cmd(
     base_url: str,
     insecure: bool,
 ) -> None:
-    args = SimpleNamespace(
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
+    response = list_instance_types(base_url, token, insecure)
+    filtered_response = filter_instance_types(
+        response,
         available=available,
         cheapest=cheapest,
-        region=list(region),
+        region=region,
         gpu=gpu,
         min_gpus=min_gpus,
         min_vcpus=min_vcpus,
@@ -281,8 +277,6 @@ def types_cmd(
         min_storage=min_storage,
         max_price=max_price,
     )
-    response = list_instance_types(args)
-    filtered_response = filter_instance_types(response, args)
 
     if json:
         print_response(filtered_response)
