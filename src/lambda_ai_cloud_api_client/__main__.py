@@ -84,8 +84,7 @@ def ls_cmd(
 @click.argument("id")
 @_common_options
 def get_cmd(id: str, token: str | None, base_url: str, insecure: bool) -> None:
-    args = SimpleNamespace(id=id, token=token, base_url=base_url, insecure=insecure)
-    response = get_instance(args)
+    response = get_instance(id=id, base_url=base_url, token=token, insecure=insecure)
     print_response(response)
 
     status = int(response.status_code)

@@ -6,7 +6,7 @@ import sys
 import time
 from types import SimpleNamespace
 
-from lambda_ai_cloud_api_client.cli.get import get_instance as _get_instance
+from lambda_ai_cloud_api_client.cli.get import get_instance
 from lambda_ai_cloud_api_client.cli.ls import list_instances as _list_instances
 from lambda_ai_cloud_api_client.cli.response import print_response
 from lambda_ai_cloud_api_client.models import Instance
@@ -56,15 +56,8 @@ def _choose_instance(response: Response, name_or_id: str) -> Instance:
 
 def _wait_for_ip(instance_id: str, args: SimpleNamespace) -> str | None:
     deadline = time.monotonic() + args.timeout_seconds
-    poll_args = SimpleNamespace(
-        id=instance_id,
-        token=args.token,
-        base_url=args.base_url,
-        insecure=args.insecure,
-    )
-
     while True:
-        response = _get_instance(poll_args)
+        response = get_instance(id=instance_id, base_url=args.base_url, token=args.token, insecure=args.insecure)
         status = int(response.status_code)
         if status < 200 or status >= 300 or response.parsed is None:
             print_response(response)
