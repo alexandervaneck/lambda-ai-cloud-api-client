@@ -12,7 +12,7 @@ from lambda_ai_cloud_api_client.types import Response
 
 
 def list_instance_types(args: SimpleNamespace) -> Response[ListInstanceTypesResponse200]:
-    client = auth_client(args)
+    client = auth_client(base_url=args.base_url, token=args.token, insecure=args.insecure)
     r: Response[ListInstanceTypesResponse200] = _list_instance_types(client=client)
     return r
 

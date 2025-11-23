@@ -12,7 +12,7 @@ from lambda_ai_cloud_api_client.types import Response
 
 
 def list_images(args: SimpleNamespace) -> Response[ListImagesResponse200]:
-    client = auth_client(args)
+    client = auth_client(base_url=args.base_url, token=args.token, insecure=args.insecure)
     images: Response[ListImagesResponse200] = _list_images(client=client)
     return images
 

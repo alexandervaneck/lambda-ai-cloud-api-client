@@ -7,6 +7,6 @@ from lambda_ai_cloud_api_client.types import Response
 
 
 def get_instance(args: SimpleNamespace) -> Response[GetInstanceResponse200]:
-    client = auth_client(args)
+    client = auth_client(base_url=args.base_url, token=args.token, insecure=args.insecure)
     instance: Response[GetInstanceResponse200] = _get_instance(client=client, id=args.id)
     return instance

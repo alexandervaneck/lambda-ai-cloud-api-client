@@ -141,8 +141,7 @@ def start_instance(
     | LaunchInstanceResponse404
     | None
 ]:
-    client = auth_client(args)
-
+    client = auth_client(base_url=args.base_url, token=args.token, insecure=args.insecure)
     instance_type_name, region = _resolve_type_and_region(args)
 
     image = _parse_image(args)

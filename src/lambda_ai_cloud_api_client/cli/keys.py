@@ -12,7 +12,7 @@ from lambda_ai_cloud_api_client.types import Response
 
 
 def list_keys(args: SimpleNamespace) -> Response[ListSSHKeysResponse200]:
-    client = auth_client(args)
+    client = auth_client(base_url=args.base_url, token=args.token, insecure=args.insecure)
     keys: Response[ListSSHKeysResponse200] = _list_keys(client=client)
     return keys
 

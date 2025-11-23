@@ -18,7 +18,7 @@ from lambda_ai_cloud_api_client.types import Response, Unset
 def list_instances(
     args: SimpleNamespace,
 ) -> Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403]:
-    client = auth_client(args)
+    client = auth_client(base_url=args.base_url, token=args.token, insecure=args.insecure)
     instances: Response[ListInstancesResponse200] = _list_instances(client=client)
     return instances
 

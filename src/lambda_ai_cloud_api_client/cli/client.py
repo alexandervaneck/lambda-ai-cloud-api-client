@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import sys
-from types import SimpleNamespace
 from typing import TypeVar
 
 from lambda_ai_cloud_api_client.client import AuthenticatedClient
@@ -29,11 +28,10 @@ def _load_token(explicit_token: str | None) -> str:
     sys.exit(1)
 
 
-def auth_client(args: SimpleNamespace) -> AuthenticatedClient:
-    token = _load_token(args.token)
+def auth_client(base_url: str, token: str | None = None, insecure: bool = False) -> AuthenticatedClient:
     client = AuthenticatedClient(
-        base_url=args.base_url,
-        token=token,
-        verify_ssl=not args.insecure,
+        base_url=base_url,
+        token=_load_token(token),
+        verify_ssl=not insecure,
     )
     return client

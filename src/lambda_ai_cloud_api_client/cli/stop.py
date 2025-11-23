@@ -20,6 +20,6 @@ def stop_instances(
     | TerminateInstanceResponse403
     | TerminateInstanceResponse404
 ]:
-    client = auth_client(args)
+    client = auth_client(base_url=args.base_url, token=args.token, insecure=args.insecure)
     request = InstanceTerminateRequest(instance_ids=args.id)
     return terminate_instance(client=client, body=request)

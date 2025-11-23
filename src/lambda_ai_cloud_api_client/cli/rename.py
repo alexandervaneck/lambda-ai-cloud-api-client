@@ -7,7 +7,7 @@ from lambda_ai_cloud_api_client.types import Response
 
 
 def rename_instance(args: SimpleNamespace) -> Response[PostInstanceResponse200]:
-    client = auth_client(args)
+    client = auth_client(base_url=args.base_url, token=args.token, insecure=args.insecure)
     instance: Response[PostInstanceResponse200] = _post_instance(
         client=client, id=args.id, body=InstanceModificationRequest(name=args.name)
     )

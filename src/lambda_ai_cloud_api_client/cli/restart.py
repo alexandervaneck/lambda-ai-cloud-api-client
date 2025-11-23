@@ -17,6 +17,6 @@ def restart_instances(
 ) -> Response[
     RestartInstanceResponse200 | RestartInstanceResponse401 | RestartInstanceResponse403 | RestartInstanceResponse404
 ]:
-    client = auth_client(args)
+    client = auth_client(base_url=args.base_url, token=args.token, insecure=args.insecure)
     request = InstanceRestartRequest(instance_ids=args.id)
     return restart_instance(client=client, body=request)
