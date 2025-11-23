@@ -219,7 +219,7 @@ def rename_cmd(id: str, name: str, token: str | None, base_url: str, insecure: b
     type=int,
     default=60 * 10,  # 10min
     show_default=True,
-    help="Time to wait for an IP before giving up.",
+    help="Time to wait before an IP address is assigned, and then to wait until SSH (port 22) is open.",
 )
 @click.option(
     "--interval-seconds",
@@ -228,33 +228,16 @@ def rename_cmd(id: str, name: str, token: str | None, base_url: str, insecure: b
     show_default=True,
     help="Polling interval while waiting for the IP.",
 )
-@click.option(
-    "--ssh-ready-timeout-seconds",
-    type=int,
-    default=120,
-    show_default=True,
-    help="Time to wait for SSH (port 22) to open after an IP is assigned.",
-)
 @_common_options
 def ssh_cmd(
     name_or_id: str,
     timeout_seconds: int,
     interval_seconds: int,
-    ssh_ready_timeout_seconds: int,
     token: str | None,
     base_url: str,
     insecure: bool,
 ) -> None:
-    args = SimpleNamespace(
-        name_or_id=name_or_id,
-        timeout_seconds=max(timeout_seconds, 1),
-        interval_seconds=max(interval_seconds, 1),
-        ssh_ready_timeout_seconds=max(ssh_ready_timeout_seconds, 1),
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
-    )
-    ssh_into_instance(args)
+    ssh_into_instance(name_or_id, max(timeout_seconds, 1), max(interval_seconds, 1), base_url, token, insecure)
 
 
 @main.command(name="types", help="List instance types.")

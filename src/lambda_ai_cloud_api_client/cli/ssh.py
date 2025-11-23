@@ -4,7 +4,6 @@ import os
 import socket
 import sys
 import time
-from types import SimpleNamespace
 
 from lambda_ai_cloud_api_client.cli.get import get_instance
 from lambda_ai_cloud_api_client.cli.ls import list_instances
@@ -54,10 +53,18 @@ def _choose_instance(response: Response, name_or_id: str) -> Instance:
     return matches[0]
 
 
-def _wait_for_ip(instance_id: str, args: SimpleNamespace) -> str | None:
-    deadline = time.monotonic() + args.timeout_seconds
+def _wait_for_ip(
+    name_or_id: str,
+    instance_id: str,
+    timeout_seconds: int,
+    interval_seconds: int,
+    base_url: str,
+    token: str | None = None,
+    insecure: bool = False,
+) -> str | None:
+    deadline = time.monotonic() + timeout_seconds
     while True:
-        response = get_instance(id=instance_id, base_url=args.base_url, token=args.token, insecure=args.insecure)
+        response = get_instance(id=instance_id, base_url=base_url, token=token, insecure=insecure)
         status = int(response.status_code)
         if status < 200 or status >= 300 or response.parsed is None:
             print_response(response)
@@ -71,16 +78,16 @@ def _wait_for_ip(instance_id: str, args: SimpleNamespace) -> str | None:
         if remaining <= 0:
             return None
 
-        wait_seconds = min(args.interval_seconds, remaining)
+        wait_seconds = min(interval_seconds, remaining)
         print(
-            f"Waiting for IP on instance '{args.name_or_id}' ({instance_id})... retrying in {int(wait_seconds)}s",
+            f"Waiting for IP on instance '{name_or_id}' ({instance_id})... retrying in {int(wait_seconds)}s",
             file=sys.stderr,
         )
         time.sleep(wait_seconds)
 
 
-def _wait_for_ssh(ip: str, args: SimpleNamespace) -> bool:
-    deadline = time.monotonic() + args.ssh_ready_timeout_seconds
+def _wait_for_ssh(name_or_id: str, ip: str, ssh_ready_timeout_seconds: int, interval_seconds: int) -> bool:
+    deadline = time.monotonic() + ssh_ready_timeout_seconds
     while True:
         try:
             with socket.create_connection((ip, 22), timeout=5):
@@ -92,33 +99,47 @@ def _wait_for_ssh(ip: str, args: SimpleNamespace) -> bool:
         if remaining <= 0:
             return False
 
-        wait_seconds = min(args.interval_seconds, remaining)
+        wait_seconds = min(interval_seconds, remaining)
         print(
-            f"Waiting for SSH on instance '{args.name_or_id}' ({ip})... retrying in {int(wait_seconds)}s",
+            f"Waiting for SSH on instance '{name_or_id}' ({ip})... retrying in {int(wait_seconds)}s",
             file=sys.stderr,
         )
         time.sleep(wait_seconds)
 
 
-def ssh_into_instance(args: SimpleNamespace) -> None:
-    instances = list_instances(args.base_url, args.token, args.insecure)
-    instance = _choose_instance(instances, args.name_or_id)
+def ssh_into_instance(
+    name_or_id: str,
+    timeout_seconds: int,
+    interval_seconds: int,
+    base_url: str,
+    token: str | None = None,
+    insecure: bool = False,
+) -> None:
+    instances = list_instances(base_url, token, insecure)
+    instance = _choose_instance(instances, name_or_id)
 
     ip = _extract_ip(instance)
     if not ip:
-        ip = _wait_for_ip(instance.id, args)
+        ip = _wait_for_ip(
+            name_or_id,
+            instance.id,
+            timeout_seconds,
+            interval_seconds,
+            base_url=base_url,
+            token=token,
+            insecure=insecure,
+        )
 
     if not ip:
         print(
-            f"Instance '{args.name_or_id}' ({instance.id}) did not receive an IP within {args.timeout_seconds} seconds.",
+            f"Instance '{name_or_id}' ({instance.id}) did not receive an IP within {timeout_seconds} seconds.",
             file=sys.stderr,
         )
         sys.exit(1)
 
-    if not _wait_for_ssh(ip, args):
+    if not _wait_for_ssh(name_or_id, ip, timeout_seconds, interval_seconds):
         print(
-            f"Instance '{args.name_or_id}' ({instance.id}) did not open SSH within "
-            f"{args.ssh_ready_timeout_seconds} seconds.",
+            f"Instance '{name_or_id}' ({instance.id}) did not open SSH within {timeout_seconds} seconds.",
             file=sys.stderr,
         )
         sys.exit(1)
