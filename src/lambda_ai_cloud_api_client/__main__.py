@@ -354,17 +354,8 @@ def images_cmd(
     base_url: str,
     insecure: bool,
 ) -> None:
-    args = SimpleNamespace(
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
-        family=list(family),
-        version=list(version),
-        arch=list(arch),
-        region=list(region),
-    )
-    response = list_images(args)
-    filtered_response = filter_images(response, args)
+    response = list_images(base_url, token, insecure)
+    filtered_response = filter_images(response, family, version, arch, region)
 
     if json:
         print_response(filtered_response)
