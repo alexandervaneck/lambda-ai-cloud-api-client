@@ -9,8 +9,8 @@ Commands:
   ls       List instances.
   get      Get instance details.
   start    Start/launch a new instance.
-  stop     Stop/terminate one or more instances.
   restart  Restart one or more instances.
+  stop     Stop/terminate one or more instances.
   rename   Rename an instance.
   ssh      SSH into an instance by name or id.
   run      Run a command on an instance over SSH.

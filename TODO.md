@@ -31,3 +31,5 @@ Improvements
 - [x] Added run env var arg
 - [x] Added run volume arg
 - [ ] refactor instance type selection logic to me cleaner and return an InstanceType.
+- [ ] Starting an inference should tell you what it is starting, in which region and for what price.
+- [ ] Print API errors nicely.

@@ -209,11 +209,11 @@ def start_cmd(
     print(f"Started instances: {', '.join(instance_ids)}")
 
 
-@main.command(name="stop", help="Stop/terminate one or more instances.")
+@main.command(name="restart", help="Restart one or more instances.")
 @click.argument("id_or_name", nargs=-1, required=True)
 @_common_options
-def stop_cmd(id_or_name: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
-    response = stop_instances(id_or_name, base_url, token, insecure)
+def restart_cmd(id_or_name: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
+    response = restart_instances(id_or_name, base_url, token, insecure)
     print_response(response)
 
     status = int(response.status_code)
@@ -221,11 +221,11 @@ def stop_cmd(id_or_name: tuple[str, ...], token: str | None, base_url: str, inse
         sys.exit(1)
 
 
-@main.command(name="restart", help="Restart one or more instances.")
+@main.command(name="stop", help="Stop/terminate one or more instances.")
 @click.argument("id_or_name", nargs=-1, required=True)
 @_common_options
-def restart_cmd(id_or_name: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
-    response = restart_instances(id_or_name, base_url, token, insecure)
+def stop_cmd(id_or_name: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
+    response = stop_instances(id_or_name, base_url, token, insecure)
     print_response(response)
 
     status = int(response.status_code)
@@ -360,6 +360,11 @@ def run_cmd(
             base_url=base_url,
             insecure=insecure,
         )
+        status = int(response.status_code)
+        if status < 200 or status >= 300 or response.parsed is None:
+            print(response.parsed)
+            sys.exit(1)
+
         name_or_id = response.parsed.data.instance_ids[0]
     run_remote(
         name_or_id=name_or_id,
