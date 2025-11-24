@@ -18,7 +18,7 @@ from lambda_ai_cloud_api_client.cli.rename import rename_instance
 from lambda_ai_cloud_api_client.cli.response import print_response
 from lambda_ai_cloud_api_client.cli.restart import restart_instances
 from lambda_ai_cloud_api_client.cli.run import run_remote
-from lambda_ai_cloud_api_client.cli.ssh import ssh_into_instance
+from lambda_ai_cloud_api_client.cli.ssh import choose_instance, ssh_into_instance
 from lambda_ai_cloud_api_client.cli.start import start_instance
 from lambda_ai_cloud_api_client.cli.stop import stop_instances
 from lambda_ai_cloud_api_client.cli.types import filter_instance_types, list_instance_types, render_types_table
@@ -125,10 +125,12 @@ def ls_cmd(
 
 
 @main.command(name="get", help="Get instance details.")
-@click.argument("id")
+@click.argument("id_or_name")
 @_common_options
-def get_cmd(id: str, token: str | None, base_url: str, insecure: bool) -> None:
-    response = get_instance(id=id, base_url=base_url, token=token, insecure=insecure)
+def get_cmd(id_or_name: str, token: str | None, base_url: str, insecure: bool) -> None:
+    instances = list_instances(base_url, token, insecure)
+    response = choose_instance(instances, id_or_name)
+    response = get_instance(id=response.id, base_url=base_url, token=token, insecure=insecure)
     print_response(response)
 
     status = int(response.status_code)

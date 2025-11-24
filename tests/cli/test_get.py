@@ -16,23 +16,53 @@ def m_response() -> dict:
     return json.loads(f.read_text())
 
 
-def test_get(
+def test_get_by_id(
     httpx_mock,
     m_response: dict,
     c_assert_cmd_results_equals: Callable[[list[str], Path], Result],
 ) -> None:
     # Arrange
     httpx_mock.add_response(
+        method="GET",
+        url=f"{DEFAULT_BASE_URL}/api/v1/instances",
+        json=json.loads((DATA_FOLDER / "m_instances_response.json").read_text()),
+    )
+    httpx_mock.add_response(
         method="GET", url=f"{DEFAULT_BASE_URL}/api/v1/instances/0920582c7ff041399e34823a0be62549", json=m_response
     )
     cmd = ["get", "0920582c7ff041399e34823a0be62549"]
 
     # Act & Assert
-    c_assert_cmd_results_equals(cmd, DATA_FOLDER / "expected_get_output.txt")
+    c_assert_cmd_results_equals(cmd, DATA_FOLDER / "expected_get_output_id.txt")
+
+
+def test_get_by_name(
+    httpx_mock,
+    m_response: dict,
+    c_assert_cmd_results_equals: Callable[[list[str], Path], Result],
+) -> None:
+    # Arrange
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{DEFAULT_BASE_URL}/api/v1/instances",
+        json=json.loads((DATA_FOLDER / "m_instances_response.json").read_text()),
+    )
+    httpx_mock.add_response(
+        method="GET", url=f"{DEFAULT_BASE_URL}/api/v1/instances/0920582c7ff041399e34823a0be62549", json=m_response
+    )
+    cmd = ["get", "My Instance"]
+
+    # Act & Assert
+    c_assert_cmd_results_equals(cmd, DATA_FOLDER / "expected_get_output_name.txt")
 
 
 def test_get_error(httpx_mock, c_assert_cmd_results_equals: Callable[[list[str], Path, int], Result]) -> None:
     # Arrange
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{DEFAULT_BASE_URL}/api/v1/instances",
+        json=json.loads((DATA_FOLDER / "m_instances_response.json").read_text()),
+    )
     httpx_mock.add_response(
         method="GET",
         url=f"{DEFAULT_BASE_URL}/api/v1/instances/0920582c7ff041399e34823a0be62549",
