@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import sys
+from functools import cache
 from typing import TypeVar
 
 from lambda_ai_cloud_api_client.client import AuthenticatedClient
@@ -28,6 +29,7 @@ def _load_token(explicit_token: str | None) -> str:
     sys.exit(1)
 
 
+@cache
 def auth_client(base_url: str, token: str | None = None, insecure: bool = False) -> AuthenticatedClient:
     client = AuthenticatedClient(
         base_url=base_url,
