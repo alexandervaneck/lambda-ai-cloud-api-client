@@ -119,9 +119,8 @@ def test_run_with_volume(
     m_wait_for_ip,
     m_wait_for_ssh,
 ) -> None:
-    local_dir = Path(__file__).parent
     c_assert_cmd_kwargs_result_equals(
-        ["run", "My Instance", "-v", f"{local_dir}:/remote/path", "echo", "hi"],
+        ["run", "My Instance", "-v", "./:/remote/path", "echo", "hi"],
         {},
         DATA_FOLDER / "expected_run_volume_output.txt",
     )
@@ -132,7 +131,7 @@ def test_run_with_volume(
         "ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/dev/null",
         "-az",
         "--delete",
-        str(local_dir),
+        "./",
         "ubuntu@198.51.100.2:/remote/path",
     ]
     assert m_subprocess_run[-1] == [
@@ -142,5 +141,5 @@ def test_run_with_volume(
         "-az",
         "--delete",
         "ubuntu@198.51.100.2:/remote/path",
-        str(local_dir),
+        "./",
     ]
