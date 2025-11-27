@@ -1,4 +1,4 @@
-from rich.console import Console
+from rich import print
 from rich.table import Table
 
 from lambda_ai_cloud_api_client.api.ssh_keys.list_ssh_keys import sync_detailed as _list_keys
@@ -26,7 +26,7 @@ def filter_keys(keys: list[SSHKey], id: str | None = None, name: str | None = No
 
 def render_keys_table(keys: list[SSHKey]) -> None:
     if not keys:
-        Console().print("No keys found.")
+        print("No keys found.")
         return
 
     table = Table(title="Keys", show_lines=False, expand=True)
@@ -37,4 +37,4 @@ def render_keys_table(keys: list[SSHKey]) -> None:
     for key in keys:
         table.add_row(key.id, key.name, key.public_key)
 
-    Console().print(table)
+    print(table)

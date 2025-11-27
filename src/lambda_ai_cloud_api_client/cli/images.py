@@ -1,4 +1,4 @@
-from rich.console import Console
+from rich import print
 from rich.table import Table
 
 from lambda_ai_cloud_api_client.api.images.list_images import sync_detailed as _list_images
@@ -36,7 +36,7 @@ def filter_images(
 
 def render_images_table(images: list[Image]) -> None:
     if not images:
-        Console().print("No images found.")
+        print("No images found.")
         return
 
     table = Table(title="Images", show_lines=False, expand=True)
@@ -59,4 +59,4 @@ def render_images_table(images: list[Image]) -> None:
             image.region.name,
         )
 
-    Console().print(table)
+    print(table)

@@ -1,3 +1,6 @@
+# 2.4.0
+* feat: Switch to rich.print instead of python's print.
+
 # 2.3.0
 
 * feat: Add `lai run <name-or-id> <command>` to run a command on a remote instance. Supports env vars.

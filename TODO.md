@@ -33,3 +33,4 @@ Improvements
 - [x] refactor instance type selection logic to me cleaner and return an InstanceType.
 - [x] Starting an inference should tell you what it is starting, in which region and for what price.
 - [x] Print API errors nicely.
+- [ ] Should I be able to avoid regions? --exclude flag?
