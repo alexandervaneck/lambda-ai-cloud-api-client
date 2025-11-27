@@ -1,6 +1,6 @@
 [project]
 name = "lambda-ai-cloud-api-client"
-version = "2.2.1"
+version = "2.3.0"
 description = "A client library for accessing Lambda Cloud API"
 authors = [{ name = "Alexander van Eck", email = "alexander@x-all.nl" }]
 requires-python = ">=3.10"
