@@ -1,6 +1,6 @@
 import logging
 
-from rich.console import Console
+from rich import print
 from rich.table import Table
 
 from lambda_ai_cloud_api_client.api.instances.list_instance_types import sync_detailed as _list_instance_types
@@ -90,7 +90,7 @@ def filter_instance_types(
 
 def render_types_table(instance_types: list[InstanceTypesItem], title: str = "Instance Types") -> None:
     if not instance_types:
-        Console().print("No instance types found.")
+        print("No instance types found.")
         return
 
     table = Table(title=title, show_lines=False)
@@ -120,4 +120,4 @@ def render_types_table(instance_types: list[InstanceTypesItem], title: str = "In
         ]
         table.add_row(*row)
 
-    Console().print(table)
+    print(table)

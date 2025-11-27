@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Any
 
+from rich import print
+
 from lambda_ai_cloud_api_client.api.instances.launch_instance import sync_detailed as launch_instance
 from lambda_ai_cloud_api_client.cli.client import auth_client
 from lambda_ai_cloud_api_client.cli.response import print_json

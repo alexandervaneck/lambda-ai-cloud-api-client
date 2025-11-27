@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from dotenv import dotenv_values
+from rich import print
 
 from lambda_ai_cloud_api_client.cli.ssh import ssh_command, wait_for_instance
 from lambda_ai_cloud_api_client.models import Instance

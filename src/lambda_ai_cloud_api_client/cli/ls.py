@@ -1,4 +1,4 @@
-from rich.console import Console
+from rich import print
 from rich.table import Table
 
 from lambda_ai_cloud_api_client.api.instances.list_instances import sync_detailed as _list_instances
@@ -38,7 +38,7 @@ def filter_instances(
 
 def render_instances_table(instances: list[Instance], title: str = "Instances") -> None:
     if not instances:
-        Console().print("No instances found.")
+        print("No instances found.")
         return
 
     table = Table(title=title, show_lines=False)
@@ -67,4 +67,4 @@ def render_instances_table(instances: list[Instance], title: str = "Instances") 
             f"{price:.2f}",
         )
 
-    Console().print(table)
+    print(table)

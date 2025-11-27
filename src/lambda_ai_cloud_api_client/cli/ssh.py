@@ -6,6 +6,8 @@ import socket
 import sys
 import time
 
+from rich import print
+
 from lambda_ai_cloud_api_client.cli.get import get_instance
 from lambda_ai_cloud_api_client.models import Instance
 from lambda_ai_cloud_api_client.types import Unset
