@@ -34,3 +34,4 @@ Improvements
 - [x] Starting an inference should tell you what it is starting, in which region and for what price.
 - [x] Print API errors nicely.
 - [ ] Should I be able to avoid regions? --exclude flag?
+- [ ] Have a look at dry-run. I dislike that I have to pass it into start_instance. and why does run_cmd also have dry run?
