@@ -12,6 +12,7 @@
 * refactor: Instance lifecycle commands now resolve and display richer context—ssh/run show the chosen instance,
   enforce unique name/id matches, and surface timeouts for missing IP/SSH; start renders a launch plan table and
   ensures filters pick exactly one type/region.
+* feat: Add `file_system_mount` and `firewall_ruleset` as args to `run` and `start`.
 
 # 2.2.1
 

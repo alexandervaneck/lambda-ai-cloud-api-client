@@ -3,8 +3,8 @@ Endpoints to be implemented:
 - [x] GET instance
 - [x] POST instance (update), rename.
 - [x] POST instance (create/launch) - start
-  - [ ]: Add `file_system_mounts` as param
-  - [ ]: Add `firewall_rulesets` as param
+  - [x]: Add `file_system_mounts` as param
+  - [x]: Add `firewall_rulesets` as param
   - [x]: Add a `cheapest` flag? like with instance-types?
 - [x] POST instance (terminate) - stop
 - [x] POST instance (restart) - restart
@@ -30,6 +30,6 @@ Improvements
 - [x] Added run command
 - [x] Added run env var arg
 - [x] Added run volume arg
-- [ ] refactor instance type selection logic to me cleaner and return an InstanceType.
-- [ ] Starting an inference should tell you what it is starting, in which region and for what price.
-- [ ] Print API errors nicely.
+- [x] refactor instance type selection logic to me cleaner and return an InstanceType.
+- [x] Starting an inference should tell you what it is starting, in which region and for what price.
+- [x] Print API errors nicely.

@@ -74,12 +74,24 @@ def _start_options(func: Callable[..., T]) -> Callable[..., T]:
     func = click.option(
         "--ssh-key", required=False, multiple=True, help="SSH key name to inject (repeat for multiple)."
     )(func)
+    func = click.option(
+        "--firewall-ruleset",
+        "firewall_ruleset",
+        multiple=True,
+        help="Firewall ruleset ID to associate with the instance (repeat for multiple).",
+    )(func)
     func = click.option("--dry-run", is_flag=True, help="Resolve type/region and print the plan without launching.")(
         func
     )
     func = click.option("--name", help="Instance name.")(func)
     func = click.option("--hostname", help="Hostname to assign.")(func)
     func = click.option("--filesystem", multiple=True, help="Filesystem name to mount (repeat for multiple).")(func)
+    func = click.option(
+        "--filesystem-mount",
+        "filesystem_mount",
+        multiple=True,
+        help="Mount filesystem by id at a given path (<filesystem-id>:<absolute-mount-path>). Repeatable.",
+    )(func)
     func = click.option("--image-id", help="Image ID to boot from.")(func)
     func = click.option("--image-family", help="Image family to boot from.")(func)
     func = click.option("--user-data-file", help="Path to cloud-init user-data file.")(func)
@@ -152,10 +164,12 @@ def start_cmd(
     name: str | None,
     hostname: str | None,
     filesystem: tuple[str, ...],
+    filesystem_mount: tuple[str, ...],
     image_id: str | None,
     image_family: str | None,
     user_data_file: str | None,
     tag: tuple[str, ...],
+    firewall_ruleset: tuple[str, ...],
     json: bool,
 ) -> None:
     instance_ids = start_instance(
@@ -174,10 +188,12 @@ def start_cmd(
         name=name,
         hostname=hostname,
         filesystem=filesystem,
+        filesystem_mount=filesystem_mount,
         image_id=image_id,
         image_family=image_family,
         user_data_file=user_data_file,
         tag=tag,
+        firewall_ruleset=firewall_ruleset,
         json=json,
     )
     if dry_run:
@@ -292,10 +308,12 @@ def run_cmd(
     name: str | None,
     hostname: str | None,
     filesystem: tuple[str, ...],
+    filesystem_mount: tuple[str, ...],
     image_id: str | None,
     image_family: str | None,
     user_data_file: str | None,
     tag: tuple[str, ...],
+    firewall_ruleset: tuple[str, ...],
     remove: bool,
     timeout_seconds: int,
     interval_seconds: int,
@@ -329,10 +347,12 @@ def run_cmd(
             name=name,
             hostname=hostname,
             filesystem=filesystem,
+            filesystem_mount=filesystem_mount,
             image_id=image_id,
             image_family=image_family,
             user_data_file=user_data_file,
             tag=tag,
+            firewall_ruleset=firewall_ruleset,
         )
         name_or_id = instance_ids[0]
 

@@ -6,12 +6,14 @@ from lambda_ai_cloud_api_client.cli.client import auth_client
 from lambda_ai_cloud_api_client.cli.response import print_json
 from lambda_ai_cloud_api_client.cli.types import filter_instance_types, list_instance_types, render_types_table
 from lambda_ai_cloud_api_client.models import (
+    FirewallRulesetEntry,
     ImageSpecificationFamily,
     ImageSpecificationID,
     InstanceLaunchRequest,
     InstanceType,
     InstanceTypesItem,
     Region,
+    RequestedFilesystemMountEntry,
     RequestedTagEntry,
 )
 
@@ -89,6 +91,23 @@ def _resolve_type_and_region(
     return items[0].instance_type, available_regions[0]
 
 
+def _parse_filesystem_mounts(raw_mounts: tuple[str, ...]) -> list[RequestedFilesystemMountEntry] | None:
+    mounts: list[RequestedFilesystemMountEntry] = []
+    for raw in raw_mounts:
+        if ":" not in raw:
+            raise RuntimeError(f"Invalid filesystem mount '{raw}'. Use <filesystem-id>:<absolute-mount-path>.")
+        fs_id, mount_point = raw.split(":", 1)
+        if not mount_point.startswith("/"):
+            raise RuntimeError(f"Mount point must be absolute, got '{mount_point}'.")
+        mounts.append(RequestedFilesystemMountEntry(file_system_id=fs_id, mount_point=mount_point))
+
+    return mounts
+
+
+def _parse_firewall_rulesets(raw_rulesets: tuple[str, ...]) -> list[FirewallRulesetEntry] | None:
+    return [FirewallRulesetEntry(id=rid) for rid in raw_rulesets]
+
+
 def start_instance(
     instance_type: str | None,
     region: tuple[str, ...],
@@ -105,10 +124,12 @@ def start_instance(
     name: str | None,
     hostname: str | None,
     filesystem: tuple[str, ...],
+    filesystem_mount: tuple[str, ...],
     image_id: str | None,
     image_family: str | None,
     user_data_file: str | None,
     tag: tuple[str, ...],
+    firewall_ruleset: tuple[str, ...],
     json: bool = False,
 ) -> list[str]:
     client = auth_client()
@@ -144,12 +165,16 @@ def start_instance(
         request_params["hostname"] = hostname
     if filesystem:
         request_params["file_system_names"] = filesystem
+    if filesystem_mount:
+        request_params["file_system_mounts"] = _parse_filesystem_mounts(filesystem_mount)
     if image:
         request_params["image"] = image
     if user_data:
         request_params["user_data"] = user_data
     if tags:
         request_params["tags"] = tags
+    if firewall_ruleset:
+        request_params["firewall_rulesets"] = [FirewallRulesetEntry(id=rid) for rid in firewall_ruleset]
 
     plan = {
         "instance_type_name": instance_type.name,
