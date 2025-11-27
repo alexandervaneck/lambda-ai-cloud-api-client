@@ -25,7 +25,10 @@ def test_ssh_waits_for_port_then_execs(
     monkeypatch.setattr("lambda_ai_cloud_api_client.cli.ssh.os.execvp", _fake_execvp)
 
     # Assert
-    c_assert_cmd_results_equals(["ssh", "My Instance"], DATA_FOLDER / "expected_ssh_output.txt")
+    c_assert_cmd_results_equals(
+        ["ssh", "My Instance", "--timeout-seconds", "0.1", "--interval-seconds", "0.05"],
+        DATA_FOLDER / "expected_ssh_output.txt",
+    )
     assert captured_execvp["call"] == (
         "ssh",
         [
@@ -60,7 +63,8 @@ def test_ip_never_gets_assigned(
 ) -> None:
     # Assert
     c_assert_cmd_results_equals(
-        ["ssh", "My Instance", "--timeout-seconds", "0.1"], DATA_FOLDER / "expected_ssh_ip_error_output.txt"
+        ["ssh", "My Instance", "--timeout-seconds", "0.1", "--interval-seconds", "0.05"],
+        DATA_FOLDER / "expected_ssh_ip_error_output.txt",
     )
 
 

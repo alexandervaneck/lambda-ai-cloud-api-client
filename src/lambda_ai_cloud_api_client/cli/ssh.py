@@ -38,12 +38,11 @@ def _wait_for_ip(instance: Instance, timeout_seconds: float, interval_seconds: f
         if remaining <= 0:
             return None
 
-        wait_seconds = min(interval_seconds, remaining)
         print(
-            f"Waiting for IP on instance '{instance.name}' ({instance.id})... retrying in {wait_seconds:.2f}s",
+            f"Waiting for IP on instance '{instance.name}' ({instance.id})... retrying in {interval_seconds:.2f}s",
             file=sys.stderr,
         )
-        time.sleep(wait_seconds)
+        time.sleep(interval_seconds)
 
 
 def _wait_for_ssh(instance: Instance, timeout_seconds: float, interval_seconds: float) -> bool:
@@ -59,12 +58,11 @@ def _wait_for_ssh(instance: Instance, timeout_seconds: float, interval_seconds: 
         if remaining <= 0:
             return False
 
-        wait_seconds = min(interval_seconds, remaining)
         print(
-            f"Waiting for SSH on instance '{instance.name}' ({instance.ip})... retrying in {wait_seconds:.2f}s",
+            f"Waiting for SSH on instance '{instance.name}' ({instance.ip})... retrying in {interval_seconds:.2f}s",
             file=sys.stderr,
         )
-        time.sleep(wait_seconds)
+        time.sleep(interval_seconds)
 
 
 def wait_for_instance(

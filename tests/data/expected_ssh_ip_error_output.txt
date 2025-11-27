@@ -4,7 +4,8 @@
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━╇━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━┩
 │ 0920582c7ff041399e34823a0be62549 │ My Instance │    │ booting │ us-west-1 │ H100 (80 GB SXM5) │ 35.92        │
 └──────────────────────────────────┴─────────────┴────┴─────────┴───────────┴───────────────────┴──────────────┘
-Waiting for IP on instance 'My Instance' (0920582c7ff041399e34823a0be62549)... retrying in 0.10s
+Waiting for IP on instance 'My Instance' (0920582c7ff041399e34823a0be62549)... retrying in 0.05s
+Waiting for IP on instance 'My Instance' (0920582c7ff041399e34823a0be62549)... retrying in 0.05s
 Usage: main ssh [OPTIONS] NAME_OR_ID
 Try 'main ssh --help' for help.
 
