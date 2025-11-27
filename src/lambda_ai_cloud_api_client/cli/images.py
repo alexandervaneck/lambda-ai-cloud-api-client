@@ -1,56 +1,40 @@
-import sys
-
 from rich.console import Console
 from rich.table import Table
 
 from lambda_ai_cloud_api_client.api.images.list_images import sync_detailed as _list_images
 from lambda_ai_cloud_api_client.cli.client import auth_client
-from lambda_ai_cloud_api_client.cli.response import print_response
-from lambda_ai_cloud_api_client.models import ListImagesResponse200
-from lambda_ai_cloud_api_client.types import Response
+from lambda_ai_cloud_api_client.models import Image
 
 
-def list_images(base_url: str, token: str | None = None, insecure: bool = False) -> Response[ListImagesResponse200]:
-    client = auth_client(base_url=base_url, token=token, insecure=insecure)
-    images: Response[ListImagesResponse200] = _list_images(client=client)
-    return images
+def list_images() -> list[Image]:
+    client = auth_client()
+    response = _list_images(client=client)
+    response.raise_for_status()
+    return response.parsed.data
 
 
 def filter_images(
-    response: Response[ListImagesResponse200],
+    images: list[Image],
     family: tuple[str, ...] | None = None,
     version: tuple[str, ...] | None = None,
     arch: tuple[str, ...] | None = None,
     region: tuple[str, ...] | None = None,
-) -> Response[ListImagesResponse200]:
-    if response.parsed and hasattr(response.parsed, "data"):
-        filtered = response.parsed.data
-        if family:
-            allowed_family = set(family)
-            filtered = [img for img in filtered if getattr(img, "family", None) in allowed_family]
-        if version:
-            allowed_version = set(version)
-            filtered = [img for img in filtered if getattr(img, "version", None) in allowed_version]
-        if arch:
-            allowed_arch = set(arch)
-            filtered = [img for img in filtered if getattr(img, "architecture", None) in allowed_arch]
-        if region:
-            allowed = set(region)
-            filtered = [img for img in filtered if getattr(getattr(img, "region", None), "name", None) in allowed]
-
-        response.parsed.data = filtered  # type: ignore[attr-defined]
-
-    return response
+) -> list[Image]:
+    filtered_images = []
+    for image in images:
+        if family and image.family not in family:
+            continue
+        if version and image.version not in version:
+            continue
+        if arch and image.architecture.value not in arch:
+            continue
+        if region and image.region.name not in region:
+            continue
+        filtered_images.append(image)
+    return filtered_images
 
 
-def render_images_table(response) -> None:
-    status = int(response.status_code)
-    if status < 200 or status >= 300 or response.parsed is None:
-        print_response(response)
-        sys.exit(1)
-
-    parsed = response.parsed
-    images = getattr(parsed, "data", None)
+def render_images_table(images: list[Image]) -> None:
     if not images:
         Console().print("No images found.")
         return
@@ -63,23 +47,16 @@ def render_images_table(response) -> None:
     table.add_column("Arch")
     table.add_column("Region")
 
-    sorted_images = sorted(
-        images,
-        key=lambda img: (
-            getattr(getattr(img, "region", None), "name", "") or "",
-            getattr(img, "version", "") or "",
-        ),
-    )
+    sorted_images = sorted(images, key=lambda image: (image.region.name, image.version))
 
-    for img in sorted_images:
-        region = getattr(img, "region", None)
+    for image in sorted_images:
         table.add_row(
-            getattr(img, "id", ""),
-            getattr(img, "name", ""),
-            getattr(img, "family", ""),
-            getattr(img, "version", ""),
-            getattr(img, "architecture", ""),
-            getattr(region, "name", "") if region else "",
+            image.id,
+            image.name,
+            image.family,
+            image.version,
+            image.architecture.value,
+            image.region.name,
         )
 
     Console().print(table)

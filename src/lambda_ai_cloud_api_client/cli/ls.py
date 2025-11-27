@@ -1,61 +1,47 @@
-import sys
-
 from rich.console import Console
 from rich.table import Table
 
 from lambda_ai_cloud_api_client.api.instances.list_instances import sync_detailed as _list_instances
 from lambda_ai_cloud_api_client.cli.client import auth_client
-from lambda_ai_cloud_api_client.cli.response import print_response
 from lambda_ai_cloud_api_client.models import (
-    ListInstancesResponse200,
-    ListInstancesResponse401,
-    ListInstancesResponse403,
+    Instance,
 )
-from lambda_ai_cloud_api_client.types import Response, Unset
+from lambda_ai_cloud_api_client.types import Unset
 
 
-def list_instances(
-    base_url: str, token: str | None = None, insecure: bool = False
-) -> Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403]:
-    client = auth_client(base_url=base_url, token=token, insecure=insecure)
-    instances: Response[ListInstancesResponse200] = _list_instances(client=client)
-    return instances
+def list_instances() -> list[Instance]:
+    client = auth_client()
+    response = _list_instances(client=client)
+    response.raise_for_status()
+    return response.parsed.data
 
 
 def filter_instances(
-    response: Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403],
+    instances: list[Instance],
     region: tuple[str, ...] | None = None,
     status: tuple[str, ...] | None = None,
-) -> Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403]:
-    if response.parsed and hasattr(response.parsed, "data"):
-        filtered = response.parsed.data
-        if region:
-            allowed = set(region)
-            filtered = [i for i in filtered if getattr(getattr(i, "region", None), "name", None) in allowed]
-        if status:
-            allowed = set(status)
-            filtered = [i for i in filtered if getattr(i, "status", None) in allowed]
+    id: tuple[str, ...] | None = None,
+) -> list[Instance]:
+    filtered_instances = []
+    for instance in instances:
+        if id and instance.id not in id:
+            continue
+        if region and instance.region.name not in region:
+            continue
+        if status and instance.status not in status:
+            continue
 
-        response.parsed.data = filtered  # type: ignore[attr-defined]
+        filtered_instances.append(instance)
 
-    return response
+    return filtered_instances
 
 
-def render_instances_table(
-    response: Response[ListInstancesResponse200 | ListInstancesResponse401 | ListInstancesResponse403],
-) -> None:
-    status = int(response.status_code)
-    if status < 200 or status >= 300 or response.parsed is None:
-        print_response(response)
-        sys.exit(1)
-
-    parsed = response.parsed
-    instances = getattr(parsed, "data", None)
+def render_instances_table(instances: list[Instance], title: str = "Instances") -> None:
     if not instances:
         Console().print("No instances found.")
         return
 
-    table = Table(title="Instances", show_lines=False)
+    table = Table(title=title, show_lines=False)
     table.add_column("ID")
     table.add_column("Name")
     table.add_column("IP")

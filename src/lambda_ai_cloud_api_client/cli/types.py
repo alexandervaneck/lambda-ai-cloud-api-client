@@ -1,25 +1,24 @@
-import sys
+import logging
 
 from rich.console import Console
 from rich.table import Table
 
 from lambda_ai_cloud_api_client.api.instances.list_instance_types import sync_detailed as _list_instance_types
 from lambda_ai_cloud_api_client.cli.client import auth_client
-from lambda_ai_cloud_api_client.cli.response import print_response
-from lambda_ai_cloud_api_client.models import ListInstanceTypesResponse200
-from lambda_ai_cloud_api_client.types import Response
+from lambda_ai_cloud_api_client.models import InstanceTypesItem
+
+logger = logging.getLogger(__name__)
 
 
-def list_instance_types(
-    base_url: str, token: str | None = None, insecure: bool = False
-) -> Response[ListInstanceTypesResponse200]:
-    client = auth_client(base_url=base_url, token=token, insecure=insecure)
-    r: Response[ListInstanceTypesResponse200] = _list_instance_types(client=client)
-    return r
+def list_instance_types() -> list[InstanceTypesItem]:
+    client = auth_client()
+    response = _list_instance_types(client=client)
+    response.raise_for_status()
+    return response.parsed.data.additional_properties.values()
 
 
 def filter_instance_types(
-    response: Response[ListInstanceTypesResponse200],
+    instance_types: list[InstanceTypesItem],
     instance_type: str | None,
     available: bool,
     cheapest: bool,
@@ -30,103 +29,71 @@ def filter_instance_types(
     min_memory: int | None,
     min_storage: int | None,
     max_price: int | None,
-) -> Response[ListInstanceTypesResponse200]:
-    parsed = response.parsed
-    target = getattr(parsed, "data", parsed if hasattr(parsed, "additional_properties") else None)
-    if not target or not hasattr(target, "additional_properties"):
-        return response
+) -> list[InstanceTypesItem]:
+    filtered_instance_type_items: list[InstanceTypesItem] = []
 
-    items = dict(target.additional_properties)
+    for item in instance_types:
+        name = item.instance_type.name
+        price_dollars_per_hour = item.instance_type.price_cents_per_hour / 100
 
-    if instance_type:
-        items = {
-            name: item
-            for name, item in items.items()
-            if getattr(getattr(item, "instance_type", None), "name", None)
-            and getattr(getattr(item, "instance_type", None), "name", None) == instance_type
-        }
+        if instance_type and item.instance_type.name != instance_type:
+            logger.debug(f"[filter] {name} skipped: wanted instance_type '{instance_type}'.")
+            continue
 
-    if available:
-        items = {name: item for name, item in items.items() if item.regions_with_capacity_available}
+        if available and not item.regions_with_capacity_available:
+            # No regions with capacity = not available
+            logger.debug(f"[filter] {name} skipped: no regions with capacity and --available requested.")
+            continue
 
-    if region:
-        allowed_regions = set(region)
-        items = {
-            name: item
-            for name, item in items.items()
-            if any(getattr(reg, "name", None) in allowed_regions for reg in item.regions_with_capacity_available)
-        }
+        if region and not any(r in item.regions_with_capacity_available for r in region):
+            regions = ", ".join([r.name for r in item.regions_with_capacity_available]) or "none"
+            wanted = ", ".join(region)
+            logger.debug(f"[filter] {name} skipped: regions with capacity [{regions}] do not include [{wanted}].")
+            continue
 
-    if gpu:
-        items = {
-            name: item
-            for name, item in items.items()
-            if getattr(getattr(item, "instance_type", None), "gpu_description", None)
-            and any(term.lower() in getattr(item.instance_type, "gpu_description", "").lower() for term in gpu)
-        }
+        if gpu and not any(g in item.instance_type.gpu_description for g in gpu):
+            continue
 
-    if min_gpus is not None:
-        items = {
-            name: item
-            for name, item in items.items()
-            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "gpus", 0) >= min_gpus
-        }
+        if min_gpus is not None and item.instance_type.specs.gpus < min_gpus:
+            logger.debug(f"[filter] {name} skipped: gpus {item.instance_type.specs.gpus} < min_gpus {min_gpus}.")
+            continue
 
-    if min_vcpus is not None:
-        items = {
-            name: item
-            for name, item in items.items()
-            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "vcpus", 0) >= min_vcpus
-        }
+        if min_vcpus is not None and item.instance_type.specs.vcpus < min_vcpus:
+            logger.debug(f"[filter] {name} skipped: vcpus {item.instance_type.specs.vcpus} < min_vcpus {min_vcpus}.")
+            continue
 
-    if min_memory is not None:
-        items = {
-            name: item
-            for name, item in items.items()
-            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "memory_gib", 0) >= min_memory
-        }
+        if min_memory is not None and item.instance_type.specs.memory_gib < min_memory:
+            logger.debug(
+                f"[filter] {name} skipped: memory {item.instance_type.specs.memory_gib} < min_memory {min_memory}."
+            )
+            continue
 
-    if min_storage is not None:
-        items = {
-            name: item
-            for name, item in items.items()
-            if getattr(getattr(getattr(item, "instance_type", None), "specs", None), "storage_gib", 0) >= min_storage
-        }
+        if min_storage is not None and item.instance_type.specs.storage_gib < min_storage:
+            logger.debug(
+                f"[filter] {name} skipped: storage {item.instance_type.specs.storage_gib} < min_storage {min_storage}."
+            )
+            continue
 
-    if max_price is not None:
-        items = {
-            name: item
-            for name, item in items.items()
-            if getattr(getattr(item, "instance_type", None), "price_cents_per_hour", 0) <= max_price * 100
-        }
+        if max_price is not None and item.instance_type.price_cents_per_hour > max_price * 100:
+            logger.debug(f"[filter] {name} skipped: price ${price_dollars_per_hour}/hr > max_price ${max_price}/hr.")
+            continue
 
-    if cheapest and items:
-        prices: dict[str, int] = {}
-        for name, item in items.items():
-            price = getattr(item, "instance_type", None).price_cents_per_hour
-            prices[name] = price
+        logger.debug(f"[filter] {name} kept (price ${price_dollars_per_hour}/hr).")
+        filtered_instance_type_items.append(item)
 
-        min_price = min(prices.values())
-        items = {name: item for name, item in items.items() if prices.get(name) == min_price}
+    if cheapest and filtered_instance_type_items:
+        sorted_items = sorted(filtered_instance_type_items, key=lambda x: x.instance_type.price_cents_per_hour)
+        return [sorted_items[0]]
 
-    response.parsed.data.additional_properties = items  # type: ignore[attr-defined]
-
-    return response
+    return filtered_instance_type_items
 
 
-def render_types_table(response: Response[ListInstanceTypesResponse200]) -> None:
-    status = int(response.status_code)
-    if status < 200 or status >= 300 or response.parsed is None:
-        print_response(response)
-        sys.exit(1)
-
-    parsed = response.parsed
-    types = getattr(parsed, "data", parsed if hasattr(parsed, "additional_properties") else None)
-    if not types.to_dict() or not hasattr(types, "additional_properties"):
+def render_types_table(instance_types: list[InstanceTypesItem], title: str = "Instance Types") -> None:
+    if not instance_types:
         Console().print("No instance types found.")
         return
 
-    table = Table(title="Instance Types", show_lines=False)
+    table = Table(title=title, show_lines=False)
     table.add_column("Name")
     table.add_column("GPU")
     table.add_column("vCPUs")
@@ -136,20 +103,21 @@ def render_types_table(response: Response[ListInstanceTypesResponse200]) -> None
     table.add_column("Price ($/hr)")
     table.add_column("Regions w/ Capacity")
 
-    for name, item in types.additional_properties.items():
-        inst_type = getattr(item, "instance_type", None)
-        specs = getattr(inst_type, "specs", None)
-        regions = ", ".join([getattr(r, "name", "") for r in item.regions_with_capacity_available]) or "-"
-        price = getattr(inst_type, "price_cents_per_hour", 0) / 100
-        table.add_row(
-            name,
-            getattr(inst_type, "gpu_description", "") or "",
-            str(getattr(specs, "vcpus", "")),
-            str(getattr(specs, "memory_gib", "")),
-            str(getattr(specs, "storage_gib", "")),
-            str(getattr(specs, "gpus", "")),
-            f"{price:.2f}",
+    for item in instance_types:
+        regions = "-"
+        if item.regions_with_capacity_available:
+            regions = ", ".join([r.name for r in item.regions_with_capacity_available])
+
+        row = [
+            item.instance_type.name,
+            item.instance_type.gpu_description,
+            str(item.instance_type.specs.vcpus),
+            str(item.instance_type.specs.memory_gib),
+            str(item.instance_type.specs.storage_gib),
+            str(item.instance_type.specs.gpus),
+            f"{item.instance_type.price_cents_per_hour / 100:.2f}",
             regions,
-        )
+        ]
+        table.add_row(*row)
 
     Console().print(table)

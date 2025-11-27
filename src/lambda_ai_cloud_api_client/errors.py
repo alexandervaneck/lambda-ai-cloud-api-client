@@ -13,4 +13,13 @@ class UnexpectedStatus(Exception):
         )
 
 
-__all__ = ["UnexpectedStatus"]
+class HttpError(Exception):
+    def __init__(self, status_code: int, content: str) -> None:
+        self.message = f"{status_code=}\nResponse:\n{content}"
+        self.status_code = status_code
+        self.content = content
+
+        super().__init__(self.message)
+
+
+__all__ = ["HttpError", "UnexpectedStatus"]

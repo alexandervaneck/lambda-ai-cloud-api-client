@@ -75,6 +75,11 @@ def test_start(
         httpx_mock.add_response(
             method="POST", url=f"{DEFAULT_BASE_URL}/api/v1/instance-operations/launch", json=m_response
         )
+        httpx_mock.add_response(
+            method="GET",
+            url=f"{DEFAULT_BASE_URL}/api/v1/instances",
+            json=json.loads((DATA_FOLDER / "m_instances_response.json").read_text()),
+        )
     if user_data := kwargs.get("user-data-file"):
         user_data_path = tmp_path / user_data
         user_data_path.write_text("#cloud-config\n")

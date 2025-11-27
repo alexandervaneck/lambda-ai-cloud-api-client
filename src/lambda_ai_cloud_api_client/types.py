@@ -6,6 +6,8 @@ from typing import IO, BinaryIO, Generic, Literal, TypeVar
 
 from attrs import define
 
+from lambda_ai_cloud_api_client.errors import HttpError
+
 
 class Unset:
     def __bool__(self) -> Literal[False]:
@@ -58,6 +60,10 @@ class Response(Generic[T]):
     content: bytes
     headers: MutableMapping[str, str]
     parsed: T | None
+
+    def raise_for_status(self):
+        if self.status_code.is_client_error or self.status_code.is_server_error:
+            raise HttpError(status_code=self.status_code, content=self.content.decode(errors="ignore"))
 
 
 __all__ = ["UNSET", "File", "FileTypes", "RequestFiles", "Response", "Unset"]

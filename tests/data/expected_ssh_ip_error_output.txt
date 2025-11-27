@@ -4,7 +4,8 @@
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━╇━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━┩
 │ 0920582c7ff041399e34823a0be62549 │ My Instance │    │ booting │ us-west-1 │ H100 (80 GB SXM5) │ 35.92        │
 └──────────────────────────────────┴─────────────┴────┴─────────┴───────────┴───────────────────┴──────────────┘
-Executing: ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/dev/null ubuntu@198.51.100.2
-Waiting for IP on instance 'My Instance' (0920582c7ff041399e34823a0be62549)... retrying in 5.00s
-Waiting for IP on instance 'My Instance' (0920582c7ff041399e34823a0be62549)... retrying in 5.00s
-Waiting for SSH on instance 'My Instance' (198.51.100.2)... retrying in 5.00s
+Waiting for IP on instance 'My Instance' (0920582c7ff041399e34823a0be62549)... retrying in 0.10s
+Usage: main ssh [OPTIONS] NAME_OR_ID
+Try 'main ssh --help' for help.
+
+Error: Instance 'My Instance' (0920582c7ff041399e34823a0be62549) did not receive an IP within 0.1 seconds.

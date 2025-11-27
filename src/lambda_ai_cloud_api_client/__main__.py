@@ -1,27 +1,25 @@
-"""Command line wrapper for the Lambda Cloud API client (click-based)."""
-
-from __future__ import annotations
-
-import json as _json
 import os
-import sys
 from collections.abc import Callable
+from functools import wraps
+from http import HTTPStatus
 from typing import TypeVar
 
 import click
+from click import UsageError
 
 from lambda_ai_cloud_api_client.cli.get import get_instance
 from lambda_ai_cloud_api_client.cli.images import filter_images, list_images, render_images_table
 from lambda_ai_cloud_api_client.cli.keys import filter_keys, list_keys, render_keys_table
 from lambda_ai_cloud_api_client.cli.ls import filter_instances, list_instances, render_instances_table
 from lambda_ai_cloud_api_client.cli.rename import rename_instance
-from lambda_ai_cloud_api_client.cli.response import print_response
+from lambda_ai_cloud_api_client.cli.response import print_json
 from lambda_ai_cloud_api_client.cli.restart import restart_instances
 from lambda_ai_cloud_api_client.cli.run import run_remote
-from lambda_ai_cloud_api_client.cli.ssh import choose_instance, ssh_into_instance
+from lambda_ai_cloud_api_client.cli.ssh import get_instance_by_name_or_id, ssh_into_instance
 from lambda_ai_cloud_api_client.cli.start import start_instance
 from lambda_ai_cloud_api_client.cli.stop import stop_instances
 from lambda_ai_cloud_api_client.cli.types import filter_instance_types, list_instance_types, render_types_table
+from lambda_ai_cloud_api_client.errors import HttpError
 
 DEFAULT_BASE_URL = os.getenv("LAMBDA_CLOUD_BASE_URL", "https://cloud.lambdalabs.com")
 TOKEN_ENV_VARS = ("LAMBDA_CLOUD_TOKEN", "LAMBDA_CLOUD_API_TOKEN", "LAMBDA_API_TOKEN")
@@ -29,20 +27,15 @@ TOKEN_ENV_VARS = ("LAMBDA_CLOUD_TOKEN", "LAMBDA_CLOUD_API_TOKEN", "LAMBDA_API_TO
 T = TypeVar("T")
 
 
-def _common_options(func: Callable[..., T]) -> Callable[..., T]:
-    func = click.option("--token", help="API token. Defaults to env vars: " + ", ".join(TOKEN_ENV_VARS))(func)
-    func = click.option(
-        "--base-url",
-        default=DEFAULT_BASE_URL,
-        show_default=True,
-        help="API base URL.",
-    )(func)
-    func = click.option(
-        "--insecure",
-        is_flag=True,
-        help="Disable TLS verification (not recommended).",
-    )(func)
-    return func
+def raise_error_as_usage_error(f: Callable[..., T]) -> Callable[..., T]:
+    @wraps(f)
+    def wrapper(*args, **kwargs) -> T:
+        try:
+            return f(*args, **kwargs)
+        except (HttpError, RuntimeError) as e:
+            raise UsageError(str(e)) from e
+
+    return wrapper
 
 
 def _instance_type_filter_options(func: Callable[..., T]) -> Callable[..., T]:
@@ -62,14 +55,14 @@ def _instance_type_filter_options(func: Callable[..., T]) -> Callable[..., T]:
 def _ssh_wait_options(func: Callable[..., T]) -> Callable[..., T]:
     func = click.option(
         "--timeout-seconds",
-        type=int,
+        type=float,
         default=60 * 10,  # 10min
         show_default=True,
         help="Time to wait before an IP address is assigned and until SSH (port 22) is open, individually.",
     )(func)
     func = click.option(
         "--interval-seconds",
-        type=int,
+        type=float,
         default=5,
         show_default=True,
         help="Polling interval while waiting for the IP.",
@@ -110,39 +103,39 @@ def main() -> None:
 @click.option("--status", multiple=True, help="Filter by status (repeat to include multiple).")
 @click.option("--region", multiple=True, help="Filter by region (repeat to include multiple).")
 @click.option("--json", is_flag=True, help="Output raw JSON instead of a table.")
-@_common_options
-def ls_cmd(
-    status: tuple[str, ...], region: tuple[str, ...], json: bool, token: str | None, base_url: str, insecure: bool
-) -> None:
-    response = list_instances(base_url, token, insecure)
-    filtered_response = filter_instances(response, region, status)
+@raise_error_as_usage_error
+def ls_cmd(status: tuple[str, ...], region: tuple[str, ...], json: bool) -> None:
+    instances = list_instances()
+    filtered_instances = filter_instances(instances, region, status)
 
     if json:
-        print_response(filtered_response)
+        print_json([i.to_dict() for i in instances])
         return
 
-    render_instances_table(filtered_response)
+    render_instances_table(filtered_instances)
 
 
 @main.command(name="get", help="Get instance details.")
 @click.argument("id_or_name")
-@_common_options
-def get_cmd(id_or_name: str, token: str | None, base_url: str, insecure: bool) -> None:
-    instances = list_instances(base_url, token, insecure)
-    response = choose_instance(instances, id_or_name)
-    response = get_instance(id=response.id, base_url=base_url, token=token, insecure=insecure)
-    print_response(response)
+@raise_error_as_usage_error
+def get_cmd(id_or_name: str) -> None:
+    try:
+        instance = get_instance(id=id_or_name)  # if user sent an ID it'll work.
+    except HttpError as e:
+        if e.status_code != HTTPStatus.NOT_FOUND:
+            raise
+        # We have to look up the name
+        instances = list_instances()
+        instance = get_instance_by_name_or_id(instances, id_or_name)
 
-    status = int(response.status_code)
-    if status < 200 or status >= 300 or response.parsed is None:
-        sys.exit(1)
+    print_json(instance.to_dict())
 
 
 @main.command(name="start", help="Start/launch a new instance.")
 @_instance_type_filter_options
 @_start_options
 @click.option("--json", is_flag=True, help="Output raw JSON instead of a table.")
-@_common_options
+@raise_error_as_usage_error
 def start_cmd(
     instance_type: str | None,
     region: tuple[str, ...],
@@ -164,11 +157,8 @@ def start_cmd(
     user_data_file: str | None,
     tag: tuple[str, ...],
     json: bool,
-    token: str | None,
-    base_url: str,
-    insecure: bool,
 ) -> None:
-    response = start_instance(
+    instance_ids = start_instance(
         instance_type=instance_type,
         region=region,
         available=available,
@@ -189,76 +179,66 @@ def start_cmd(
         user_data_file=user_data_file,
         tag=tag,
         json=json,
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
     )
     if dry_run:
         return
 
-    status = int(response.status_code)
-    if status < 200 or status >= 300 or response.parsed is None:
-        print_response(response)
-        sys.exit(1)
+    instances = list_instances()
+    filtered_instances = filter_instances(instances, id=tuple(instance_ids))
+    instance = filtered_instances[0]
 
-    instance_ids = response.parsed.data.instance_ids
     if json:
-        print(_json.dumps(instance_ids, indent=2))
+        print_json(instance.to_dict())
         return
 
-    print(f"Started instances: {', '.join(instance_ids)}")
+    render_instances_table([instance], title="Launched instance")
 
 
 @main.command(name="restart", help="Restart one or more instances.")
 @click.argument("id_or_name", nargs=-1, required=True)
-@_common_options
-def restart_cmd(id_or_name: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
-    response = restart_instances(id_or_name, base_url, token, insecure)
-    print_response(response)
-
-    status = int(response.status_code)
-    if status < 200 or status >= 300 or response.parsed is None:
-        sys.exit(1)
+@raise_error_as_usage_error
+def restart_cmd(
+    id_or_name: tuple[str, ...],
+) -> None:
+    instances = restart_instances(id_or_name)
+    print_json([i.to_dict() for i in instances])
 
 
 @main.command(name="stop", help="Stop/terminate one or more instances.")
 @click.argument("id_or_name", nargs=-1, required=True)
-@_common_options
-def stop_cmd(id_or_name: tuple[str, ...], token: str | None, base_url: str, insecure: bool) -> None:
-    response = stop_instances(id_or_name, base_url, token, insecure)
-    print_response(response)
-
-    status = int(response.status_code)
-    if status < 200 or status >= 300 or response.parsed is None:
-        sys.exit(1)
+@raise_error_as_usage_error
+def stop_cmd(
+    id_or_name: tuple[str, ...],
+) -> None:
+    instances = stop_instances(id_or_name)
+    print_json([i.to_dict() for i in instances])
 
 
 @main.command(name="rename", help="Rename an instance.")
 @click.argument("id")
 @click.argument("name")
-@_common_options
-def rename_cmd(id: str, name: str, token: str | None, base_url: str, insecure: bool) -> None:
-    response = rename_instance(id, name, base_url, token, insecure)
-    print_response(response)
-
-    status = int(response.status_code)
-    if status < 200 or status >= 300 or response.parsed is None:
-        sys.exit(1)
+@raise_error_as_usage_error
+def rename_cmd(
+    id: str,
+    name: str,
+) -> None:
+    instance = rename_instance(id, name)
+    print_json(instance.to_dict())
 
 
 @main.command(name="ssh", help="SSH into an instance by name or id.")
 @click.argument("name_or_id")
 @_ssh_wait_options
-@_common_options
+@raise_error_as_usage_error
 def ssh_cmd(
     name_or_id: str,
-    timeout_seconds: int,
-    interval_seconds: int,
-    token: str | None,
-    base_url: str,
-    insecure: bool,
+    timeout_seconds: float,
+    interval_seconds: float,
 ) -> None:
-    ssh_into_instance(name_or_id, max(timeout_seconds, 1), max(interval_seconds, 1), base_url, token, insecure)
+    instances = list_instances()
+    instance = get_instance_by_name_or_id(instances, name_or_id)
+    render_instances_table([instance], title="Instance")
+    ssh_into_instance(instance, timeout_seconds, interval_seconds)
 
 
 @main.command(name="run", help="Run a command on an instance over SSH.")
@@ -291,7 +271,7 @@ def ssh_cmd(
     help="Remove the instance after the command executes, make sure to use --volumes to retrieve written out data.",
 )
 @_ssh_wait_options
-@_common_options
+@raise_error_as_usage_error
 def run_cmd(
     command: tuple[str, ...],
     env_vars: tuple[str, ...],
@@ -319,9 +299,6 @@ def run_cmd(
     remove: bool,
     timeout_seconds: int,
     interval_seconds: int,
-    token: str | None,
-    base_url: str,
-    insecure: bool,
 ) -> None:
     # The first word in the command may be an id or instance name.
     # If we haven't set filters then we assume the first arg is the name or id.
@@ -336,7 +313,7 @@ def run_cmd(
         raise click.UsageError("Provide --ssh-key when launching a new instance.")
 
     if not name_or_id:
-        response = start_instance(
+        instance_ids = start_instance(
             instance_type=instance_type,
             region=region,
             available=available,
@@ -356,37 +333,31 @@ def run_cmd(
             image_family=image_family,
             user_data_file=user_data_file,
             tag=tag,
-            token=token,
-            base_url=base_url,
-            insecure=insecure,
         )
-        status = int(response.status_code)
-        if status < 200 or status >= 300 or response.parsed is None:
-            print(response.parsed)
-            sys.exit(1)
+        name_or_id = instance_ids[0]
 
-        name_or_id = response.parsed.data.instance_ids[0]
+    instances = list_instances()
+    instance = get_instance_by_name_or_id(instances=instances, name_or_id=name_or_id)
+    render_instances_table([instance], title="Instance")
+
     run_remote(
-        name_or_id=name_or_id,
+        instance=instance,
         command=command,
         env_vars=env_vars,
         env_files=env_file,
         volumes=volume,
         timeout_seconds=max(timeout_seconds, 1),
         interval_seconds=max(interval_seconds, 1),
-        token=token,
-        base_url=base_url,
-        insecure=insecure,
     )
     if remove:
-        response = stop_instances(tuple([name_or_id]), base_url, token, insecure)
-        print_response(response)
+        instances = stop_instances(tuple([instance.id]))
+        print_json([i.to_dict() for i in instances])
 
 
 @main.command(name="types", help="List instance types.")
 @_instance_type_filter_options
 @click.option("--json", is_flag=True, help="Output raw JSON instead of a table.")
-@_common_options
+@raise_error_as_usage_error
 def types_cmd(
     instance_type: str | None,
     available: bool,
@@ -399,13 +370,10 @@ def types_cmd(
     min_storage: int | None,
     max_price: int | None,
     json: bool,
-    token: str | None,
-    base_url: str,
-    insecure: bool,
 ) -> None:
-    response = list_instance_types(base_url, token, insecure)
-    filtered_response = filter_instance_types(
-        response,
+    instance_types = list_instance_types()
+    instance_types = filter_instance_types(
+        instance_types,
         instance_type=instance_type,
         available=available,
         cheapest=cheapest,
@@ -419,10 +387,10 @@ def types_cmd(
     )
 
     if json:
-        print_response(filtered_response)
+        print_json([i.to_dict() for i in instance_types])
         return
 
-    render_types_table(filtered_response)
+    render_types_table(instance_types)
 
 
 @main.command(name="images", help="List available images.")
@@ -451,25 +419,22 @@ def types_cmd(
     is_flag=True,
     help="Output raw JSON instead of a table.",
 )
-@_common_options
+@raise_error_as_usage_error
 def images_cmd(
     family: tuple[str, ...],
     version: tuple[str, ...],
     arch: tuple[str, ...],
     region: tuple[str, ...],
     json: bool,
-    token: str | None,
-    base_url: str,
-    insecure: bool,
 ) -> None:
-    response = list_images(base_url, token, insecure)
-    filtered_response = filter_images(response, family, version, arch, region)
+    images = list_images()
+    images = filter_images(images, family, version, arch, region)
 
     if json:
-        print_response(filtered_response)
+        print_json([i.to_dict() for i in images])
         return
 
-    render_images_table(filtered_response)
+    render_images_table(images)
 
 
 @main.command(name="keys", help="List SSH keys.")
@@ -488,23 +453,20 @@ def images_cmd(
     is_flag=True,
     help="Output raw JSON instead of a table.",
 )
-@_common_options
+@raise_error_as_usage_error
 def ssh_keys_cmd(
     id: tuple[str, ...] | None,
     name: tuple[str, ...] | None,
     json: bool,
-    token: str | None,
-    base_url: str,
-    insecure: bool,
 ) -> None:
-    response = list_keys(base_url, token, insecure)
-    filtered_response = filter_keys(response, id, name)
+    keys = list_keys()
+    keys = filter_keys(keys, id, name)
 
     if json:
-        print_response(filtered_response)
+        print_json([i.to_dict() for i in keys])
         return
 
-    render_keys_table(filtered_response)
+    render_keys_table(keys)
 
 
 if __name__ == "__main__":
