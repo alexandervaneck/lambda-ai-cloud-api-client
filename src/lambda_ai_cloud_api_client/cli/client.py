@@ -1,9 +1,5 @@
-"""Command line wrapper for the Lambda Cloud API client (click-based)."""
-
-from __future__ import annotations
-
 import os
-import sys
+from functools import cache
 from typing import TypeVar
 
 from lambda_ai_cloud_api_client.client import AuthenticatedClient
@@ -14,24 +10,25 @@ TOKEN_ENV_VARS = ("LAMBDA_CLOUD_TOKEN", "LAMBDA_CLOUD_API_TOKEN", "LAMBDA_API_TO
 T = TypeVar("T")
 
 
-def _load_token(explicit_token: str | None) -> str:
-    if explicit_token:
-        return explicit_token
+def _load_token() -> str:
     for env_var in TOKEN_ENV_VARS:
         token = os.getenv(env_var)
         if token:
             return token
-    print(
+    raise RuntimeError(
         f"No API token provided. Supply --token or set one of: {', '.join(TOKEN_ENV_VARS)}",
-        file=sys.stderr,
     )
-    sys.exit(1)
 
 
-def auth_client(base_url: str, token: str | None = None, insecure: bool = False) -> AuthenticatedClient:
+@cache
+def auth_client() -> AuthenticatedClient:
+    base_url = os.getenv("LAMBDA_CLOUD_BASE_URL", DEFAULT_BASE_URL)
+    token = _load_token()
+    verify_ssl = os.getenv("LAMBDA_CLOUD_VERIFY_SSL", True)
+
     client = AuthenticatedClient(
         base_url=base_url,
-        token=_load_token(token),
-        verify_ssl=not insecure,
+        token=token,
+        verify_ssl=verify_ssl,
     )
     return client

@@ -1,80 +1,78 @@
-{
-  "data": [
-    {
-      "id": "0920582c7ff041399e34823a0be62549",
-      "status": "booting",
-      "ssh_key_names": [
-        "My SSH key"
-      ],
-      "file_system_names": [
-        "my-filesystem"
-      ],
-      "region": {
-        "name": "us-west-1",
-        "description": "California, USA"
+[
+  {
+    "id": "0920582c7ff041399e34823a0be62549",
+    "status": "booting",
+    "ssh_key_names": [
+      "My SSH key"
+    ],
+    "file_system_names": [
+      "my-filesystem"
+    ],
+    "region": {
+      "name": "us-west-1",
+      "description": "California, USA"
+    },
+    "instance_type": {
+      "name": "gpu_8x_h100_sxm5gdr",
+      "description": "8x H100 (80 GB SXM5)",
+      "gpu_description": "H100 (80 GB SXM5)",
+      "price_cents_per_hour": 3592,
+      "specs": {
+        "vcpus": 208,
+        "memory_gib": 1800,
+        "storage_gib": 24780,
+        "gpus": 8
+      }
+    },
+    "actions": {
+      "migrate": {
+        "available": false,
+        "reason_code": "vm-has-not-launched",
+        "reason_description": "string"
       },
-      "instance_type": {
-        "name": "gpu_8x_h100_sxm5gdr",
-        "description": "8x H100 (80 GB SXM5)",
-        "gpu_description": "H100 (80 GB SXM5)",
-        "price_cents_per_hour": 3592,
-        "specs": {
-          "vcpus": 208,
-          "memory_gib": 1800,
-          "storage_gib": 24780,
-          "gpus": 8
-        }
+      "rebuild": {
+        "available": false,
+        "reason_code": "vm-has-not-launched",
+        "reason_description": "string"
       },
-      "actions": {
-        "migrate": {
-          "available": false,
-          "reason_code": "vm-has-not-launched",
-          "reason_description": "string"
-        },
-        "rebuild": {
-          "available": false,
-          "reason_code": "vm-has-not-launched",
-          "reason_description": "string"
-        },
-        "restart": {
-          "available": false,
-          "reason_code": "vm-has-not-launched",
-          "reason_description": "string"
-        },
-        "cold_reboot": {
-          "available": false,
-          "reason_code": "vm-has-not-launched",
-          "reason_description": "string"
-        },
-        "terminate": {
-          "available": false,
-          "reason_code": "vm-has-not-launched",
-          "reason_description": "string"
-        }
+      "restart": {
+        "available": false,
+        "reason_code": "vm-has-not-launched",
+        "reason_description": "string"
       },
-      "name": "My Instance",
-      "ip": "198.51.100.2",
-      "private_ip": "10.0.2.100",
-      "file_system_mounts": [
-        {
-          "mount_point": "/data/custom-mount-point",
-          "file_system_id": "398578a2336b49079e74043f0bd2cfe8"
-        }
-      ],
-      "hostname": "headnode1",
-      "jupyter_token": "03b7d30d9d3e4d8fa41657bc0d478c1b",
-      "jupyter_url": "https://jupyter-249e1ccff1894822af39ac822637f881.lambdaspaces.com/?token=03b7d30d9d3e4d8fa41657bc0d478c1b",
-      "tags": [
-        {
-          "key": "key1",
-          "value": "value1"
-        }
-      ],
-      "firewall_rulesets": [
-        {
-          "id": "c4d291f47f9d436fa39f58493ce3b50d"
-        }
-      ]
-    }
-  ]
-}
+      "cold_reboot": {
+        "available": false,
+        "reason_code": "vm-has-not-launched",
+        "reason_description": "string"
+      },
+      "terminate": {
+        "available": false,
+        "reason_code": "vm-has-not-launched",
+        "reason_description": "string"
+      }
+    },
+    "name": "My Instance",
+    "ip": "198.51.100.2",
+    "private_ip": "10.0.2.100",
+    "file_system_mounts": [
+      {
+        "mount_point": "/data/custom-mount-point",
+        "file_system_id": "398578a2336b49079e74043f0bd2cfe8"
+      }
+    ],
+    "hostname": "headnode1",
+    "jupyter_token": "03b7d30d9d3e4d8fa41657bc0d478c1b",
+    "jupyter_url": "https://jupyter-249e1ccff1894822af39ac822637f881.lambdaspaces.com/?token=03b7d30d9d3e4d8fa41657bc0d478c1b",
+    "tags": [
+      {
+        "key": "key1",
+        "value": "value1"
+      }
+    ],
+    "firewall_rulesets": [
+      {
+        "id": "c4d291f47f9d436fa39f58493ce3b50d"
+      }
+    ]
+  }
+]

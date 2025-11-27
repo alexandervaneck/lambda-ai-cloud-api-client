@@ -1,4 +1,21 @@
+# 2.3.0
+
+* feat: Add `lai run <name-or-id> <command>` to run a command on a remote instance. Supports env vars.
+* Breaking: CLI auth/options simplified (lambda_ai_cloud_api_client/__main__.py, cli/client.py)—removed
+  --token/--base-url/--insecure; commands now read LAMBDA_CLOUD_TOKEN (and friends) plus optional
+  LAMBDA_CLOUD_VERIFY_SSL, raising UsageError if missing/invalid.
+* Breaking: CLI JSON outputs now emit parsed objects (print_json) instead of status-wrapped responses; commands like
+  ls/get/start/stop/restart/run/types/images/keys return full instance/image/key/type dicts or render tables,
+  so scripted consumers need to adjust.
+* feat: HTTP failures now flow through Response.raise_for_status → HttpError → Click UsageError, improving
+  user-facing error messages across the CLI.
+* refactor: Instance lifecycle commands now resolve and display richer context—ssh/run show the chosen instance,
+  enforce unique name/id matches, and surface timeouts for missing IP/SSH; start renders a launch plan table and
+  ensures filters pick exactly one type/region.
+* feat: Add `file_system_mount` and `firewall_ruleset` as args to `run` and `start`.
+
 # 2.2.1
+
 * feat: Replace `lai ssh --ssh_ready_timeout_seconds` with the already existing `--timout-seconds`, and re-use.
 * refactor: Remove SimpleNamespace as argument, this is a god-dict and not explicit enough.
 * fix: Make Unset renderable by rich.

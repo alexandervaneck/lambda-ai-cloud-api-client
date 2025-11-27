@@ -23,6 +23,12 @@ class Region:
     description: str
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
+    def __eq__(self, other: str | Region | PublicRegionCode) -> bool:
+        if isinstance(other, (Region, PublicRegionCode)):
+            return self.name == other.name
+
+        return self.name.value == other
+
     def to_dict(self) -> dict[str, Any]:
         name = self.name.value
 

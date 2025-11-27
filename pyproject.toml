@@ -1,6 +1,6 @@
 [project]
 name = "lambda-ai-cloud-api-client"
-version = "2.2.1"
+version = "2.3.0"
 description = "A client library for accessing Lambda Cloud API"
 authors = [{ name = "Alexander van Eck", email = "alexander@x-all.nl" }]
 requires-python = ">=3.10"
@@ -29,6 +29,7 @@ dependencies = [
   "python-dateutil>=2.8.0,<3",
   "click>=8.3.1",
   "rich>=13.9.4",
+  "python-dotenv>=1.0.1",
 ]
 
 [project.scripts]
@@ -74,6 +75,7 @@ omit = [
   # Exclude auto-generated code
   "src/lambda_ai_cloud_api_client/api/*",
   "src/lambda_ai_cloud_api_client/models/*",
+  "src/lambda_ai_cloud_api_client/client.py",
 ]
 branch = true
 

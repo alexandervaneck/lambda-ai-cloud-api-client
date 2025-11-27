@@ -3,8 +3,8 @@ Endpoints to be implemented:
 - [x] GET instance
 - [x] POST instance (update), rename.
 - [x] POST instance (create/launch) - start
-  - [ ]: Add `file_system_mounts` as param
-  - [ ]: Add `firewall_rulesets` as param
+  - [x]: Add `file_system_mounts` as param
+  - [x]: Add `firewall_rulesets` as param
   - [x]: Add a `cheapest` flag? like with instance-types?
 - [x] POST instance (terminate) - stop
 - [x] POST instance (restart) - restart
@@ -23,7 +23,13 @@ Endpoints to be implemented:
 
 Additional commands to be implemented:
 - [x] lai ssh, ssh into an instance.
-- [ ] lai run --rm, start an instance, ssh into it, and optionally remove/turn-off the instance after exiting.
+- [x] lai run --rm, start an instance, ssh into it, and optionally remove/turn-off the instance after exiting.
 
 Improvements
-- [ ] Share auth_client globally so we can use the same thread when we need multiple calls. probably with @cached
+- [x] Share auth_client globally so we can use the same thread when we need multiple calls. probably with @cached
+- [x] Added run command
+- [x] Added run env var arg
+- [x] Added run volume arg
+- [x] refactor instance type selection logic to me cleaner and return an InstanceType.
+- [x] Starting an inference should tell you what it is starting, in which region and for what price.
+- [x] Print API errors nicely.
