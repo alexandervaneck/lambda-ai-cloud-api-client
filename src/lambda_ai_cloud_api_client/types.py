@@ -62,7 +62,7 @@ class Response(Generic[T]):
     parsed: T | None
 
     def raise_for_status(self):
-        if self.status_code.is_client_error or self.status_code.is_server_error:
+        if 400 <= self.status_code <= 599:
             raise HttpError(status_code=self.status_code, content=self.content.decode(errors="ignore"))
 
 
