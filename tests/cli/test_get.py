@@ -41,7 +41,7 @@ def test_get_by_name(
     httpx_mock.add_response(
         method="GET",
         url=f"{DEFAULT_BASE_URL}/api/v1/instances/My%20Instance",
-        status_code=404,
+        status_code=400,
         json={"error": ApiErrorInstanceNotFound(code="global/object-does-not-exist").to_dict()},
     )
     httpx_mock.add_response(
@@ -59,8 +59,8 @@ def test_get_error(httpx_mock, c_assert_cmd_results_equals: Callable[[list[str],
     # Arrange
     httpx_mock.add_response(
         method="GET",
-        url=f"{DEFAULT_BASE_URL}/api/v1/instances/0920582c7ff041399e34823a0be62549",
-        status_code=400,
+        url=f"{DEFAULT_BASE_URL}/api/v1/instances/my-name",
+        status_code=500,
         json={
             "error": {
                 "code": "global/invalid-parameters",
@@ -69,6 +69,6 @@ def test_get_error(httpx_mock, c_assert_cmd_results_equals: Callable[[list[str],
             }
         },
     )
-    cmd = ["get", "0920582c7ff041399e34823a0be62549"]
+    cmd = ["get", "my-name"]
     # Act & Assert
     c_assert_cmd_results_equals(cmd, DATA_FOLDER / "expected_get_output_error.txt", 1)

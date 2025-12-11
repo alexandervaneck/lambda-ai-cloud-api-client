@@ -1,6 +1,6 @@
 Usage: main get [OPTIONS] ID_OR_NAME
 Try 'main get --help' for help.
 
-Error: status_code=<HTTPStatus.BAD_REQUEST: 400>
+Error: status_code=<HTTPStatus.INTERNAL_SERVER_ERROR: 500>
 Response:
 {"error":{"code":"global/invalid-parameters","message":"Error in request path at 'id': Input should be a valid UUID, invalid length: expected length 32 for simple format, found 2","suggestion":"Retry the request after fixing the request parameters."}}

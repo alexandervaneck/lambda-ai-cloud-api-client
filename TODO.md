@@ -35,3 +35,7 @@ Improvements
 - [x] Print API errors nicely.
 - [ ] Should I be able to avoid regions? --exclude flag?
 - [ ] Have a look at dry-run. I dislike that I have to pass it into start_instance. and why does run_cmd also have dry run?
+- [ ] I'd like to exclude files/folders with .lambda-ai-ignore from volumes. Or should we introduce a .lambda-ai-api-client file?
+- [ ] Rename user-data-file to cloud-init-file ?
+- [ ] -w/--working-directory in run to cd to directory.
+- [ ] add `lai rsync my-instance src:dst src:dst` or something similar so we can rsync from the command line. Potentially with --watch?
