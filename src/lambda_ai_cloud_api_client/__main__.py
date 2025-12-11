@@ -134,7 +134,7 @@ def get_cmd(id_or_name: str) -> None:
     try:
         instance = get_instance(id=id_or_name)  # if user sent an ID it'll work.
     except HttpError as e:
-        if e.status_code != HTTPStatus.NOT_FOUND:
+        if e.status_code not in (HTTPStatus.NOT_FOUND, HTTPStatus.BAD_REQUEST):
             raise
         # We have to look up the name
         instances = list_instances()

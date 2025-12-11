@@ -1,3 +1,6 @@
+# 2.4.1
+* fix: Allow `lai get <name>` to be a name. Previously returned an HTTP 400.
+
 # 2.4.0
 * feat: Switch to rich.print instead of python's print.
 
