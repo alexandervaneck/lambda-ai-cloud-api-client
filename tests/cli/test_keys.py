@@ -43,18 +43,42 @@ def test_keys(
     httpx_mock.add_response(method="GET", url=f"{DEFAULT_BASE_URL}/api/v1/ssh-keys", json=m_response)
     # Act & Assert
     suffix = f"_{param_id}" if param_id else ""
-    c_assert_cmd_kwargs_result_equals(["keys"], kwargs, DATA_FOLDER / f"expected_keys_output{suffix}.txt")
+    c_assert_cmd_kwargs_result_equals(["keys", "ls"], kwargs, DATA_FOLDER / f"expected_keys_output{suffix}.txt")
 
 
 def test_key_empty(httpx_mock, c_assert_cmd_results_equals: Callable[[list[str], Path, int], Result]) -> None:
     # Arrange
     httpx_mock.add_response(method="GET", url=f"{DEFAULT_BASE_URL}/api/v1/ssh-keys", status_code=200, json={"data": []})
     # Act & Assert
-    c_assert_cmd_results_equals(["keys"], DATA_FOLDER / "expected_keys_output_empty.txt")
+    c_assert_cmd_results_equals(["keys", "ls"], DATA_FOLDER / "expected_keys_output_empty.txt")
 
 
 def test_key_error(httpx_mock, c_assert_cmd_results_equals: Callable[[list[str], Path, int], Result]) -> None:
     # Arrange
     httpx_mock.add_response(method="GET", url=f"{DEFAULT_BASE_URL}/api/v1/ssh-keys", status_code=500, json={"data": []})
     # Act & Assert
-    c_assert_cmd_results_equals(["keys"], DATA_FOLDER / "expected_keys_output_error.txt", 1)
+    c_assert_cmd_results_equals(["keys", "ls"], DATA_FOLDER / "expected_keys_output_error.txt", 1)
+
+
+def test_keys_add(httpx_mock, c_assert_cmd_results_equals: Callable[[list[str], Path, int], Result]) -> None:
+    # Arrange
+    m_key = {
+        "data": {
+            "id": "new-key-id",
+            "name": "my-new-key",
+            "public_key": "ssh-rsa AAAAB3Nza...",
+        }
+    }
+    httpx_mock.add_response(method="POST", url=f"{DEFAULT_BASE_URL}/api/v1/ssh-keys", json=m_key)
+    
+    # Act & Assert
+    c_assert_cmd_results_equals(["keys", "add", "my-new-key", "--public-key", "ssh-rsa AAAAB3Nza..."], DATA_FOLDER / "expected_keys_add_output.txt")
+
+
+def test_keys_rm(httpx_mock, c_assert_cmd_results_equals: Callable[[list[str], Path, int], Result]) -> None:
+    # Arrange
+    httpx_mock.add_response(method="DELETE", url=f"{DEFAULT_BASE_URL}/api/v1/ssh-keys/key-id", status_code=200, json={"data": {}})
+    
+    # Act & Assert
+    result = c_assert_cmd_results_equals(["keys", "rm", "key-id"], DATA_FOLDER / "expected_keys_rm_output.txt")
+    assert "Removed key key-id" in result.output

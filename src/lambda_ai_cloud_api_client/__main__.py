@@ -8,12 +8,14 @@ import click
 from click import UsageError
 
 from lambda_ai_cloud_api_client.cli.get import get_instance
+from lambda_ai_cloud_api_client.cli.completion import print_completion_script
 from lambda_ai_cloud_api_client.cli.images import filter_images, list_images, render_images_table
-from lambda_ai_cloud_api_client.cli.keys import filter_keys, list_keys, render_keys_table
+from lambda_ai_cloud_api_client.cli.keys import filter_keys, list_keys, render_keys_table, add_key, delete_key
 from lambda_ai_cloud_api_client.cli.ls import filter_instances, list_instances, render_instances_table
 from lambda_ai_cloud_api_client.cli.rename import rename_instance
 from lambda_ai_cloud_api_client.cli.response import print_json
 from lambda_ai_cloud_api_client.cli.restart import restart_instances
+from lambda_ai_cloud_api_client.cli.rsync import rsync_command
 from lambda_ai_cloud_api_client.cli.run import run_remote
 from lambda_ai_cloud_api_client.cli.ssh import get_instance_by_name_or_id, ssh_into_instance
 from lambda_ai_cloud_api_client.cli.start import start_instance
@@ -257,6 +259,29 @@ def ssh_cmd(
     ssh_into_instance(instance, timeout_seconds, interval_seconds)
 
 
+@main.command(
+    name="rsync",
+    help="Rsync files to/from an instance. Use -- to pass arbitrary rsync arguments.",
+    context_settings=dict(ignore_unknown_options=True),
+)
+@click.argument("name_or_id")
+@click.argument("src")
+@click.argument("dst")
+@click.option("--reverse", is_flag=True, help="Rsync from remote to local.")
+@click.option("--no-ignore", is_flag=True, help="Do not use .lambda-ai-ignore or .gitignore.")
+@click.argument("args", nargs=-1, type=click.UNPROCESSED)
+@raise_error_as_usage_error
+def rsync_cmd(
+    name_or_id: str,
+    src: str,
+    dst: str,
+    reverse: bool,
+    no_ignore: bool,
+    args: tuple[str, ...],
+) -> None:
+    rsync_command(name_or_id, src, dst, reverse, no_ignore, args)
+
+
 @main.command(name="run", help="Run a command on an instance over SSH.")
 @click.argument("command", nargs=-1, required=True)
 @_instance_type_filter_options
@@ -457,24 +482,20 @@ def images_cmd(
     render_images_table(images)
 
 
-@main.command(name="keys", help="List SSH keys.")
-@click.option(
-    "--id",
-    multiple=True,
-    help="Filter keys by id (repeat to include multiple).",
-)
-@click.option(
-    "--name",
-    multiple=True,
-    help="Filter key by name (repeat to include multiple).",
-)
-@click.option(
-    "--json",
-    is_flag=True,
-    help="Output raw JSON instead of a table.",
-)
+@main.group(name="keys", help="Manage SSH keys.", invoke_without_command=True)
+@click.pass_context
 @raise_error_as_usage_error
-def ssh_keys_cmd(
+def ssh_keys_group(ctx) -> None:
+    if ctx.invoked_subcommand is None:
+        ctx.invoke(keys_list_cmd)
+
+
+@ssh_keys_group.command(name="ls", help="List SSH keys.")
+@click.option("--id", multiple=True, help="Filter keys by id (repeat to include multiple).")
+@click.option("--name", multiple=True, help="Filter key by name (repeat to include multiple).")
+@click.option("--json", is_flag=True, help="Output raw JSON instead of a table.")
+@raise_error_as_usage_error
+def keys_list_cmd(
     id: tuple[str, ...] | None,
     name: tuple[str, ...] | None,
     json: bool,
@@ -487,6 +508,35 @@ def ssh_keys_cmd(
         return
 
     render_keys_table(keys)
+
+
+@ssh_keys_group.command(name="add", help="Add an SSH key.")
+@click.argument("name")
+@click.option("--public-key", help="The public key string. If omitted, Lambda Labs will generate one for you.")
+@click.option("--json", is_flag=True, help="Output raw JSON.")
+@raise_error_as_usage_error
+def keys_add_cmd(name: str, public_key: str | None, json: bool) -> None:
+    key = add_key(name, public_key)
+    if json:
+        print_json(key.to_dict())
+        return
+    render_keys_table([key])
+
+
+@ssh_keys_group.command(name="rm", help="Remove an SSH key.")
+@click.argument("id")
+@raise_error_as_usage_error
+def keys_rm_cmd(id: str) -> None:
+    delete_key(id)
+    print(f"Removed key {id}")
+
+
+@main.command(name="completion", help="Generate shell completion scripts.")
+@click.argument("shell", type=click.Choice(["bash", "zsh", "fish"]))
+@raise_error_as_usage_error
+def completion_cmd(shell: str) -> None:
+    """Generate shell completion scripts."""
+    print_completion_script(shell)
 
 
 if __name__ == "__main__":

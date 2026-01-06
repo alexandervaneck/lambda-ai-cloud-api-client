@@ -23,6 +23,8 @@ def m_subprocess_run(monkeypatch) -> list[list[str]]:
         return FakeCompleted()
 
     monkeypatch.setattr("lambda_ai_cloud_api_client.cli.run.subprocess.run", _fake_run)
+    monkeypatch.setattr("lambda_ai_cloud_api_client.cli.rsync.subprocess.run", _fake_run)
+    monkeypatch.setattr("lambda_ai_cloud_api_client.cli.rsync.get_rsync_ignore_args", lambda: [])
 
     return calls
 

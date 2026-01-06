@@ -8,6 +8,7 @@ from dotenv import dotenv_values
 from rich import print
 
 from lambda_ai_cloud_api_client.cli.ssh import ssh_command, wait_for_instance
+from lambda_ai_cloud_api_client.cli.rsync import rsync_instance
 from lambda_ai_cloud_api_client.models import Instance
 
 
@@ -40,24 +41,6 @@ def _parse_volumes(raw_volumes: tuple[str, ...]) -> list[tuple[str, str]]:
     return volumes
 
 
-def _rsync(local: str, remote: str, ip: str, reverse: bool = False) -> None:
-    src, dst = (f"ubuntu@{ip}:{remote}", local) if reverse else (local, f"ubuntu@{ip}:{remote}")
-    cmd = [
-        "rsync",
-        "-e",
-        "ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/dev/null",
-        "-az",
-        "--delete",
-        src,
-        dst,
-    ]
-    print(f"Rsync: {' '.join(cmd)}")
-    try:
-        subprocess.run(cmd, check=True, stdout=sys.stdout, stderr=sys.stderr)
-    except FileNotFoundError as e:
-        raise RuntimeError("rsync is not installed or not in PATH.") from e
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"rsync failed with code {e.returncode}") from e
 
 
 def run_remote(
@@ -80,7 +63,7 @@ def run_remote(
     instance = wait_for_instance(instance, timeout_seconds, interval_seconds)
 
     for local, remote in volume_pairs:
-        _rsync(local, remote, instance.ip)
+        rsync_instance(instance, local, remote, additional_args=("--delete",))
 
     ssh_args = ssh_command(instance.ip, command, env_assignments)
     print(f"Executing: {' '.join(ssh_args)}")
@@ -89,7 +72,7 @@ def run_remote(
         result = subprocess.run(ssh_args)
     finally:
         for local, remote in volume_pairs:
-            _rsync(local, remote, instance.ip, reverse=True)
+            rsync_instance(instance, remote, local, reverse=True, additional_args=("--delete",))
 
     if result.returncode:
         sys.exit(result.returncode)

@@ -67,6 +67,7 @@ dev = [
   "pytest-cov>=7.0.0",
   "tox-uv>=1.11.0",
   "pytest-httpx>=0.30.0",
+  "hypothesis>=6.149.1",
 ]
 
 [tool.coverage.run]

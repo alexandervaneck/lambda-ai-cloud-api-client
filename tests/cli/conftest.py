@@ -20,6 +20,17 @@ def f_cli_runner() -> CliRunner:
     return CliRunner()
 
 
+@pytest.fixture(autouse=True)
+def m_execvp(monkeypatch) -> list[tuple[str, list[str]]]:
+    calls = []
+
+    def _fake_execvp(file, args):
+        calls.append((file, args))
+
+    monkeypatch.setattr("os.execvp", _fake_execvp)
+    return calls
+
+
 @pytest.fixture
 def c_assert_cmd_results_equals(f_cli_runner: CliRunner) -> Callable[[list[str], Path, int | None], Result]:
     def _(command: Iterable[str], expected_file: Path, expected_exit_code: int = 0) -> Result:
